@@ -18,16 +18,16 @@ $(document).ready(function() {
         },
         messages: {
             order_id: {
-                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Order yang dikonfirmasi harus diisi'|lang }}"
+                required: "{{ 'Order yang dikonfirmasi harus diisi'|lang }}"
             },
             via_id: {
-                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Metode pembayaran harus diisi'|lang }}"
+                required: "{{ 'Metode pembayaran harus diisi'|lang }}"
             },
             bank_tujuan: {
-                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Bank Tujuan Transfer harus diisi'|lang }}"
+                required: "{{ 'Bank Tujuan Transfer harus diisi'|lang }}"
             },
             besar: {
-                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Besar Pembayaran harus diisi'|lang }}"
+                required: "{{ 'Besar Pembayaran harus diisi'|lang }}"
             }
         },
         errorLabelContainer: '.errorMsg',
@@ -97,7 +97,7 @@ $(document).ready(function() {
     </div>
     <!-- bank destination -->
     <div class="form-group">
-        <label class="col-md-3">{{ 'Bank Tujuan Transfer'|lang }}
+        <label class="col-md-3">{{ 'Bank Tujuan Transfer'|lang }} <span>*</span>
         </label>
         <div class="col-md-9">
             <input class="form-control" type="text" name="bank_tujuan" id="bank_tujuan" size="40" />
@@ -106,6 +106,7 @@ $(document).ready(function() {
     <!-- total cost -->
     <div class="form-group">
         <label class="col-md-3">{{ 'Besar Pembayaran'|lang }}
+        <span>*</span>
         </label>
         <div class="col-md-9">
             <input class="form-control" type="text" name="besar" id="besar" value="{{ confirm.payment_amount }}" size="40" />
@@ -113,7 +114,7 @@ $(document).ready(function() {
     </div>
     <!-- date payment -->
     <div class="form-group">
-        <label class="col-md-3">{{ 'Tanggal Pembayaran'|lang }}</label>
+        <label class="col-md-3">{{ 'Tanggal Pembayaran'|lang }}<span>*</span></label>
         <div class="col-md-9">
             <link rel="stylesheet" type="text/css" href="{{ 'jscalender.css'|asset_url }}" />
             <script type="text/javascript" src="{{ 'jscalender.js'|asset_url }}"></script>

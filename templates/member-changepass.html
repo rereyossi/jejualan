@@ -16,15 +16,15 @@ $(document).ready(function() {
         },
         messages: {
             password_old: {
-                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Password Lama harus diisi'|lang }}"
+                required: "{{ 'Password Lama harus diisi'|lang }}"
             },
             password_new: {
-                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Password Baru harus diisi'|lang }}",
-                minlength: "{{ '<i class="fa fa-exclamation-triangle"></i> Password Baru minimal 3 karakter'|lang }}"
+                required: "{{ 'Password Baru harus diisi'|lang }}",
+                minlength: "{{ 'Password Baru minimal 3 karakter'|lang }}"
             },
             password_new2: {
-                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Ulangi Password Baru harus diisi'|lang }}",
-                equalTo: "{{ '<i class="fa fa-exclamation-triangle"></i> Password Baru & Ulangi Password Baru tidak sama'|lang }}"
+                required: "{{ 'Ulangi Password Baru harus diisi'|lang }}",
+                equalTo: "{{ 'Password Baru & Ulangi Password Baru tidak sama'|lang }}"
             }
         },
         errorLabelContainer: '.errorMsg',
@@ -49,55 +49,67 @@ $(document).ready(function() {
 });
 </script>
 
+
 <h3 class="text-title">{{ 'Ganti Password'|lang }}</h3>
 
 <!-- error msg -->
-<div id="result_change">
-    <div class="alert alert-danger errorMsg" style="display:none;">
+<div class="row">
+    <div class="col-md-7">
+        <div id="result_change col-md-8 col-md-offset-4">
+            <div class="alert alert-danger errorMsg" style="display:none;">
+
+            </div>
+        </div>
 
     </div>
 </div>
 
+
 <!-- change form -->
-<form class="form-vertical" id="change_form" name="change_form" method="post" action="{{ changepass_action_url }}">
-    <!-- email -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Email'|lang }}</label>
-        <div class="col-md-9">
-            {{ username }}
-        </div>
+<div class="row">
+    <div class="form-change-pass col-md-7">
+        <form class="form-vertical" id="change_form" name="change_form" method="post" action="{{ changepass_action_url }}">
+            <!-- email -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Email'|lang }}</label>
+                <div class="col-md-8">
+                    {{ username }}
+                </div>
+            </div>
+            <!-- old pass -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Password Lama'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <input class="form-control" type="password" name="password_old" id="password_old" />
+                </div>
+            </div>
+            <!-- new pass -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Password Baru'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <input class="form-control" type="password" name="password_new" id="password_new" />
+                </div>
+            </div>
+            <!-- re new pass -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Ulangi Password Baru'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <input class="form-control" type="password" name="password_new2" id="password_new2" />
+                </div>
+            </div>
+            <!-- submit -->
+            <div class="form-group">
+                <div class="col-md-8 col-md-offset-4">
+                    <input class="formBtn btn btn-primary pull-right" type="submit" name="add_change" value="{{ 'Ganti'|lang }}" />
+                </div>
+            </div>
+        </form>
     </div>
-    <!-- old pass -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Password Lama'|lang }}
-            <span>*</span>
-        </label>
-        <div class="col-md-9">
-            <input class="text" type="password" name="password_old" id="password_old" />
-        </div>
-    </div>
-    <!-- new pass -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Password Baru'|lang }}
-            <span>*</span>
-        </label>
-        <div class="col-md-9">
-            <input class="text" type="password" name="password_new" id="password_new" />
-        </div>
-    </div>
-    <!-- re new pass -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Ulangi Password Baru'|lang }}
-            <span>*</span>
-        </label>
-        <div class="col-md-9">
-            <input class="text" type="password" name="password_new2" id="password_new2" />
-        </div>
-    </div>
-    <!-- submit -->
-    <div class="form-group">
-        <div class="col-md-9 col-md-offset-3">
-            <input class="formBtn btn btn-primary pull-right" type="submit" name="add_change" value="{{ 'Ganti'|lang }}" />
-        </div>
-    </div>
-</form>
+
+</div>

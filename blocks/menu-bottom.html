@@ -4,7 +4,7 @@
             <h4 class="text-title">{{ menu.title }}</h4>
             <div class="content">
                 {% if menu.child|length > 0 %}
-                <ul class=" menu-bottom-block">
+                <ul class="content">
                     {% for item in menu.child %}
                     <li>
                         <a href="{{ item.url }}"><i class="fa fa-caret-right"></i> {{ item.title }}</a>

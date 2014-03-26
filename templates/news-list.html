@@ -1,30 +1,43 @@
 <div class="row">
-	<div class="col-md-12 nopadding">
-		<div class="breadcrumb">
-			<center>
-				<strong>{{ 'Berita'|lang }}</strong>
-			</center>
-		</div>
-	</div>
+    <div class="col-md-12">
+        <div class="breadcrumb">
+            <h2 class="text-title">{{ 'Berita'|lang }}</h2>
+        </div>
+    </div>
 </div>
-<div class="row mar-bot">
-	<div class="padding10">
-		{% for item in news %}
-		<div class="col-md-12 news-list">
-			<h4><a href="{{ item.url }}">{{ item.title }}</a><span class="pull-right"><small>{{ item.date|date("d M Y") }}</small></span></h4>
-			<p>
-				{% if item.image %}
-				<a href="{{ item.url }}">
-					<div class="img-blog">
-						<img class="img-thumbnail img-responsive" src="{{ item.image }}" alt="">
-					</div>
-				</a>
-				<br/>{% endif %}
-				<div class="news-body">{{ item.content|striptags|slice(0, 250) }} ...</div>
-				<br/>
-				<a class=" btn-xs btn btn-jej" href="{{ item.url }}">{{ 'Selengkapnya'|lang }}</a>
-			</p>
-		</div>
-		{% endfor %} {% include 'snippets/pagination.html' %}
-	</div>
+
+
+<div class="row">
+    <div class="news-list">
+        {% for item in news %}
+        <article class="col-md-12 margin-bottom">
+            <figure class="col-md-4">
+                <div class="img">
+                    {% if item.image %}
+                    <a href="{{ item.url }}">
+                        <div class="img">
+                            <img src="{{ item.image }}" alt="">
+                        </div>
+                    </a>
+                    {% endif %}
+                </div>
+            </figure>
+            <div class="caption col-md-8">
+                <header>
+                    <h2 class="text-capital">
+                        <a href="{{ item.url }}">{{ item.title }}</a>
+                    </h2>
+                    <small class="date">{{ item.date|date("d M Y") }}</small>
+                </header>
+                <section>
+                    {{ item.content|striptags|slice(0, 250) }} ...
+                </section>
+                <footer>
+                    <a href="{{ item.url }}" title="">{{ 'Selengkapnya'|lang }}</a>
+                </footer>
+            </div>
+
+        </article>
+        {% endfor %} {% include 'snippets/pagination.html' %}
+    </div>
 </div>
