@@ -1,0 +1,96 @@
+<script type="text/javascript">
+$(document).ready(function(){
+	var count_page = '{{ paginate.pages_count }}';		
+	//var currentPage = null;
+	$(".pagination a.previous").hide();	   
+	$('a.item[data-id=1]').addClass('current');
+	$("#list-data-order").load("{{ order_list_url }}/1");
+	
+	$(".pagination a.item").click(function(){
+		
+		var thisId = $(this).data("id");
+		
+		if( thisId == $(".pagination .item").length )
+		{
+			$(".pagination a.next").hide();
+			$(".pagination a.previous").show();
+		}
+		else
+		{
+			if( thisId == 1 )
+			{
+				$(".pagination a.previous").hide();
+				$(".pagination a.next").show();
+			}
+			else
+			{
+				$(".pagination a.previous").show();
+				$(".pagination a.next").show();
+			}
+		}
+		
+		
+				
+		$("#list-data-order").load("{{ order_list_url }}/" + thisId);
+		$(this).siblings().removeClass('current');
+		$(this).addClass("current");
+		return false;
+	});
+			
+	$(".pagination a.previous").click(function(){
+		
+		if( $(".current").data('id') > 1 )
+		{
+			var previousID = $(".current").data('id') - 1;
+		}else{
+			var previousID = 1;
+		}
+		if( previousID == 1 )
+		{
+			$(this).hide();	
+		}
+		else
+		{
+			$(this).show();	
+		}
+		
+		//alert(previousID);
+		$('.pagination a.next').show();	
+		$("#list-data-order").load("{{ order_list_url }}/" + previousID);
+		$(this).siblings().removeClass('current');
+		$('a.item[data-id=' + previousID + ']').addClass('current');
+		
+	
+		return false;
+	});
+	
+	$(".pagination a.next").click(function(){		
+		var nextID = $(".current").data('id') + 1;	
+		
+		if( nextID == $(".pagination .item").length )
+		{
+			$(this).hide();	
+		}
+		else
+		{
+			$(this).show();	
+		}
+		
+		$('.pagination a.previous').show();	
+		$("#list-data-order").load("{{ order_list_url }}/" + nextID);
+		$(this).siblings().removeClass('current');
+		$('a.item[data-id=' + nextID + ']').addClass('current');
+
+		return false;
+	});	
+	
+});
+</script>
+
+<h3>{{ 'Order Sebelumnya'|lang }}</h3>
+<div class="table-responsive">
+<div id="list-data-order"></div>
+</div>
+<br />
+
+{% include 'snippets/pagination.html' %}

@@ -1,0 +1,24 @@
+<div class="product-small-item">
+    {% if item.images.0.detail %}
+    <a class="figure-small col-xs-6 col-md-2" href="{{ item.url }}" title="{{ item.name }}">
+        <figure>
+            <div class="img">
+                <img class="img-responsive" src="{{ item.images.0.compact }}" alt="{{ item.images.0.title }}" />
+            </div>
+            <figcaption>
+                <h3 class="text-title">{{ item.name }}</h3>
+                <span class="price">
+                    {% if config.show_price == 1 %} {% if productlist.retail_price > 0 and productlist.price > productlist.retail_price %}
+                    <p>{{ item.retail_price|money }}</p>
+                    {% if item.discount %}
+                    <del>{{ item.price|money }}</del>
+                    {% endif %} {% else %}
+                    <p>{{ item.price|money }}</p>
+                    {% endif %} {% endif %}
+                </span>
+            </figcaption>
+        </figure>
+    </a>
+
+    {% endif %}
+</div>

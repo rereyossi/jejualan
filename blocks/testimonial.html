@@ -1,0 +1,11 @@
+<h3>{{ settings.block_title_testimonial|lang }}</h3>
+<div class="posting-testi">
+	<div class="testim">
+		<p> <em> {{ testimonial.date|date("d M Y") }}</em></p>
+		<p>{{ testimonial.content }}</p>
+	</div>
+	<div class="arrow pull-right"></div>
+	<a><p class="contributor"><strong>{{  testimonial.name }}</strong></p></a> &nbsp;
+</div>
+<center><a class="btn btn-jej mar-bot" href="{{ testimonial.url }}">&nbsp;{{ 'Lihat testimonial'|lang }}</a></center>
+<br/>

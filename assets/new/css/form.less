@@ -1,0 +1,105 @@
+
+
+@form-color: @color-line-primary;
+@form-radius: @radius;
+@form-height: 34px;
+@form-border: 1px solid rgb(204, 204, 204);
+
+.form-group{
+    display: block;
+    margin-bottom: 15px;
+    .clearfix();
+        label{
+        display: inline-block;
+    }
+}
+
+.form-control{
+    display: block;
+    width: 100%;
+    height: @form-height;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: rgb(85, 85, 85);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    border: @form-border;
+    border-radius: @form-radius;
+    box-shadow: none;
+    &:focus{
+        box-shadow: none;
+
+    }
+
+}
+
+label {
+    text-transform: capitalize;
+    font-weight: 700;
+}
+
+
+// form inline
+.form-inline{
+    .clearfix();
+    .form-group{
+        display: inline;
+        float: left;
+    }
+}
+
+// form vertical 
+.form-vertical{
+    label{
+        text-align: right;
+    }
+    .form-input{
+
+    }
+}
+
+
+// text area 
+textarea{
+    min-height: 100px !important;
+}
+
+
+// form radio and checkbox
+.radio, .checkbox {
+    display: block;
+    min-height: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    input{
+        float: left;
+        margin-left: -20px;
+        margin: 6px 4px 0 0;
+        box-sizing: border-box;
+        padding: 0;
+        line-height: normal;
+    }
+    label{
+        display: inline;
+        margin-bottom: 8px;
+        font-weight: 400;
+        cursor: pointer;
+    }
+}
+
+// form radio and checkbox inline
+.radio-inline, .checkbox-inline{
+   .clearfix();
+    .radio, .checkbox{
+        padding-left:20px;
+        float: left;
+        display: inline;
+    }
+}
+
+.radio-vertical, .checkbox-vertical{
+    .radio, .checkbox{
+        padding-left:20px;
+    }
+}

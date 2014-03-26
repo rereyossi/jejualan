@@ -1,0 +1,129 @@
+.navbar {
+  float: left;
+}
+.navbar ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.navbar ul:before,
+.navbar ul:after {
+  content: " ";
+  display: table;
+}
+.navbar ul:after {
+  clear: both;
+}
+.navbar ul li {
+  position: relative;
+  list-style: none;
+  float: left;
+}
+.navbar ul li:hover ul {
+  display: block;
+}
+.navbar ul li:hover ul ul {
+  display: none;
+}
+.navbar ul li a {
+  display: block;
+  height: 50px;
+  line-height: 50px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.navbar ul li a:hover {
+  background-color: #ffffff;
+  text-decoration: none;
+}
+@media screen and ("max-height: 670px") {
+  .navbar ul {
+    /* style */
+  }
+}
+.navbar ul ul {
+  display: none;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  padding: 0;
+  position: relative;
+  left: 0;
+  background-color: #ed4e6e;
+  z-index: 9999;
+}
+.navbar ul ul li {
+  width: 100%;
+  position: relative;
+}
+.navbar ul ul li a {
+  display: block;
+  background: grey;
+}
+.navbar ul ul li ul {
+  left: 100%;
+}
+.nopadding {
+  padding: 0px;
+}
+.margin-top {
+  margin-top: 20px;
+}
+.margin-bottom {
+  margin-bottom: 20px;
+}
+.margin-left {
+  margin-left: 20px;
+}
+.margin-right {
+  margin-right: 20px;
+}
+.img {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.img img {
+  width: 100%;
+  display: block;
+  position: relative;
+  height: auto;
+}
+#nav-main {
+  background-color: blue;
+}
+#nav-main:before,
+#nav-main:after {
+  content: " ";
+  display: table;
+}
+#nav-main:after {
+  clear: both;
+}
+.nav-box {
+  float: left;
+  height: 50px !important;
+  line-height: 50px;
+  min-width: 50px;
+  background-color: red;
+}
+.list-main li a {
+  display: block;
+  overflow: hidden;
+  height: 50px;
+  width: 180px;
+  line-height: 50px;
+  background-color: #ffffff;
+  color: #333333;
+}
+.list-main li a:hover {
+  background-color: #333333;
+  color: #ffffff;
+}
+.list-main .active {
+  background-color: #333333;
+  color: #ffffff;
+}
+.inline-list li {
+  display: inline-block;
+}
+.inline-list li a {
+  margin-left: 10px;
+}

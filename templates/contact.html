@@ -1,0 +1,231 @@
+<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+<script src="{{ 'jquery.gmap.js'|asset_url }}" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#img_captcha').click(function() {
+        $(this).attr('src', '{{ captcha_url }}?r=' + Math.random());
+    });
+    $("#contact_form").validate({
+        rules: {
+            name: {
+                required: true,
+                minlength: 3
+            },
+            email: {
+                required: true,
+                email: true
+            },
+            mobile: {
+                required: true
+            },
+            address: {
+                required: true
+            },
+            content: {
+                required: true
+            },
+            captcha: {
+                required: true
+            }
+        },
+        messages: {
+            name: {
+                required: "Nama harus diisi",
+                minlength: "Nama minimal 3 karakter"
+            },
+            email: {
+                required: "Email harus diisi",
+                email: "Email tidak valid (contoh: nama@domain.com)"
+            },
+            phone: {
+                required: "No. Telp harus diisi"
+            },
+            mobile: {
+                required: "No. Handphone harus diisi"
+            },
+            address: {
+                required: "Alamat harus diisi"
+            },
+            content: {
+                required: "Pesan harus diisi"
+            },
+            content: {
+                required: "Kode capthca harus diisi"
+            }
+        },
+        errorLabelContainer: '.errorMsg',
+        errorElement: 'div',
+        errorClass: "ferror",
+        submitHandler: function() {
+            $.ajax({
+                type: 'POST',
+                url: $('#contact_form').attr('action'),
+                data: $('#contact_form').serialize(),
+                dataType: "json",
+                success: function(data) {
+                    if (data.status == 1) {
+                        $('#result').html(data.msg).show();
+                        $('#contact-form').hide();
+                    } else if (data.status == 2) {
+                        $('#result').html(data.msg).show();
+                        $('#img_captcha').attr('src', '{{ captcha_url }}?r=' + Math.random());
+                    }
+                }
+            });
+            return false;
+        },
+        errorPlacement: function(error, element) {
+            var field = element.parent(".input").parent(".field");
+            field.addClass('invalid');
+            $('div.ferror', field).remove();
+            error.prependTo(field);
+        },
+    });
+    $("#contact_map").gMap({
+        { %
+            if latitude != ''
+            and longitude != '' %
+        }
+        markers: [{
+            latitude: '{{ latitude }}',
+            longitude: '{{ longitude }}'
+        }],
+        latitude: '{{ latitude }}',
+        longitude: '{{ longitude }}',
+        { %
+            else %
+        }
+        markers: [{
+            address: '{{ address }}'
+        }],
+        address: '{{ address }}',
+        { % endif %
+        }
+        zoom: 14,
+        mapTypeControl: false,
+        zoomControl: false,
+        scrollwheel: false
+    });
+});
+</script>
+
+<!-- error msg-->
+<div class="row">
+    <div class="col-md-12">
+        <div id="result">
+            <div class="errorMsg" style="display:none;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- contact page-->
+<div class="row">
+    <div id="contact-main " class="col-md-12">
+        <!-- form contact -->
+        <div class="contact-form col-md-6">
+            <!-- contact title -->
+            <div class="breadcrumb">
+                <h3 class="text-title">{{ 'Kirim Pesan'|lang }}</h3>
+            </div>
+
+            <!-- contact content -->
+            <div id="contact-content">
+                <form id="contact_form" class="form-vertical" name="contact_form" method="post" action="{{ contact_save_url }}">
+                    {% if show_name == 1 %}
+                    <div class="form-group">
+                        <label for="input_name" class="col-sm-4 control-label">{{ 'Nama'|lang }}
+                            <span>*</span>
+                        </label>
+                        <div class="col-sm-8">
+                            <input type="text" id="input_name" name="name" value="" class="form-control">
+                        </div>
+                    </div>
+                    {% endif %} {% if show_email == 1 %}
+                    <div class="form-group">
+                        <label for="input_email" class="col-sm-4 control-label">{{ 'Email'|lang }}
+                            <span>*</span>
+                        </label>
+                        <div class="col-sm-8">
+                            <input type="email" id="input_email" name="email" value="" class="form-control">
+                        </div>
+                    </div>
+                    {% endif %} {% if show_phone == 1 %}
+                    <div class="form-group">
+                        <label for="input_phone" class="col-sm-4 control-label">{{ 'No. Telp'|lang }}
+                            <span>*</span>
+                        </label>
+                        <div class="col-sm-8">
+                            <input type="text" id="input_phone" name="notelp" value="" class="form-control">
+                        </div>
+                    </div>
+                    {% endif %} {% if show_hp == 1 %}
+                    <div class="form-group">
+                        <label for="input_hp" class="col-sm-4 control-label">{{ 'No. Handphone'|lang }}
+                            <span>*</span>
+                        </label>
+                        <div class="col-sm-8">
+                            <input type="text" id="input_hp" name="nohp" value="" class="form-control">
+                        </div>
+                    </div>
+                    {% endif %} {% if show_address == 1 %}
+                    <div class="form-group">
+                        <label for="input_address" class="col-sm-4 control-label">{{ 'Alamat'|lang }}
+                            <span>*</span>
+                        </label>
+                        <div class="col-sm-8">
+                            <input type="text" id="input_address" name="address" value="" class="form-control">
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="input_content" class="col-sm-4 control-label">{{ 'Pesan'|lang }}
+                            <span>*</span>
+                        </label>
+                        <div class="col-sm-8">
+                            <textarea id="input_content" name="content" rows="4" cols="40" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="input_captcha" class="col-sm-4 control-label">{{ 'Kode Captcha'|lang }}
+                            <span>*</span>
+                        </label>
+                        <div class="col-sm-8">
+                            <img id="img_captcha" src="{{ captcha_url }}" />
+                            <p>
+                                <strong>{{ 'Isikan kode diatas'|lang }}</strong>
+                            </p>
+                            <input class="form-control col-md-6" type="text" id="captcha" name="captcha" value="" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <input class="btn btn-primary pull-right" type="submit" id="submit_message" name="add_contact" value="{{ 'Kirim'|lang }}" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- widget box -->
+        <div class="widget-box col-md-6">
+            <!-- title map -->
+            <div class="breadcrumb">
+                <h3 class="text-title">{{ 'Info Kontak'|lang }}</h3>
+            </div>
+
+            <!-- content widget box -->
+            <div class="widget-content">
+                {% if address or latitude and longitude %}
+                <div class="map">
+                    <div id="contact_map" style="width:100%; height:340px;"></div>
+                </div>
+                {% endif %}
+                <div class="contact-text">
+                    {{text}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

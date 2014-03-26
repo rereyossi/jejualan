@@ -1,0 +1,14 @@
+figure {
+  position: relative;
+}
+figure .img {
+  height: 169px;
+  background-color: #ffffff;
+}
+figure .overlay {
+  position: relative;
+}
+figure figcaption {
+  color: #333333;
+  padding: 10px;
+}

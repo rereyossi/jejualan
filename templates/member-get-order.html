@@ -1,0 +1,39 @@
+<script type="text/javascript">
+$(".iframe").colorbox({
+	iframe: true,
+	width: "75%",
+	height: "75%"
+});
+</script>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th><strong><center>{{ 'Total Biaya'|lang }}</center></strong>
+			</th>
+			<th><strong><center>{{ 'Tgl Order'|lang }}</center></strong>
+			</th>
+			<th><strong>{{ 'Pembayaran'|lang }}</strong>
+			</th>
+			<th><strong>{{ 'Dikirim'|lang }}</strong>
+			</th>
+			<th><strong>{{ 'Status'|lang }}</strong>
+			</th>
+			<th><strong>{{ 'Detail'|lang }}</strong>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for item in order_list %}
+		<tr>
+			<td valign="top" align="right">{{ item.total_price|money }}</td>
+			<td valign="top"><center>{{ item.order_date|date("d M Y") }}</center></td>
+			<td valign="top">{{ item.payment_date is empty ? "" : item.payment_date|date("d M Y") }}</td>
+			<td valign="top">{{ item.payment_date is empty ? "" : item.shipping_date|date("d M Y") }}</td>
+			<td valign="top">{{ item.status }}</td>
+			<td valign="top">
+				<a class="iframe" href="{{ item.url }}">{{ 'Lihat Detail'|lang }}</a>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>

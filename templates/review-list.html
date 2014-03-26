@@ -1,0 +1,39 @@
+{% if review_list|length > 0 %}
+
+	{% for review in review_list %}
+		<div class="testimonial-item">
+			<div>{{ review.content }}</div>
+			<p>				
+				{% if review.name != '' %}
+				<strong>{{ review.name }}</strong>
+				{% endif %}
+
+				{% if review.name != '' and review.date != '' %}
+				, 
+				{% endif %}
+				
+				{% if review.date != '' %}
+				<span style="background:none;">{{ review.date|date('d M Y') }}</span>
+				{% endif %}
+
+				{% if review.rating == 1 %}
+					<span class="rate-good" style="background:none"><img src="{{ 'thumbs-up.png'|asset_url }}" alt="" /></span>
+				{% else %}
+					<span class="rate-bad" style="background:none"><img src="{{ 'thumbs-down.png'|asset_url }}" alt="" /></span>
+				{% endif %}
+			</p>
+		</div>
+		
+		{% if review.replied == 1 and review.reply_content != ''%}
+			<div class="testimonial-item" style="margin-left:50px;">
+				<div>{{ review.reply_content }}</div>
+				<p>
+					<strong>{{ 'Admin'|lang }}</strong>, <span style="background:none;">{{ review.reply_date|date('d M Y') }}</span>
+				</p>
+			</div>
+		{% endif %}
+		
+	{% endfor %}
+{% else %}
+<center><em>{{ 'Data review kosong'|lang }}</em></center>
+{% endif %}

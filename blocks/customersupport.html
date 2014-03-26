@@ -1,0 +1,17 @@
+<h3>{{ settings.block_title_cs|lang }}</h3>
+<p><small>{{ settings.block_pengantar_cs}}</small></p>
+<div class="row"> 
+	{% for cs in customersupport %}
+		<div class="col-md-12 col-sm-4"> 
+			<div class="customers"> 
+					<a href="ymsgr:sendIM?{{ cs.ymid }}">
+						<span>{{ cs.name }}</span>
+						<span class="box-ym pull-right">
+							<img src="http://opi.yahoo.com/online?u={{ cs.ymid }}&m=g&t=0&rand={{ random() }}"  border="0" />
+						</span>
+					</a>
+			</div>	
+		</div>	
+	{% endfor %}
+</div>
+

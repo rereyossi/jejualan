@@ -1,0 +1,77 @@
+<!-- step step buy -->
+<div class="row">
+    <div class="col-md-12">
+        <!-- step cart -->
+        <div class="step-cart">
+            <ul class="list-inline">
+                <li class="active">{{ 'Langkah Order'|lang }}</li>
+                <li class="active">{{ 'Keranjang Belanja'|lang }}</li>
+                <li class="active">{{ 'Login / Daftar'|lang }}</li>
+                <li class="active">{{ 'Pengiriman'|lang }}</li>
+                <li class="active">{{ 'Selesai'|lang }}</li>
+            </ul>
+        </div>
+
+
+        <div class="cart-informasi">
+            <!-- message -->
+            <div class="padd">
+                {% if sendmail is empty %} {% else %}
+                <div class="successMsg padd alert-success">
+                    {{ 'Terimakasih atas Order Anda. Email invoice telah kami kirimkan ke alamat email Anda.'|lang }}
+                </div>
+                <br/>{% endif %} {{ payment }}
+            </div>
+
+            <!-- table informasi -->
+            <table class="table table-striped">
+                <tr>
+                    <td>
+                        <strong>{{ 'Nama Produk'|lang }}</strong>
+                    </td>
+                    <td align="right">
+                        <strong>{{ 'Harga'|lang }}</strong>
+                    </td>
+                    <td align="right">
+                        <strong>{{ 'Jumlah'|lang }}</strong>
+                    </td>
+                    <td align="right">
+                        <strong>{{ 'Total'|lang }}</strong>
+                    </td>
+                </tr>
+                {% for item in products %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td align="right">{{ item.price|money }}</td>
+                    <td align="right">{{ item.qty }}</td>
+                    <td align="right">{{ (item.price * item.qty)|money }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="3">{{ 'Diskon'|lang }}</td>
+                    <td align="right" id="subtotal">{{ discount|money }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3">{{ 'Jumlah sub total belanja'|lang }}</td>
+                    <td align="right" id="subtotal">{{ total_price|money }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3">{{ 'Biaya Pengiriman'|lang }}</td>
+                    <td align="right" id="subtotal">{{ shipping_cost|money }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3">{{ 'Biaya Tambahan'|lang }}</td>
+                    <td align="right" id="subtotal">{{ handling_fee|money }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <strong>{{ 'Biaya total yang harus dibayar'|lang }}</strong>
+                    </td>
+                    <td align="right" id="subtotal">
+                        <h4>{{ grandtotal_price|money }}</h4>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

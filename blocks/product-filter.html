@@ -1,0 +1,63 @@
+{% if products %}
+{% if product_filter.price|length > 0 or product_filter.filter_attribute|length > 0 %}
+<div class="product-filter block_theme light">
+	<div class="block_content">
+		<div class="block-filter">
+			<div class="widget widget-link harga">
+				{% if product_filter.price|length > 0 %}
+				<div class="title-filter"><span>{{ 'Tampilkan harga'|lang }}</span></div>
+				<center>
+					<div class="list-group">
+						{% if product_filter.selected %}
+						<a  class="list-group-item active">{{ 'Semua harga'|lang }}</a>
+						{% else %}
+						<a class="list-group-item" href="{{ product_filter.url }}">{{ 'Semua harga'|lang }}</a>
+						{% endif %}
+						{% for pricefilter in product_filter.price %}
+						{% if pricefilter.selected %}
+						{% if pricefilter.pricestart and pricefilter.priceend %}
+						<a class="list-group-item active">{{ pricefilter.pricestart|money }} {{ 's/d'|lang }} {{ pricefilter.priceend|money }}</a>
+						{% elseif not pricefilter.priceend %}
+						<a class="list-group-item active"> {{ pricefilter.sign }} {{ pricefilter.pricestart|money }}</a>
+						{% elseif not pricefilter.pricestart %}
+						<a class="list-group-item active"> {{ pricefilter.sign }} {{ pricefilter.priceend|money }}</a>
+						{% endif %}
+						{% else %}                    	
+						{% if pricefilter.pricestart and pricefilter.priceend %}                        	
+						<a class="list-group-item " href="{{ pricefilter.url }}">{{ pricefilter.pricestart|money }} {{ 's/d'|lang }} {{ pricefilter.priceend|money }}</a>
+						{% elseif not pricefilter.priceend %}
+						<a class="list-group-item " href="{{ pricefilter.url }}"> {{ pricefilter.sign }} {{ pricefilter.pricestart|money }}</a>
+						{% elseif not pricefilter.pricestart %}
+						<a class="list-group-item " href="{{ pricefilter.url }}"> {{ pricefilter.sign }} {{ pricefilter.priceend|money }}</a>
+						{% endif %}
+						{% endif %}
+						{% endfor %}
+					</div>
+				</center>
+				{% endif %}
+				<div class="widget-inner"></div>
+			</div>
+			{% if product_filter.filter_attribute|length > 0 %}
+			{% for attribute in product_filter.filter_attribute %}
+			<div class="widget widget-link ">
+				<div class="title-filter"><span>{{ 'Tampilkan'|lang }} {{ attribute.name }}</span></div>
+				<center>
+					<div class="list-group">
+						<a href="{{ product_filter.url }}" class="list-group-item active">{{ 'Semua'|lang }} {{ attribute.name }}</a>
+						{% for option in attribute.option %}
+						{% if option.selected %}
+						<a class="list-group-item">{{ option.name }}</a>
+						{% else %}
+						<a class="list-group-item" href="{{ option.url }}">{{ option.name }}</a>
+						{% endif %}
+						{% endfor %}
+					</div>
+				</center>
+			</div>
+			{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endif %}
+{% endif %}

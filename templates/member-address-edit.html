@@ -1,0 +1,224 @@
+<script type="text/javascript">
+$("#address_edit_form-{{ item.id }}").validate({
+    rules: {
+        firstname: {
+            required: true,
+            minlength: 3
+        },
+        lastname: {
+            required: true
+        },
+        address: {
+            required: true
+        },
+        postcode: {
+            required: true
+        },
+        state_id: {
+            required: true
+        },
+        city_id: {
+            required: true
+        },
+        phone: {
+            required: true
+        },
+        phone_mobile: {
+            required: true
+        }
+    },
+    messages: {
+        firstname: {
+            required: "{{ '<i class="fa fa-exclamation-triangle"></i> Nama Depan harus diisi'|lang }}",
+            minlength: "{{ '<i class="fa fa-exclamation-triangle"></i> Nama Depan minimal 3 karakter'|lang }}"
+        },
+        lastname: {
+            required: "{{ '<i class="fa fa-exclamation-triangle"></i> Nama Belakang harus diisi'|lang }}"
+        },
+        address: {
+            required: "{{ '<i class="fa fa-exclamation-triangle"></i> Alamat harus diisi'|lang }}"
+        },
+        postcode: {
+            required: "{{ '<i class="fa fa-exclamation-triangle"></i> Kode Pos harus diisi'|lang }}"
+        },
+        state_id: {
+            required: "{{ '<i class="fa fa-exclamation-triangle"></i> Kota harus diisi'|lang }}"
+        },
+        city_id: {
+            required: "{{ '<i class="fa fa-exclamation-triangle"></i> Propinsi harus diisi'|lang }}"
+        },
+        phone: {
+            required: "{{ '<i class="fa fa-exclamation-triangle"></i> No. Telp harus diisi'|lang }}"
+        },
+        phone_mobile: {
+            required: "{{ '<i class="fa fa-exclamation-triangle"></i> No. Handphone harus diisi'|lang }}"
+        }
+    },
+    errorLabelContainer: '.errorMsg',
+    errorElement: 'div',
+    submitHandler: function() {
+        $.ajax({
+            type: 'POST',
+            url: $('#address_edit_form-{{ item.id }}').attr('action'),
+            data: $('#address_edit_form-{{ item.id }}').serialize(),
+            dataType: "json",
+            success: function(data) {
+                if (data.status == 1) {
+                    $('#result_address_edit-{{ item.id }}').html(data.msg).show();
+                    setTimeout(function() {
+                        $("#address_list_container").load('{{ address_list_url }}');
+                    }, 1000);
+                } else if (data.status == 2) {
+                    $('#result_address_edit-{{ item.id }}').html(data.msg).show();
+                }
+            }
+        });
+        return false;
+    }
+});
+$('#country_id-{{ item.id }}').change(function() {
+    var country_id = $(this).val();
+    var url_action = '{{ addressajax_action_url }}';
+    var post_data = 'action=get_state&country_id=' + country_id;
+    $.post(url_action, post_data, function(data) {
+        $('#state_id-{{ item.id }}').empty().html(data);
+        $('#city_id-{{ item.id }}').empty().html('<option value="">{{ ' - pilih kota - '|lang }}</option>');
+    });
+});
+
+$('#state_id-{{ item.id }}').change(function() {
+    var state_id = $(this).val();
+    var url_action = '{{ addressajax_action_url }}';
+    var post_data = 'action=get_shipping_city&state_id=' + state_id;
+    $.post(url_action, post_data, function(data) {
+        $('#city_id-{{ item.id }}').empty().html(data);
+    });
+});
+</script>
+
+<!-- error msg -->
+<div id="result_address_edit-{{ item.id }}">
+    <div class="alert alert-danger errorMsg" style="display:none;"></div>
+</div>
+
+<!-- form address -->
+<form id="address_edit_form-{{ item.id }}" name="address_edit_form-{{ item.id }}" method="post" action="{{ addressedit_action_url }}">
+    <input type="hidden" name="address_id" value="{{ item.id }}" />
+
+    <!-- first name -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Nama Depan'|lang }}
+            <span>*</span>
+        </label>
+        <div class="col-md-9">
+            <input class="form-control" type="text" name="firstname" id="firstname" value="{{ item.firstname }}" />
+        </div>
+    </div>
+
+    <!-- last name -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Nama Belakang'|lang }}
+            <span>*</span>
+        </label>
+        <div class="col-md-9">
+            <input class="form-control" type="text" name="company" id="company" value="{{ item.company }}" />
+        </div>
+    </div>
+
+
+    <!-- company -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Perusahaan'|lang }}</label>
+        <div class="col-md-9">
+            <input class="form-control" type="text" name="company" id="company" value="{{ item.company }}" />
+        </div>
+    </div>
+
+
+    <!-- address -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Alamat'|lang }}
+            <span>*</span>
+        </label>
+        <div class="col-md-9">
+            <textarea class="form-control" type="text" name="address" id="address">{{ item.address }}</textarea>
+        </div>
+    </div>
+
+
+    <!-- country -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Negara'|lang }}
+            <span>*</span>
+        </label>
+        <div class="col-md-9">
+            <select class="form-control" name="country_id" id="country_id-{{ item.id }}" style="max-width:164px;">
+                <option value="">{{ '-pilih negara-'|lang }}</option>
+                {% include 'snippets/country-options.html' with { 'selected': item.country_id } %}
+            </select>
+        </div>
+    </div>
+
+    <!-- provinsi -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Propinsi'|lang }}
+            <span>*</span>
+        </label>
+        <div class="col-md-9">
+            <select class="form-control" name="state_id" id="state_id-{{ item.id }}">
+                <option value="">{{ '-pilih propinsi-'|lang }}</option>
+                {% include 'snippets/state-options.html' with { 'selected': item.state_id } %}
+            </select>
+        </div>
+    </div>
+
+    <!-- city -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Kota/Kabupaten'|lang }}
+            <span>*</span>
+        </label>
+        <div class="col-md-9">
+            <select class="form-control" name="city_id" id="city_id-{{ item.id }}">
+                <option value="">{{ '-pilih kota-'|lang }}</option>
+                {% include 'snippets/city-options.html' with { 'selected': item.city_id } %}
+            </select>
+        </div>
+    </div>
+
+    <!-- code pos -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Kode Pos'|lang }}
+            <span>*</span>
+        </label>
+        <div class="col-md-9">
+            <inputclass="form-control" type="text" name="postcode" id="postcode" value="{{ item.postcode }}" />
+        </div>
+    </div>
+
+    <!-- no telp -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'No. Telp'|lang }}</label>
+        <div class="col-md-9">
+            <input class="form-control" type="text" name="phone" id="phone" value="{{ item.phone }}" />
+        </div>
+    </div>
+
+
+    <!-- no hp -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'No. HP'|lang }}
+            <span>*</span>
+        </label>
+        <div class="col-md-9">
+            <input class="form-control" type="text" name="phone_mobile" id="phone_mobile" value="{{ item.hp }}" />
+        </div>
+    </div>
+
+    <!-- submit -->
+    <div class="form-group">
+        <div class="col-md-9 col-md-offset-3">
+            <input class="btn btn-primary pull-right" type="submit" name="edit_address" value="{{ 'Submit'|lang }}" />
+        </div>
+    </div>
+
+</form>

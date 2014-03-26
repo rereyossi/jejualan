@@ -1,0 +1,533 @@
+<p>
+	<script>
+		$(function () {
+			$('.add2cart').submit(function () {
+				var add2cart = $(this);
+				var add2cart_modal = '<div id="add2cart">';
+				add2cart_modal += '<img src="{{ product.urlassets }}assets/images/loadingAnimation.gif" id="imageloading">';
+				add2cart_modal += '<div id="add2cartmessage">{{ "Silahkan tunggu, produk sedang ditambahkan ke keranjang belanja."|lang }}</div>';
+				add2cart_modal += '</div>';
+				var sukses = '<div class="add2cartmsg mb20">{{ "Produk berhasil ditambahkan ke keranjang belanja."|lang }}</div>';
+				var back = '<input type="button" class="backButton btn-block btn btn-primary" value="{{ "Belanja Lagi"|lang }}" onclick="$(\'#cboxClose\').click();">';
+				var cart = ' <input type="button" class="checkoutBtn btn-block btn btn-success" value="{{ "Selesai Belanja"|lang }}" onclick="window.location=\'{{ product.cart_url }}\'">';
+				var ok = '<input type="button" class="buttonLink btn btn-block btn-jej" value="{{ "OK"|lang }}" onclick="$(\'#cboxClose\').click();">';
+		
+				$.colorbox({
+					/*inline: true,
+						href: '#add2cart',*/
+					html: add2cart_modal,
+					scrolling: false,
+					height: '250px',
+					width: '170px',
+					opacity: 0.5,
+					onOpen: function () {
+						//$('#add2cart').show();
+						$('#imageloading').show();
+						$('#add2cartmessage').html('{{ "Silahkan tunggu, produk sedang ditambahkan ke keranjang belanja."|lang }} ').show();
+						$.ajax({
+							type: 'POST',
+							url: add2cart.attr('action'),
+							data: add2cart.serialize(),
+							dataType: 'json',
+							success: function (data) {
+								$('#imageloading').hide();
+								if (data.success == 1) {
+									$('#add2cartmessage').html(sukses + back + cart);
+								}
+								else {
+									$('#add2cartmessage').html('<div class="add2cartmsg">' + data.msg + '</div>' + ok);
+								}
+							}
+						});
+					},
+					onClosed: function () {
+						//$('#add2cart').hide();
+					}
+				});
+		
+		
+				return false;
+			});
+		});
+	</script>
+	<style>
+		#add2cart {
+		padding: 10px;
+		}
+		#colorbox {
+		height: 250px !important;
+		}
+		.add2cartmsg {
+		margin-bottom: 30px;
+		font-size: 12px;
+		}
+	</style>
+<div class="content-wrapper">
+	<div class="row">
+		<div class="product-detail col-md-12 ">
+			<div class="shadow-box">
+				<center>{% include "blocks/breadcrumb.html" %}</center>
+				<div class="product-detail-main">
+					<div class="row">
+						<div class="col-md-6 ">
+							<a href="{{ product.images.0.large }}" class="cloud-zoom" id="zoom1" rel="adjustX: 10, adjustY:-4">
+							<img src="{{ product.images.0.detail }}" alt="{{ product.name }}" title="{{ product.name }}" />
+							</a>
+							<div class="bg-green">
+								<center>
+									{% for images in product.images %}
+									<a href="{{ images.large }}" class="cloud-zoom-gallery" title="{{ product.name }}" rel="useZoom: 'zoom1', smallImage: '{{ images.detail }}' ">
+									<img src="{{ images.small }}" alt="{{ product.name }}" />
+									</a>
+									{% endfor %}
+								</center>
+							</div>
+						</div>
+						<div class="product-detail-desc col-md-6">
+							<h2>{{ product.name }}</h2>
+							<div class="product-detail-price ">
+								{{ 'Harga'|lang }}
+								{% if product.discount %}
+								<strong class="ori "><del>{{ product.price|money }}</del></strong>
+								<strong class="current ">
+									<img class="discount-label2" src="{{ 'discount-icon.png'|asset_url }}" alt="" />
+									<h3><img src="{{ 'green_arrow_down.png'|asset_url }}" alt="" />{{ product.retail_price|money }}</h3>
+								</strong>
+								{% else %}
+								<strong class="current">
+									<h3>{{ product.retail_price|money }}</h3>
+								</strong>
+								{% endif %}
+							</div>
+							<br/>
+							<div class="">
+								<div class="pull-right hidden-xs">
+									<!-- AddThis Button BEGIN -->
+									<div class="addthis_toolbox addthis_default_style row">
+										<a class="col-md-4 addthis_button_facebook_like" fb:like:layout="button_count"></a>
+										<a class="col-md-4 addthis_button_tweet"></a>
+									</div>
+									<script type="text/javascript" 
+										src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4fff9b8d24c2d509"></script>
+									<!-- AddThis Button END -->
+								</div>
+								<p class="stat-av">
+									{% if product.stock %}
+									<img class="tick" src="{{ 'tick.png'|asset_url }}">{{ 'Tersedia'|lang }}
+									{% else %}
+									<img class="tick" src="{{ 'error.png'|asset_url }}">{{ 'Tidak Tersedia'|lang }}
+									{% endif %}
+								</p>
+							</div>
+							<div class="product-desc">
+								{{ product.desc }}
+							</div>
+							<div class="product-buy clearfix">
+								<form name="" id="p{{ product.product_id }}" class="add2cart mb20" method="post" action="{{ product.buy_url }}">
+									<input type="hidden" value="{{ product.id }}" name="product_id">
+									<input type="hidden" value="add" name="act">{% if product.attribute_stock.data|length > 1 %}
+									<select name="stock_id" style="width:100%">
+										{% for id,stockdata in product.attribute_stock.data %}
+										<option value="{{ id }}">{{ stockdata.option_name }}</option>
+										{% endfor %}
+									</select>
+									{% else %}
+									<input type="hidden" name="stock_id" value="{{ product.stock_id }}">{% endif %}
+									<div class="pull-left">
+										<br/>{% if product.stock %}
+										<div id="buyProduct">
+											<span class="">
+											<input type="submit" value="{{ 'Beli Produk Ini'|lang }}" class="btn btn-jej" />
+											</span>
+										</div>
+										{% else %}
+										<span class="button-wrap">
+										<input type="submit" value="{{ 'Beli Produk Ini'|lang }}" class="btn disabled" disabled="disabled" />
+										</span>
+										{% endif %}
+									</div>
+								</form>
+							</div>
+							<br/>
+							<ul class="nav nav-tabs" id="myTab">
+								<li class="active"><a href="#pdetail" data-toggle="tab">Detail & Stock</a></li>
+								<li><a href="#price" data-toggle="tab">{{ 'Harga grosir'|lang }}</a></li>
+								<li><a href="#review" data-toggle="tab">{{ 'List Review'|lang }}</a></li>
+								<li><a href="#comment" data-toggle="tab">{{ 'Comments'|lang }}</a></li>
+							</ul>
+							<div class="tab-content">
+								<div class="tab-pane  active" id="pdetail">
+									<div class="row">
+										<div class="col-md-12 present">
+										<h4>{{ 'Info Detail'|lang }}</h4>
+											<!-- Porduct Id -->
+											<div class="col-sm-4 thumb">
+												<h5 class="title">{{ 'Nomor Produk'|lang }}</h5>
+												<div class="value">{{ product.id }}</div>
+											</div>
+											<!-- Weight -->
+											{% if product.weight > 0 %}
+											<div class="col-sm-4 thumb">
+												<h5 class="title">{{ 'Shipping weight'|lang }}</h5>
+												<div class="value">{{ product.weight }} gr</div>
+											</div>
+											{% endif %}
+											<!-- Tag -->
+											{% if product.tags != '' %}
+											<div class="col-sm-4 thumb">
+												<h5 class="title">{{ 'Tags'|lang }}</h5>
+												<div class="value">{{ product.tags }}</div>
+											</div>
+											{% endif %}
+											<!-- Attribute -->
+											{% if product.other_atributes is not empty %} {% for otherattributes in product.other_atributes %}
+											<div class="col-sm-4 thumb">
+												<h5 class="title">{{ otherattributes.name }}</h5>
+												<div class="value">{{ otherattributes.value }}</div>
+											</div>
+											{% endfor %} {% endif %}
+										</div>
+									</div>
+									<!-- Stock -->
+									{% if config.record_stock %} {% if product.attribute_stock.data > 0 %}
+									<div class="stock">
+										<h4>{{ 'Info Stok'|lang }}</h4>
+										<table class="table  table-bordered">
+											<thead>
+												<tr class="table-primer">
+													{% for title in product.attribute_stock.name %}
+													<th>{{ title }}</th>
+													{% endfor %}
+													<th>{{ 'Stok'|lang }}</th>
+												</tr>
+											</thead>
+											<tbody>
+												{% for attribute in product.attribute_stock.data %}
+												<tr>
+													{% for key,attr in attribute %} {% if key != 'option_name' %}
+													<td>{{ attr }}</td>
+													{% endif %} {% endfor %}
+												</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+									</div>
+									{% endif %} {% endif %}
+								</div>
+								<div class="tab-pane fade" id="price">
+									<div class="present">
+										<!-- Price -->
+										{% if config.show_price == 1 %} {% if product.wholesale|length > 0 %}
+										<div class="listmeta">
+											<h4>{{ 'Harga grosir'|lang }}</h4>
+											<div class="list">
+												{% for wholesale in product.wholesale %}
+												<div><span>{{ wholesale.qty }} Pcs:</span>  <strong>{{ wholesale.price|money }} </strong>
+												</div>
+												{% endfor %}
+											</div>
+										</div>
+										{% endif %} {% endif %}
+									</div>
+								</div>
+								<div class="tab-pane fade" id="review">
+									<div class="sidebar-inner present">
+										<div class="product-review">
+											<script type="text/javascript">
+												$(document).ready(function(){
+													$('#review_add').live("click", function () {
+														$('#review_add_container').slideToggle("slow");
+														var txtclick = $('#review_add').html();
+														if(txtclick=='(-) Tutup Form'){
+															$('#review_add').html("(+) Tambah review");
+														}else{
+															$('#review_add').html("(-) Tutup Form");
+														}
+													});
+													
+													var count_page = {{  paginate.pages_count  ? paginate.pages_count : 0 }};
+													//var currentPage = null;
+													$(".pagination a.previous").hide();	   
+													$('a.item[data-id=1]').addClass('current');
+													$("#review_list_container").load("{{ review.data_url }}/1");
+													
+													$(".pagination a.item").click(function(){
+														
+														var thisId = $(this).data("id");
+														
+														if( thisId == $(".pagination .item").length )
+														{
+															$(".pagination a.next").hide();
+															$(".pagination a.previous").show();
+														}
+														else
+														{
+															if( thisId == 1 )
+															{
+																$(".pagination a.previous").hide();
+																$(".pagination a.next").show();
+															}
+															else
+															{
+																$(".pagination a.previous").show();
+																$(".pagination a.next").show();
+															}
+														}		
+																
+														$("#review_list_container").load("{{ review.data_url }}/" + thisId);
+														$(this).siblings().removeClass('current');
+														$(this).addClass("current");
+														return false;
+													});
+															
+													$(".pagination a.previous").click(function(){
+														
+														if( $(".current").data('id') > 1 )
+														{
+															var previousID = $(".current").data('id') - 1;
+														}else{
+															var previousID = 1;
+														}
+														if( previousID == 1 )
+														{
+															$(this).hide();
+														}
+														else
+														{
+															$(this).show();
+														}
+														
+														//alert(previousID);
+														$('.pagination a.next').show();
+														$("#review_list_container").load("{{ review.data_url }}/" + previousID);
+														$(this).siblings().removeClass('current');
+														$('a.item[data-id=' + previousID + ']').addClass('current');
+														
+													
+														return false;
+													});
+													
+													$(".pagination a.next").click(function(){
+														var nextID = $(".current").data('id') + 1;
+														
+														if( nextID == $(".pagination .item").length )
+														{
+															$(this).hide();
+														}
+														else
+														{
+															$(this).show();
+														}
+														
+														$('.pagination a.previous').show();
+														$("#review_list_container").load("{{ review.data_url }}/" + nextID);
+														$(this).siblings().removeClass('current');
+														$('a.item[data-id=' + nextID + ']').addClass('current');
+												
+														return false;
+													});
+													
+													$("#review_add_form").validate({
+														rules: {
+															name: {
+																required: true,
+																minlength: 3
+															},
+															email: {
+																required: true,
+																email: true
+															},
+															content: {
+																required: true
+															},
+															rating: {
+																required: true
+															},
+															code: {
+																required: true
+															}
+														},
+														messages: {
+															name: {
+																required: "{{ 'Nama harus diisi'|lang }}",
+																minlength: "{{ 'Nama minimal 3 karakter'|lang }}"
+															},
+															email: {
+																required: "{{ 'Email harus diisi'|lang }}",
+																email: "{{ 'Email tidak valid (contoh: nama@domain.com)'|lang }}"
+															},
+															content: {
+																required: "{{ 'Review harus diisi'|lang }}"
+															},
+															rating: {
+																required: "{{ 'Rating harus diisi'|lang }}"
+															},
+															code: {
+																required: "{{ 'Kode keamanan harus diisi'|lang }}"
+															}
+														},
+														errorLabelContainer: '.errorMsg',
+														errorElement: 'div',
+														submitHandler: function() {
+															$.ajax({
+																type: 'POST',
+																url: $('#review_add_form').attr('action'),
+																data: $('#review_add_form').serialize(),
+																dataType:"json",
+																success: function (data) {
+												                                         if (data.status == 1) {
+												                                             $('#result_review_add')
+												                                                 .html( '<div class="alert">' + data.msg + '</div>')
+												                                                 .show();
+												                                             setTimeout(function(){
+												                                                 $("#review_list_container").load("{{ review.data_url }}");	
+												                                             }, 1000);
+												                                         }
+												                                         else if (data.status == 2) {
+												                                             $('#result_review_add')
+												                                                 .html('<div class="alert">' + data.msg + '</div>' )
+												                                                 .show();
+												                                         }
+																}
+															});
+															return false;
+														}
+													});
+													
+													
+												});
+											</script>
+											<div class="product-review-main">
+												<p><a id="review_add" class="btn btn-jej" href="javascript:void(0);">{{ '(+) Tambah review'|lang }}</a>
+												</p>
+												<div id="review_add_container" style="margin-bottom:20px; display:none">
+													<div id="result_review_add">
+														<div class="errorMsg" style=" display:none"></div>
+													</div>
+													<form id="review_add_form" name="review_add_form" method="post" action="{{ review.action_url }}">
+														<input type="hidden" name="product_id" value="{{ product.id }}" />
+														<table class="table inputan">
+															<tr>
+																<td width="">{{ 'Nama'|lang }}</td>
+																<td width="">
+																	<input class="text" type="text" name="name" id="name" />
+																</td>
+															</tr>
+															<tr>
+																<td>{{ 'Email'|lang }}</td>
+																<td>
+																	<input class="text" type="text" name="email" id="email" />
+																</td>
+															</tr>
+															<tr>
+																<td style="vertical-align: top">{{ 'Review'|lang }}</td>
+																<td>
+																	<textarea class="text" name="content" id="content" rows="5"></textarea>
+																</td>
+															</tr>
+															<tr>
+																<td>{{ 'Rating'|lang }}</td>
+																<td class="padd">
+																	<input type="radio" name="rating" id="rate-good" value="1" />
+																	<label for="rate-good" class="rate-good">
+																	<img src="{{ 'thumbs-up.png'|asset_url }}" alt="" />
+																	</label>
+																	<input type="radio" name="rating" id="rate-bad" value="-1" />
+																	<label for="rate-bad" class="rate-bad">
+																	<img src="{{ 'thumbs-down.png'|asset_url }}" alt="" />
+																	</label>
+																</td>
+															</tr>
+															<tr>
+																<td>{{ 'Kode keamanan'|lang }}</td>
+																<td>
+																	<img src="{{ captcha_url }}" id="captcha">
+																	<br/>
+																	<input type="text" name="code" style="margin-top:10px;" id="code" class="text">
+																</td>
+															</tr>
+															<tr>
+																<td>&nbsp;</td>
+																<td>
+																	<input class="formBtn btn btn-jej " type="submit" name="add_review" value="{{ 'Submit'|lang }}" />
+																</td>
+															</tr>
+														</table>
+													</form>
+												</div>
+												<div id="review_list_container"></div>
+												<div id="nav-pages" style="padding-top: 10px;">
+													{% include 'snippets/pagination.html' %}
+												</div>
+											</div>
+											<!-- End .product-review -->
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane" id="comment">
+									<div class="sidebar-inner present">
+										<div class="product-fb-comment">
+											{% if config.facebook_comment == 1 and config.facebook_appid != '' %}
+											<center>
+												<div id="fb_list_container" class="hidden-xs">
+													<div id="fb-root"></div>
+													<script src="http://connect.facebook.net/en_US/all.js#appId={{ config.facebook_appid }}&amp;xfbml=1"></script>
+													<fb:comments href="{{ product.url }}" num_posts="10" width="440"></fb:comments>
+												</div>
+												<div id="fb_list_container" class="visible-xs">
+													<div id="fb-root"></div>
+													<fb:comments href="{{ product.url }}" num_posts="10" width="224"></fb:comments>
+												</div>
+											</center>
+											{% endif %}
+										</div>
+										<br/>
+									</div>
+								</div>
+							</div>
+							<script>
+								$(function () {
+								$('#myTab a:last').tab('show')
+								})
+							</script>
+						</div>
+						<br clear="all" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End .product-detail -->
+	</div>
+	<div class="row bg-alt">
+	</div>
+	<div class="row present">
+		<ul class="nav nav-tabs" id="myTab">
+			<li>
+				<a href="#new" data-toggle="tab">
+					<center>{{ settings.block_title_productnew|lang }}</center>
+				</a>
+			</li>
+			<li class="active">
+				<a href="#related" data-toggle="tab">
+					<center>{{ settings.block_title_productrelated|lang }}</center>
+				</a>
+			</li>
+			<li>
+				<a href="#last" data-toggle="tab">
+					<center>{{ settings.block_title_lastvisited|lang }}</center>
+				</a>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane fade" id="new">{% include 'blocks/product-new.html' %}</div>
+			<div class="tab-pane active" id="related">{% include 'blocks/product-related.html' %}</div>
+			<div class="tab-pane fade" id="last">{% include 'blocks/product-lastvisited.html' %}</div>
+		</div>
+		<script>
+			$(function () {
+				$('#myTab a:last').tab('show')
+			})
+		</script>
+	</div>
+</div>
+</p>

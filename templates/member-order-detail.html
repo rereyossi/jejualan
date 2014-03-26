@@ -1,0 +1,88 @@
+<link rel="stylesheet" href="{{ 'style-order.css'|asset_url }}" type="text/css" media="screen" />
+<div id="tabbed_box_1" class="tabbed_box">
+	<div class="tabbed_area">
+		<div id="content_1" class="tabcontent">
+			<ul>
+				<li>
+					{% if is_lastorder %}
+					<h3>{{ 'Order Terkini'|lang }}</h3>
+					{% else %}
+					<strong>{{ 'Detail Order Tanggal'|lang }} {{ lastorder.date|date("d M Y") }}</strong>
+					{% endif %}
+				</li>
+				<li>
+					<div>{{ 'Order'|lang }}</div> {{ lastorder.date|date("d M Y") }} <strong>( {{ lastorder.total_price|money }} )</strong>
+				</li>
+				<li>
+					<div>{{ 'Status'|lang }}</div>
+					<span style="color:red; font-size:18px">{{ lastorder.status }}</span>
+				</li>
+				<li>
+					<div>{{ 'Detail Status'|lang }}</div>Order Anda {{ lastorder.status }} pada <strong style="color:#39F">{{ lastorder.status_date|date("d M Y") }}</strong>
+				</li>
+				<li>
+					<div>{{ 'Produk'|lang }}</div><br/>
+					<table class="table table-striped">
+					{% for item in products %}
+					<tr>
+						<td style="width:25%"><img src="{{ item.images.0.small }}" alt="{{ item.images.0.title }}" /></td>
+						<td style="width:50%">{{ item.quantity }} pcs <a href="{{ item.url }}" target="_blank">{{ item.name }}</a></td>
+						<td style="width:25%;" align="right">{{ item.price|money }}</td>
+					</tr>
+					{% endfor %}
+					</table>   
+				</li>
+				<li>
+					<div>{{ 'Biaya'|lang }}</div><br/><br/>
+					<table class="table table-striped" style="width:100%">
+					<tr>
+						<td style="color:#999;width:25%">{{ 'Biaya Produk'|lang }}</td>
+						<td align="right">{{ lastorder.total_price|money }}</td>
+					</tr>
+					{% if lastorder.discount > 0 %}
+					<tr>
+						<td style="color:#999; width:25%">{{ 'Diskon'|lang }}</td>
+						<td align="right">{{ lastorder.discount|money }}</td>
+					</tr>
+					{% endif %}
+					<tr>
+						<td style="color:#999; width:25%">{{ 'Ongkos Kirim'|lang }}</td>
+						<td align="right">{{ lastorder.total_shipping|money }}</td>
+					</tr>
+					<tr>
+						<td style="color:#999; width:25%">{{ 'Biaya Tambahan'|lang }}</td>
+						<td align="right">{{ lastorder.handling_fee|money }}</td>
+					</tr>
+					<tr>
+						<td style="color:#999">{{ 'Total Biaya'|lang }}</td>
+						<td align="right"><strong style="color:#39F">{{ lastorder.total_cost|money }}</strong></td>
+					</tr>
+					</table>
+				</li>
+				<li>
+					<div>{{ 'Pengiriman'|lang }}</div><br/><br/>
+					<table class="table table-striped" style="width:100%">
+					<tr>
+						<td style="color:#999">{{ 'Nama'|lang }}</td>
+						<td>{{ lastorder.firstname }} {{ lastorder.lastname }}</td>
+					</tr>
+					<tr>
+						<td style="color:#999" >{{ 'Alamat'|lang }}</td>
+						<td>{{ lastorder.address }}</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td>				
+						{{ lastorder.city }}
+						{{ lastorder.state }}, {{ lastorder.postcode }}
+						</td>
+					</tr>
+					<tr>
+						<td style="color:#999;width:25%"">Ekspedisi</td><td><strong style="color:#39F">{{ lastorder.company }}</strong></td>
+					</tr>
+					</table>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

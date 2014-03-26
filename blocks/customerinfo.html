@@ -1,0 +1,5 @@
+{% if member.loggedin %}
+	<span class="my-acc"><a class="login_btn" href="#">{{ 'Member Area'|lang }}</a></span>
+{% else %}
+	<span class="my-acc"><a class="login_btn" href="#">{{ 'Customer Login'|lang }}</a></span>
+{% endif %}

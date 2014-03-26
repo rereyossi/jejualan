@@ -1,0 +1,24 @@
+<div class="search-block">
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $(".search_input").focus(function() {
+            if ($(this).val() == '{{ '
+                Cari '|lang }}')
+                $(this).val("");
+        }).blur(function() {
+            if ($(this).val() == '')
+                $(this).val("{{ 'Cari'|lang }}");
+        });
+    });
+    </script>
+    <form method="post" action="{{ search.search_url }}" role="search">
+        <input type="hidden" name="in_search" value="1" />
+
+        <div class="form-group">
+            <input name="keyword" placeholder="Search" value="{{ ''|lang }}" type="text" class="form-control round-form">
+        </div>
+        <div class="form-group">
+            <input class="btn btn-primary" type="submit" name="search" value="{{ 'Cari'|lang }}" />
+        </div>
+    </form>
+</div>

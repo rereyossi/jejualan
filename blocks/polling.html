@@ -1,0 +1,22 @@
+<div class="polling-block">
+    <h3 class="text-title">{{ settings.block_title_polling|lang }}</h3>
+    <div class="content">
+        <div id="polling">
+            <h4 class="title">{{ polling.title }}</h4>
+            <form method="post" action="">
+                {% for option in polling.options %}
+                <p class="polling-option">
+
+                    <div class="radio">
+                        <label for="option_{{ option.id }}">
+                            <input type="radio" name="poll_option" value="{{ option.id }}" id="option_{{ option.id }}" />{{ option.title }}
+                        </label>
+                    </div>
+                </p>
+                {% endfor %}
+                <input class="btn btn-second" type="submit" name="dovote" value="{{ 'Vote'|lang }}" />
+                <a class="btn btn-primary" href="{{ polling_url }}">{{ 'Lihat hasil'|lang }}</a>
+            </form>
+        </div>
+    </div>
+</div>

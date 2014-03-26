@@ -1,0 +1,25 @@
+<div class="block-banner-utama hidden-xs">
+	<div class="flexslider">
+		<ul class="slides">
+        {% for slide in mainbanner %}
+			<li>
+            	{% if slide.url is not empty %}
+                <a href="{{ slide.url }}">
+            		<center><img class="img-responsive" src="{{ slide.image}}" alt="{{ slide.title }}" width="100%" height="{{ slide.height }}"/></center>
+                </a>
+                {% else %}
+                	<center><img class="img-responsive" src="{{ slide.image}}" alt="{{ slide.title }}" width="100%" height="{{ slide.height }}"/></center>
+                {% endif %}
+			</li>
+        {% endfor %}
+		</ul>
+	</div>
+</div>
+<script>
+// Can also be used with $(document).ready()
+$(window).load(function() {
+  $('.flexslider').flexslider({
+    animation: "slide"
+  });
+});
+</script>

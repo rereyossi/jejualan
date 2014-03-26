@@ -1,0 +1,156 @@
+<div class="bg-white">
+    <!-- breadcrumb -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="breadcrumb">
+                <h2 class="text-title">{{ 'Data testimonial'|lang }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- testimonial -->
+    <div class="row">
+        <div id="testimonial" class="col-md-12">
+            <script type="text/javascript">
+            $(document).ready(function() {
+
+                $('#open_form_testimonial').toggle(function() {
+                    $(this).empty().html("(x) {{ 'Tutup'|lang }}");
+                    $('#testimonial_form').slideDown(400);
+                }, function() {
+                    $(this).empty().html("(+) {{ 'Tambah testimonial'|lang }}");
+                    $('#testimonial_form').slideUp(400);
+                });
+
+                $('#save_testimonial').click(function() {
+                    var urlAction = "{{ testimonial.action_url }}";
+                    var tName = $('#name').val();
+                    var tEmail = $('#email').val();
+                    var tAddress = $('#address').val();
+                    var tContent = $('#content').val();
+                    var tCode = $('#code').val();
+                    var idRespon = $('#respon');
+                    var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+                    var postData = 'action=save_testimonial&name=' + tName + '&email=' + tEmail + '&content=' + tContent + '&code=' + tCode + '&address=' + tAddress;
+                    if (tName == '') {
+                        idRespon.html("<div class=\"errorMsg alert alert-danger\">{{ 'Silahkan masukkan nama Anda'|lang }}</div>");
+                        $('#name').focus();
+                    } else if (tEmail == '' || !emailReg.test(tEmail)) {
+                        idRespon.html("<div class=\"errorMsg alert alert-danger\">{{ 'Alamat email yang Anda masukkan tidak valid'|lang }}</div>");
+                        $('#email').focus();
+                    } else if (tContent == '') {
+                        idRespon.html("<div class=\"errorMsg alert alert-danger\">{{ 'Silahkan masukkan isi testimonial'|lang }}</div>");
+                        $('#content').focus();
+                    } else if (tCode == '') {
+                        idRespon.html("<div class=\"errorMsg alert alert-danger\">{{ 'Kode keamanan tidak boleh kosong'|lang }}</div>");
+                        $('#code').focus();
+                    } else {
+                        $.post(urlAction, postData, function(respon) {
+                            if (respon.error == 1) {
+                                idRespon.html(respon.msg);
+                                reloadCaptcha();
+                            } else {
+                                reloadCaptcha();
+                                idRespon.html(respon.msg);
+                                $('input[type=text],textarea').val('');
+                            }
+                        }, 'json');
+
+                    }
+                    return false;
+                });
+
+            });
+
+            function reloadCaptcha() {
+                $('#captcha').attr('src', '{{ captcha_url }}?r=' + Math.random());
+                return false;
+            }
+            </script>
+            <a href="#" class="btn btn-second" id="open_form_testimonial">
+                (+) {{ 'Tambah testimonial'|lang }}
+            </a>
+
+
+            <!-- form testimonial -->
+            <div class="row">
+                <div id="testimonial_form" class="col-md-8" style="display:none">
+                    <!-- alert -->
+                    <div class="col-md-9 col-md-offset-3">
+                        <span id="respon"></span>
+                    </div>
+
+                    <!-- form input -->
+                    <form class="form-vertical" method="post" action="">
+                        <!-- name -->
+                        <div class="form-group">
+                            <label class="col-md-3">{{ 'Nama'|lang }} <span>*</span></label>
+                            <div class="col-md-9">
+                                <input type="text" name="name" id="name" class="form-control">
+                            </div>
+                        </div>
+                        <!-- email -->
+                        <div class="form-group">
+                            <label class="col-md-3">{{ 'Email'|lang }} <span>*</span></label>
+                            <div class="col-md-9">
+                                <input type="text" name="email" id="email" class="form-control">
+                            </div>
+                        </div>
+                        <!-- no hanphone -->
+                        <div class="form-group">
+                            <label class="col-md-3">{{ 'Alamat'|lang }}</label>
+                            <div class="col-md-9">
+                                <input type="text" name="address" id="address" class="form-control">
+                            </div>
+                        </div>
+                        <!-- content -->
+                        <div class="form-group">
+                            <label class="col-md-3">{{ 'Isi testimonial'|lang }} <span>*</span></label>
+                            <div class="col-md-9">
+                                <textarea name="content" class="form-control" id="content" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <!-- kode keamanan -->
+                        <div class="form-group">
+                            <label class="col-md-3">{{ 'Kode keamanan'|lang }} <span>*</span></label>
+                            <div class="col-md-9">
+                                <img src="{{ captcha_url }}" id="captcha">&nbsp;
+                                <input style="max-width:100px !important;" type="text" name="code" id="code" size="10" class="form-control">
+                            </div>
+                        </div>
+                        <!-- submit -->
+                        <div class="form-group">
+                            <div class="col-md-9 col-md-offset-3">
+                                <input type="submit" name="save_testimonial" class=" btn btn-primary pull-right" value="{{ 'Simpan'|lang }}" id="save_testimonial">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="row">
+                {% if testimonial != false %} {% for row in testimonial %} {% if row.content != '' %}
+                <div class="col-sm-6 posting-view">
+                    <div class="testim">
+                        <p>
+                            <em>{{ row.date|date('d M Y') }}</em>
+                        </p>
+                        <p>{{ row.content }}</p>
+                    </div>
+                    <div class="arrow pull-right"></div>
+                    <a>
+                        <p class="contributor">
+                            <strong>{{ row.name }}
+                                <small class="pull-right">
+                                    <img style="width:12px;" src="{{ 'testi-location.png'|asset_url }}" alt="" />{{ row.address }} &nbsp;&nbsp;&nbsp;</small>
+                            </strong>
+                        </p>
+                    </a>
+                </div>
+                {% endif %} {% endfor %} {% include 'snippets/pagination.html' %} {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>

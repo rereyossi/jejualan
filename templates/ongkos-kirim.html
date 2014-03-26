@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="breadcrumb">
+            <center>
+                <strong>{{ 'Daftar Ongkos Pengiriman'|lang }}</strong>
+            </center>
+        </div>
+    </div>
+</div>
+
+<!-- wrapper -->
+<div class="row">
+    <div class="col-md-12">
+        <script type="text/javascript">
+        var current_state_id = {
+            {
+                default_state_id
+            }
+        };
+        </script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+
+            $('#loaddata').hide();
+            $('.loading').fadeIn(500);
+
+            var action = '{{ shipping_list_url }}';
+
+            $('#loaddata').load(action, {
+                action: 'ongkir',
+                'id': current_state_id
+            }, function(respon) {
+                $('#loaddata').html(respon).fadeIn(800);
+                $('.loading').fadeOut(500);
+            });
+
+            $('#state_id').change(function() {
+                var id = $(this).val();
+                var post = 'action=ongkir&id=' + id;
+
+                $('#loaddata').fadeOut(400);
+                $('.loading').fadeIn(500);
+
+                $.post(action, post, function(respon) {
+                    $('#loaddata').html(respon).fadeIn(800);
+                    $('.loading').fadeOut(500);
+                });
+
+            });
+        });
+        </script>
+        <div class="form-group">
+            <select class="form-control" id="state_id" name="state_id">
+                {% include 'snippets/state-options.html' %}
+            </select>
+        </div>
+        <div class="table-responsive">
+            <div id="loaddata" class="ongkir"></div>
+        </div>
+        <div class="loading" style="display:none">
+            <img src="{{ 'loading.gif'|asset_url }}" alt="Loading.." />
+        </div>
+        <br/>
+        <br/>
+    </div>
+</div>

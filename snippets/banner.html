@@ -1,0 +1,33 @@
+<div class="banner-snippet">
+    <div class="row">
+        {% if settings.banner_link1 and settings.banner_link1 != '' %}
+        <div class="line-bottom col-md-12 col-sm-6 line-bottom">
+            <center>
+                <a href="{{ settings.banner_link1 }}">
+                    <img class="img-responsive" src="{{ settings.banner1 }}" alt="{{ settings.banner_title1 }}" />
+            </center>
+            </a>
+        </div>
+        {% else %}
+        <div class="line-bottom col-md-12 col-sm-6">
+            <center>
+                <img class="img-responsive" src="{{ settings.banner1 }}" alt="{{ settings.banner_title1 }}" />
+            </center>
+        </div>
+        {% endif %} {% if settings.banner_link2 and settings.banner_link2 != '' %}
+        <div class="line-bottom col-md-12 col-sm-6 line-bottom">
+            <center>
+                <a href="{{ settings.banner_link2 }}">
+                    <img class="img-responsive" src="{{ settings.banner2 }}" alt="{{ settings.banner_title2 }}" />
+            </center>
+            </a>
+        </div>
+        {% else %}
+        <div class="line-bottom col-md-12 col-sm-6">
+            <center>
+                <img class="img-responsive" src="{{ settings.banner2 }}" alt="{{ settings.banner_title2 }}" />
+            </center>
+        </div>
+        {% endif %}
+    </div>
+</div>

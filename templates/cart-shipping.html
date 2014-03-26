@@ -1,0 +1,565 @@
+<script>
+function formatcurrency(st) {
+    st += '';
+    var theValue = st;
+    var finalString = '';
+
+    var modulus = theValue.length % 3;
+    var param = 3;
+    var count = 0;
+    for (i = 0; i <= theValue.length; i++) {
+        if (count == modulus && modulus != 0) {
+            finalString += '.';
+        }
+        if (count == (param + modulus) && count < (theValue.length - 1)) {
+            finalString += '.';
+            param = 3 + param;
+        }
+        finalString += theValue.charAt(i);
+        count++;
+
+    }
+    return finalString;
+}
+
+function update_ekspedisi(city_id) {
+    $.ajax({
+        type: 'POST',
+        url: '{{ shipping_price_url }}',
+        data: 'to_city_id=' + city_id,
+        dataType: 'json',
+        success: function(data) {
+            if (data.status == 1) {
+                $.each(data.price, function(comp_id, v) {
+                    //console.log(comp_id);
+                    //console.log(v);
+                    $('#pilihekspedisi tr#comp_id-' + comp_id + ' .shipping_price').html(formatcurrency(v.price));
+                    $('#pilihekspedisi input#comp_id_' + comp_id).data('price', v.price);
+                    if (v.price > 0) {
+                        $('#pilihekspedisi tr#comp_id-' + comp_id).show();
+                    }
+                    $('#shipping_price_id').val(v.shipping_price_id);
+                });
+                $(':radio[name="comp_id"]:first').click();
+            }
+        }
+    });
+    $('input[name="comp_id"]').removeAttr('checked');
+    $('#biaya_pengiriman').html('');
+    $('#biaya_tambahan').html('');
+    //$('#biaya_total').html('');
+    $('#biaya_total').html(formatcurrency({
+        {
+            total_price
+        }
+    }));
+}
+
+function get_handling_fee(shipping_cost) {
+    var ongkir_biaya_tambahan = {
+        {
+            shipping_additional_cost
+        }
+    };
+    var ongkir_type_biaya_tambahan = {
+        {
+            shipping_additional_cost_type
+        }
+    };
+    var handling_fee = 0;
+    switch (ongkir_type_biaya_tambahan) {
+        case 1:
+            //rupiah
+            handling_fee = ongkir_biaya_tambahan;
+            break;
+        case 2:
+            //persen
+            handling_fee = Math.round((ongkir_biaya_tambahan / 100) * shipping_cost);
+            break;
+    }
+    return handling_fee;
+}
+
+$(function() {
+        { %
+            if addresses is empty %
+        } { %
+            else %
+        }
+        $('#shipping_address').hide(); { % endif %
+        }
+        $('#billing_address').hide();
+        $('#pilihekspedisi tr').hide();
+        //$('#lanjut').hide();
+
+        $('#shippingform input[name="address_id"]').click(function() {
+            var address_id = $(this).val();
+            if (address_id > 0) {
+                $('#shipping_address').hide();
+                var city_id = $(this).data('city');
+                update_ekspedisi(city_id);
+            } else {
+                $('#shipping_address').fadeIn();
+            }
+        });
+
+        $('.alamat-lama:last').click();
+        $(':radio[name="payment_addon_id"]:first').click();
+
+        $('#shipping_country_id').change(function() {
+            var country_id = $(this).val();
+            var url_action = '{{ action_url }}';
+            var post_data = 'action=get_state&country_id=' + country_id;
+            $.post(url_action, post_data, function(data) {
+                $('#shipping_state_id').empty().html(data);
+                $('#shipping_city_id').empty().html('<option value="">{{ "-pilih kota-"|lang }}</option>');
+            });
+        });
+
+        $('#shipping_state_id').change(function() {
+            var state_id = $(this).val();
+            var url_action = '{{ action_url }}';
+            var post_data = 'action=get_shipping_city&state_id=' + state_id;
+            $.post(url_action, post_data, function(data) {
+                $('#shipping_city_id').empty().html(data);
+            });
+        });
+
+        $('#billing_country_id').change(function() {
+            var country_id = $(this).val();
+            var url_action = '{{ action_url }}';
+            var post_data = 'action=get_state&country_id=' + country_id;
+            $.post(url_action, post_data, function(data) {
+                $('#billing_state_id').empty().html(data);
+                $('#billing_city_id').empty().html('<option value="">{{ "-pilih kota-"|lang }}</option>');
+            });
+        });
+
+        $('#billing_state_id').change(function() {
+            var state_id = $(this).val();
+            var url_action = '{{ action_url }}';
+            var post_data = 'action=get_shipping_city&state_id=' + state_id;
+            $.post(url_action, post_data, function(data) {
+                $('#billing_city_id').empty().html(data);
+            });
+        });
+
+        $('#alamat_sama').click(function() {
+            var sama = $(this).is(':checked');
+            if (sama) {
+                $('#billing_address').hide();
+            } else {
+                $('#billing_address').fadeIn();
+            }
+        });
+
+        $('#shipping_city_id').change(function() {
+            var to_city_id = $(this).val();
+            update_ekspedisi(to_city_id);
+        });
+
+        $('#pilihekspedisi :radio').click(function() {
+                var harga_produk = {
+                    {
+                        total_price
+                    }
+                };
+                var biaya_pengiriman = $(this).data('price');
+                var berat_kg = Math.ceil({
+                        {
+                            total_weight
+                        }
+                    }
+                    / 1000);
+        if (berat_kg == 0) {
+            berat_kg = 1;
+        }
+        var biaya_pengiriman2 = berat_kg * biaya_pengiriman;
+        var biaya_tambahan = get_handling_fee(biaya_pengiriman2);
+        var biaya_total = harga_produk + biaya_tambahan + biaya_pengiriman2;
+        $('#biaya_pengiriman').html(formatcurrency(biaya_pengiriman2));
+        $('#biaya_tambahan').html(formatcurrency(biaya_tambahan));
+        $('#biaya_total').html(formatcurrency(biaya_total));
+    });
+
+    $('#biaya_total').html(formatcurrency({{ total_price }}));
+
+    $('#shippingform').validate({
+        rules: {
+            address_id: {
+                required: true
+            },
+            'shipping[firstname]': {
+                required: true
+            },
+            'shipping[address]': {
+                required: true
+            },
+            'shipping[city_id]': {
+                required: true
+            },
+            'shipping[postcode]': {
+                required: true
+            },
+            'billing[firstname]': {
+                required: true
+            },
+            'billing[address]': {
+                required: true
+            },
+            'billing[city_id]': {
+                required: true
+            },
+            'billing[postcode]': {
+                required: true
+            },
+            comp_id: {
+                required: true
+            },
+            payment_addon_id: {
+                required: true
+            }
+        },
+        messages: {
+            address_id: {
+                required: '{{ "Silakan memilih alamat pengiriman"|lang }}'
+            },
+            'shipping[firstname]': {
+                required: '{{ "Nama harus diisi"|lang }}'
+            },
+            'shipping[address]': {
+                required: '{{ "Alamat harus diisi"|lang }}'
+            },
+            'shipping[city_id]': {
+                required: '{{ "Kota harus diisi"|lang }}'
+            },
+            'shipping[postcode]': {
+                required: '{{ "Kode Pos harus diisi"|lang }}'
+            },
+            'billing[firstname]': {
+                required: '{{ "Nama harus diisi"|lang }}'
+            },
+            'billing[address]': {
+                required: '{{ "Alamat harus diisi"|lang }}'
+            },
+            'billing[city_id]': {
+                required: '{{ "Kota harus diisi"|lang }}'
+            },
+            'billing[postcode]': {
+                required: '{{ "Kode Pos harus diisi"|lang }}'
+            },
+            comp_id: {
+                required: '{{ "Silakan memilih ekspedisi pengiriman"|lang }}'
+            },
+            payment_addon_id: {
+                required: '{{ "Silakan memilih cara pembayaran"|lang }}'
+            }
+        },
+        errorLabelContainer: '.errorMsg',
+        errorElement: 'div'
+    });
+
+});
+</script>
+
+<div class="row">
+    <div id="cart-shiping" class="col-md-12">
+        <!-- step step buy -->
+        <div class="step-cart">
+            <ul class="list-inline">
+                <li class="active">{{ 'Langkah Order'|lang }}</li>
+                <li class="active">{{ 'Keranjang Belanja'|lang }}</li>
+                <li class="active">{{ 'Login / Daftar'|lang }}</li>
+                <li class="active">{{ 'Pengiriman'|lang }}</li>
+                <li class="">{{ 'Selesai'|lang }}</li>
+            </ul>
+        </div>
+
+
+
+        <div class="row">
+            <div id="cart-shipping" class="col-md-12">
+                <h3 class="text-title">{{ 'Pengiriman'|lang }}</h3>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!-- error msg -->
+                        <div id="result">
+                            <div class="alert alert-danger errorMsg" style="display:none;"></div>
+                        </div>
+
+                        <!-- form address -->
+                        <form class="form-vertical" id="shippingform" method="post" action="{{ shipping_url }}">
+                            {% if addresses is not empty %}
+                            <div class="check-o mb20">
+                                {% for address in addresses %}
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="address_id" class="alamat-lama" value="{{ address.id }}" data-city="{{ address.city_id }}">{{ address.firstname }} {{ address.lastname }}, {{ address.company }}, {{ address.address }}, {{ address.postcode }}, ({{ address.hp }})
+                                    </label>
+                                </div>
+                                {% endfor %}
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="address_id" value="0" id="alamat_baru">{{ 'Alamat Baru'|lang }}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endif %}
+
+
+                            <!-- address informasi buyer -->
+                            <div id="shipping_address">
+
+                                <!-- first name -->
+                                <div class="form-group">
+                                    <label class="col-md-3">{{ 'Nama Depan'|lang }}</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" type="text" name="shipping[firstname]" id="shipping_firstname" value="{{ shipping.firstname }}">
+                                    </div>
+                                </div>
+                                <!-- last name -->
+                                <div class="form-group">
+                                    <label class="col-md-3">{{ 'Nama Belakang'|lang }}</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" type="text" name="shipping[lastname]" id="shipping_lastname" value="{{ shipping.lastname }}">
+                                    </div>
+                                </div>
+                                <!-- company -->
+                                <div class="form-group">
+                                    <label class="col-md-3">{{ 'Perusahaan'|lang }}</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" type="text" name="shipping[company]" id="shipping_company" value="{{ shipping.company }}">
+                                    </div>
+                                </div>
+                                <!-- address -->
+                                <div class="form-group">
+                                    <label class="col-md-3">{{ 'Alamat'|lang }}</label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" name="shipping[address]" id="shipping_address">{{ shipping.address }}</textarea>
+                                    </div>
+                                </div>
+                                <!-- country -->
+                                <div class="form-group">
+                                    <label class="col-md-3">{{ 'Negara'|lang }}</label>
+                                    <div class="col-md-9">
+                                        <select name="shipping[country_id]" id="shipping_country_id">
+                                            <option value="">{{ '-pilih negara-'|lang }}</option>
+                                            {% include 'snippets/country-options.html' with { 'selected': default_country_id } %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- provinsi -->
+                                <div class="form-group">
+                                    <label class="col-md-3">{{ 'Propinsi'|lang }}</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" name="shipping[state_id]" id="shipping_state_id">
+                                            <option value="">{{ '-pilih propinsi-'|lang }}</option>
+                                            {% include 'snippets/state-options.html' %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- city -->
+                                <div class="form-group">
+                                    <label class="col-md-3">{{ 'Kota/Kabupaten'|lang }}</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" name="shipping[city_id]" id="shipping_city_id">
+                                            <option value="">{{ '-pilih kota-'|lang }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- code pos -->
+                                <div class="form-group">
+                                    <label class="col-md-3">{{ 'Kode Pos'|lang }}</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" type="text" name="shipping[postcode]" id="shipping_postcode" value="{{ shipping.postcode }}">
+                                    </div>
+                                </div>
+
+                                <!-- no hp -->
+                                <div class="form-group">
+                                    <label class="col-md-3">{{ 'No. HP'|lang }}</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" type="text" name="shipping[phone_mobile]" id="shipping_phone_mobile" value="{{ shipping.phone_mobile }}">
+                                    </div>
+                                </div>
+
+                            </div>
+                    </div>
+
+                    <!-- address buyer -->
+                    <div class="address-buyer col-sm-6">
+
+                        <div class="checkbox-vertical">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="alamat_sama" name="alamat_sama" value="1" checked="checked">{{ 'Alamat tagihan sama dengan alamat pengiriman'|lang }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- new address -->
+                        <div id="billing_address">
+                            <h3 class="text-title">{{ 'Alamat Tagihan'|lang }}</h3>
+                            <!-- first name -->
+                            <div class="form-group">
+                                <label class="col-md-3">{{ 'Nama Depan'|lang }}</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" name="billing[firstname]" id="billing_firstname">
+                                </div>
+                            </div>
+                            <!-- last name -->
+                            <div class="form-group">
+                                <label class="col-md-3">{{ 'Nama Belakang'|lang }}</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" name="billing[lastname]" id="billing_lastname">
+                                </div>
+                            </div>
+                            <!-- company -->
+                            <div class="form-group">
+                                <label class="col-md-3">{{ 'Perusahaan'|lang }}</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" name="billing[company]" id="billing_company">
+                                </div>
+                            </div>
+                            <!-- address -->
+                            <div class="form-group">
+                                <label class="col-md-3">{{ 'Alamat'|lang }}</label>
+                                <div class="col-md-9">
+                                    <textarea class="form-control" name="billing[address]" id="billing_address"></textarea>
+                                </div>
+                            </div>
+                            <!-- country -->
+                            <div class="form-group">
+                                <label class="col-md-3">{{ 'Negara'|lang }}</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" name="billing[country_id]" id="billing_country_id">
+                                        <option value="">{{ '-pilih negara-'|lang }}</option>
+                                        {% include 'snippets/country-options.html' with { 'selected': default_country_id } %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- provinsi -->
+                            <div class="form-group">
+                                <label class="col-md-3">{{ 'Propinsi'|lang }}</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" name="billing[state_id]" id="billing_state_id">
+                                        <option value="">{{ '-pilih propinsi-'|lang }}</option>
+                                        {% include 'snippets/state-options.html' %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- city -->
+                            <div class="form-group">
+                                <label class="col-md-3">{{ 'Kota/Kabupaten'|lang }}</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" name="billing[city_id]" id="billing_city_id">
+                                        <option value="">{{ '-pilih kota-'|lang }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- code pos -->
+                            <div class="form-group">
+                                <label class="col-md-3">{{ 'Kode Pos'|lang }}</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" name="billing[postcode]" id="billing_postcode">
+                                </div>
+                            </div>
+
+                            <!-- no hp -->
+                            <div class="form-group">
+                                <label class="col-md-3">{{ 'No. HP'|lang }}</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" name="billing[phone_mobile]" id="billing_phone_mobile">
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        {% if shipping_free == false %}
+                        <div id="pilihekspedisi" class="mb20">
+                            {{ 'Silahkan pilih ekspedisi pengiriman:'|lang }}
+                            <table class="shippingTable">
+                                <tbody>
+                                    {% for item in shipping_company %}
+                                    <tr id="comp_id-{{ item.id }}">
+                                        <td>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" id="comp_id_{{ item.id }}" value="{{ item.id }}" name="comp_id" data-price="">
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <label for="comp_id_{{ item.id }}">{{ item.name }}</label>
+                                        </td>
+                                        <td>
+                                            <label for="comp_id_{{ item.id }}">Rp
+                                                <span class="shipping_price"></span>/ kg</label>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <input type="hidden" name="shipping_price_id" id="shipping_price_id" value="">{% endif %}
+
+                        <!-- cart informasi -->
+
+                        <table id="harga" class="table table-striped">
+                            <tr>
+                                <td>{{ 'Total Harga Produk'|lang }}</td>
+                                <td>Rp {{ total_price|money_without_currency }}</td>
+                            </tr>
+                            {% if shipping_free == false %}
+                            <tr>
+                                <td>{{ 'Total Berat Produk'|lang }}</td>
+                                <td>
+                                    <span id="berat">{{ total_weight }}</span>gr</td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'Biaya Pengiriman'|lang }}</td>
+                                <td>Rp
+                                    <span id="biaya_pengiriman"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'Biaya Tambahan Ongkos Kirim'|lang }}</td>
+                                <td>Rp
+                                    <span id="biaya_tambahan"></span>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td>{{ 'Biaya Total'|lang }}</td>
+                                <td>
+                                    <strong>Rp
+                                        <span id="biaya_total"></span>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </table>
+                        <div id="pembayaran" class="table">
+                            {{ 'Silakan pilih cara pembayaran'|lang }} {% for item in payment_addon %}
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="payment_addon_id" value="{{ item.id }}">{{ item.title }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <input class="btn btn-primary pull-right" id="lanjut" type="submit" name="finish" value="{{ 'Lanjut'|lang }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

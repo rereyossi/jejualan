@@ -1,0 +1,18 @@
+<div class="banner-theme-snippet">
+    {% if banner_title != '' %}
+        <h3 class="text-title">{{ banner_title|lang }}</h3>
+	{% endif %}
+    <div class="content">
+        {% if banner_url != '' %}
+		<div class="block-banner-ads">
+        	{% if banner_link and banner_link != '' %}
+            	<a href="{{ banner_link }}">
+                	<img src="{{ banner_url }}" alt="" />
+                </a>
+            {% else %}
+            	<img src="{{ banner_url }}" alt="" />
+            {% endif %}
+        </div>
+		{% endif %}
+    </div>
+</div>

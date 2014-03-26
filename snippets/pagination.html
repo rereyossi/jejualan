@@ -1,0 +1,26 @@
+<div class="pagging-snippet">
+    {% if paginate %}
+    <div class="center-inline">
+        <ul class="pagging-main">
+            {% if paginate.previous %}
+            <li>
+                <a class="previous" href="{{ paginate.previous.url }}">{{ paginate.previous.title }}</a>
+            </li>
+            {% endif %} {% for page in paginate.pages %} {% if page.url != '' %}
+            <li>
+                <a data-id="{{ page.id }}" href="{{ page.url }}">{{ page.title }}</a>
+            </li>
+            {% else %}
+            <li class="active">
+                <a data-id="{{ page.id }}">{{ page.title }}</a>
+            </li>
+            {% endif %} {% endfor %} {% if paginate.next %}
+            <li>
+                <a class="next" href="{{ paginate.next.url }}">{{ paginate.next.title }}</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div class="center-inline">
+    {% endif %}
+
+</div>

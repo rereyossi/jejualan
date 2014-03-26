@@ -1,0 +1,12 @@
+<div class="col-md-12 news-list">
+	<div class="content-wrapper">
+		<center><h3 class="page-title">{{ title }}</h3>
+		{% if image %}
+		<img class="img-responsive" src="{{ image }}" alt="">
+		{% endif %}
+		<div class="news-date">{{ date|date("d M Y") }}</div>
+		</center>
+		<br/>
+		<div class="news-body">{{ content_text }}</div>
+	</div>
+</div>

@@ -1,0 +1,68 @@
+
+// pagging size
+@pagging-size: 20px;
+@pagging-margin-left: 5px;
+
+// pagging color
+@pagging-background: @color-base;
+@pagging-color: @color-text-primary;
+@pagging-color-line: @color-line-primary;
+
+// pagging radius 
+@pagging-radius: 3px;  // radius for all li
+@pagging-out-radius: 5px; // radius for first and last li
+
+// pagging hover 
+@pagging-hover-color: @color-base;
+@pagging-hover-background: @color-primary;
+
+// pagging active
+// pagging background active follow ative page
+@pagging-active-color: @color-base;
+@pagging-active-background: @color-primary;
+
+.pagging-main {
+width: 275px;    
+display: block;
+.center-inline;
+    li {
+        .clearfix;
+        list-style: none;
+        display: inline-block;
+        float: left;
+        margin-left: 5px;
+        a {
+            transition: @transite-time;
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            line-height: 1.42857143;
+            text-decoration: none;
+            background-color: @pagging-background;
+            border-width: 1px;
+            border-color: @pagging-color-line;
+            border-style: solid;
+            &:hover{
+                background-color: @pagging-hover-background;
+                color: @pagging-hover-color;
+            }
+        }
+    }
+
+
+    .first {
+        border-top-left-radius: @pagging-out-radius;
+        border-bottom-left-radius: @pagging-out-radius;
+    }
+    .last {
+        border-top-right-radius: @pagging-out-radius;
+        border-bottom-right-radius: @pagging-out-radius;
+    }
+
+    .active{
+        background-color: @pagging-active-color;
+        color: @pagging-active-background;
+    }
+
+
+}

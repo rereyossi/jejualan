@@ -1,0 +1,3 @@
+{% for item in language %}
+		<a class="btn btn-link" style="padding:14px 10px" href="{{ item.url }}" title="{{ item.name }}" lang="{{ item.isocode }}"><img src="{{ item.image }}" alt="{{ item.name }}" /></a>
+{% endfor %}

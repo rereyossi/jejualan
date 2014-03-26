@@ -1,0 +1,83 @@
+<script type="text/javascript">
+$(document).ready(function () {
+	$("#reset_form").validate({
+		rules: {
+			password: {
+				required: true,
+				minlength: 3
+			},
+			password2: {
+				required: true,
+				equalTo: "#password"
+			}
+		},
+		messages: {
+			password: {
+				required: "{{ 'Password harus diisi'|lang }}",
+				minlength: "{{ 'Password minimal 3 karakter'|lang }}"
+			},
+			password2: {
+				required: "{{ 'Ulangi Password harus diisi'|lang }}",
+				equalTo: "{{ 'Password & Ulangi Password tidak sama'|lang }}"
+			}
+		},
+		errorLabelContainer: '.errorMsg',
+		errorElement: 'div',
+		submitHandler: function () {
+			$.ajax({
+				type: 'POST',
+				url: $('#reset_form').attr('action'),
+				data: $('#reset_form').serialize(),
+				dataType: "json",
+				success: function (data) {
+					if (data.status == 1) {
+						window.location.href = data.redirect;
+					}
+					else if (data.status == 2) {
+						$('#result').html(data.msg).show();
+					}
+				}
+			});
+			return false;
+		}
+	});
+});
+</script>
+<div class="row bg-white ">
+	<div class=" col-md-12 nopadding">
+		<div class=" breadcrumb">
+			<center>
+				<h3>{{ 'Rubah Password'|lang }}</h3>
+			</center>
+		</div>
+	</div>
+</div>
+<div id="result">
+	<div class="errorMsg" style="display:none;"></div>
+</div>
+<form id="reset_form" name="reset_form" method="post" action="{{ resetpass_action_url }}">
+	<table cellpadding="0" cellspacing="0" class="formTbl">
+		<tr>
+			<td width="25%">{{ 'Email'|lang }}</td>
+			<td width="75%">{{ email }}</td>
+		</tr>
+		<tr>
+			<td>{{ 'Password Baru'|lang }}</td>
+			<td>
+				<input class="text" type="password" name="password" id="password" size="40" />
+			</td>
+		</tr>
+		<tr>
+			<td>{{ 'Ulangi Password Baru'|lang }}</td>
+			<td>
+				<input class="text" type="password" name="password2" id="password2" size="40" />
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<input class="formBtn" type="submit" name="add_reset" value="{{ 'Reset'|lang }}" />
+			</td>
+		</tr>
+	</table>
+</form>

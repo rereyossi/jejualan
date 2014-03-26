@@ -1,0 +1,103 @@
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#change_form").validate({
+        rules: {
+            password_old: {
+                required: true
+            },
+            password_new: {
+                required: true,
+                minlength: 3
+            },
+            password_new2: {
+                required: true,
+                equalTo: "#password_new"
+            }
+        },
+        messages: {
+            password_old: {
+                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Password Lama harus diisi'|lang }}"
+            },
+            password_new: {
+                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Password Baru harus diisi'|lang }}",
+                minlength: "{{ '<i class="fa fa-exclamation-triangle"></i> Password Baru minimal 3 karakter'|lang }}"
+            },
+            password_new2: {
+                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Ulangi Password Baru harus diisi'|lang }}",
+                equalTo: "{{ '<i class="fa fa-exclamation-triangle"></i> Password Baru & Ulangi Password Baru tidak sama'|lang }}"
+            }
+        },
+        errorLabelContainer: '.errorMsg',
+        errorElement: 'div',
+        submitHandler: function() {
+            $.ajax({
+                type: 'POST',
+                url: $('#change_form').attr('action'),
+                data: $('#change_form').serialize(),
+                dataType: "json",
+                success: function(data) {
+                    if (data.status == 1) {
+                        $('#result_change').html(data.msg).show();
+                    } else if (data.status == 2) {
+                        $('#result_change').html(data.msg).show();
+                    }
+                }
+            });
+            return false;
+        }
+    });
+});
+</script>
+
+<h3 class="text-title">{{ 'Ganti Password'|lang }}</h3>
+
+<!-- error msg -->
+<div id="result_change">
+    <div class="alert alert-danger errorMsg" style="display:none;">
+
+    </div>
+</div>
+
+<!-- change form -->
+<form class="form-vertical" id="change_form" name="change_form" method="post" action="{{ changepass_action_url }}">
+    <!-- email -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Email'|lang }}</label>
+        <div class="col-md-9">
+            {{ username }}
+        </div>
+    </div>
+    <!-- old pass -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Password Lama'|lang }}
+            <span>*</span>
+        </label>
+        <div class="col-md-9">
+            <input class="text" type="password" name="password_old" id="password_old" />
+        </div>
+    </div>
+    <!-- new pass -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Password Baru'|lang }}
+            <span>*</span>
+        </label>
+        <div class="col-md-9">
+            <input class="text" type="password" name="password_new" id="password_new" />
+        </div>
+    </div>
+    <!-- re new pass -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Ulangi Password Baru'|lang }}
+            <span>*</span>
+        </label>
+        <div class="col-md-9">
+            <input class="text" type="password" name="password_new2" id="password_new2" />
+        </div>
+    </div>
+    <!-- submit -->
+    <div class="form-group">
+        <div class="col-md-9 col-md-offset-3">
+            <input class="formBtn btn btn-primary pull-right" type="submit" name="add_change" value="{{ 'Ganti'|lang }}" />
+        </div>
+    </div>
+</form>

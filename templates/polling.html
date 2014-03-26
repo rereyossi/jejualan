@@ -1,0 +1,41 @@
+<div class="row">
+	<div class="col-md-12 nopadding">
+		<div class="breadcrumb">
+			<center>
+				<h3>{{ 'Hasil polling'|lang }}</h3>
+			</center>
+		</div>
+	</div>
+</div>
+<center>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript">
+		  var arr_data = {{ data }};
+		  google.load("visualization", "1", {packages:["corechart"]});
+		  google.setOnLoadCallback(drawChart);
+		  function drawChart() {
+			var data = google.visualization.arrayToDataTable( arr_data );
+
+			var options = {
+			  title: '{{ title }}'
+			};
+
+			var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+			chart.draw(data, options);
+			var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
+			chart.draw(data, options);
+			var chart = new google.visualization.PieChart(document.getElementById('chart_div3'));
+			chart.draw(data, options);
+			var chart = new google.visualization.PieChart(document.getElementById('chart_div4'));
+			chart.draw(data, options);
+		  }
+		</script>
+	<div class="row">
+		<div class="col-md-12">
+			<div id="chart_div" style="width:800px !important;height:500px !important;" class="visible-lg"></div>
+			<div id="chart_div2" style="width:800px !important;height:500px !important;" class="visible-md "></div>
+			<div id="chart_div3" style="width:500px !important;height:300px !important;" class="visible-sm "></div>
+			<div id="chart_div4" style="width:150px !important;" class="visible-xs"></div>
+		</div>
+	</div>
+</center>

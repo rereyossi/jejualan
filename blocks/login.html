@@ -1,0 +1,104 @@
+<div class="block-login">
+	{% if member.loggedin %}
+	<div style="width:180px;">
+		<ul class="unstyled user-menu">
+			<li><a class="btn btn-link" href="{{ login.dashboard_url }}">{{ 'Dashboard'|lang }}</a></li>
+			<li><a class="btn btn-link" href="{{ login.order_url }}">{{ 'Status Order'|lang }}</a></li>
+			<li><a class="btn btn-link" href="{{ login.confirm_url }}">{{ 'Konfirmasi'|lang }}</a></li>
+			<li><a class="btn btn-link" href="{{ login.profile_url }}">{{ 'Data Diri'|lang }}</a></li>
+			<li><a class="btn btn-link" href="{{ login.address_url }}">{{ 'Alamat'|lang }}</a></li>
+			<li><a class="btn btn-link" href="{{ login.password_url }}">{{ 'Ganti Password'|lang }}</a></li>
+			<li><a class="btn btn-link" href="{{ login.logout_url }}">{{ 'Logout'|lang }}</a></li>
+		</ul>
+	</div>
+	{% else %}
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#login_form_block").validate({
+				rules: {
+					email: {
+						required: true,
+						email: true
+					},
+					password: {
+						required: true
+					}
+				},
+				messages: {
+					email: {
+						required: "{{ 'Email harus diisi'|lang }}",
+						email: "{{ 'Email tidak valid (contoh: nama@domain.com)'|lang }}"
+					},
+					password: {
+						required: "{{ 'Password harus diisi'|lang }}"
+					}
+				},
+				errorLabelContainer: '.errorMsg',
+				errorElement: 'div',
+				submitHandler: function() {
+					$.ajax({
+						type: 'POST',
+						url: $('#login_form_block').attr('action'),
+						data: $('#login_form_block').serialize(),
+						dataType:"json",
+						success: function (data) {
+							if (data.status == 1) {
+								window.location.href = data.redirect;
+							}
+							else if (data.status == 2) {
+								$('#result_login_block').html(data.msg).show();
+							}
+						}
+					});
+					return false;
+				}
+			});
+			$(".email_block").focus(function(){
+				if( $(this).val() == '{{ 'Email'|lang }}' )
+					$(this).val("");
+				}).blur(function(){
+					if( $(this).val() == '' )
+				$(this).val("{{ 'Email'|lang }}");
+			});
+			$(".password_block").focus(function(){
+				if( $(this).val() == '{{ 'Password'|lang }}' )
+					$(this).val("");
+				}).blur(function(){
+					if( $(this).val() == '' )
+				$(this).val("{{ 'Password'|lang }}");
+			});
+		});
+	</script>
+	<div>
+		<div id="result_login_block">
+			<div class="errorMsg" style="display:none;"></div>
+			<br/>
+		</div>
+		<form class="form-horizontal" id="login_form_block" name="login_form_block" method="post" action="{{ login.login_url }}">
+			<div class="form-group">
+				<label  for="email" class="col-sm-3 control-label">{{ 'Email'|lang }}</label>
+				<div class="col-sm-9">
+					<input type="email" class="form-control" name="email" value=""  placeholder="{{ 'Email'|lang }}" id="email_block" >
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="email" class="col-sm-3 control-label">{{ 'Password'|lang }}</label>
+				<div class="col-sm-9">
+					<input type="password" class="form-control" name="password" value="" placeholder="{{ 'Password'|lang }}" id="password_block"  >
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-3 col-sm-9">
+					{{ 'Lupa Password'|lang }} <a rel="nofollow" href="{{ login.lost_password_url }}"> {{ 'Klik disini!'|lang }}</a><br/>
+					{{ 'Belum punya akun'|lang }}<a href="{{ login.register_url }}"> {{ 'Klik disini'|lang }}</a>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-3 col-sm-9">
+					<input type="submit" class="btn btn-jej" name="add_login" value="{{ 'Login'|lang }}"/>
+				</div>
+			</div>
+		</form>
+	</div>
+	{% endif %}
+</div>

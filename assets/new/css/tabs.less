@@ -1,0 +1,56 @@
+.tabs-main{
+    display: block;
+
+    // tabs anchor
+    .tabs{
+        overflow: hidden;
+        background-color: @color-primary;
+        li{
+            float: left;
+        }
+        a{
+            display: block;
+            padding: 10px 12px;
+            text-align: center;
+            color: #fff;
+            &:hover{
+                color: color-text-second;
+                text-decoration: none;
+            }
+        }
+    }
+
+    // tabs content wrapper
+    .content{
+        overflow: hidden;
+        padding: 20px;
+        border: 1px solid @color-line-primary;
+    }
+
+    // content utama
+    .tab-content{
+        display: none;
+        -webkit-transition: 0.5s;
+        -moz-transition: 0.5s;
+        -ms-transition: 0.5s;
+        -o-transition: 0.5s;
+        transition: 0.5s;
+        -webkit-animation: bounceInLeft 0.8s;
+        -moz-animation: bounceInLeft 0.8s;
+        -ms-animation: bounceInLeft 0.8s;
+        -o-animation: bounceInLeft 0.8s;
+        animation: bounceInLeft 0.8s;
+        
+        
+    }
+
+    // active nav tabs 
+    .active-tab{
+        background-color: @color-second;
+    }
+
+    // active content
+    .active-content{
+        display: block;
+    }
+}

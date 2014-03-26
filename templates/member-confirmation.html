@@ -1,0 +1,146 @@
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#confirm_form").validate({
+        rules: {
+            order_id: {
+                required: true
+            },
+            via_id: {
+                required: true
+            },
+            bank_tujuan: {
+                required: true
+            },
+            besar: {
+                required: true,
+                minlength: 3
+            }
+        },
+        messages: {
+            order_id: {
+                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Order yang dikonfirmasi harus diisi'|lang }}"
+            },
+            via_id: {
+                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Metode pembayaran harus diisi'|lang }}"
+            },
+            bank_tujuan: {
+                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Bank Tujuan Transfer harus diisi'|lang }}"
+            },
+            besar: {
+                required: "{{ '<i class="fa fa-exclamation-triangle"></i> Besar Pembayaran harus diisi'|lang }}"
+            }
+        },
+        errorLabelContainer: '.errorMsg',
+        errorElement: 'div',
+        submitHandler: function() {
+            $.ajax({
+                type: 'POST',
+                url: $('#confirm_form').attr('action'),
+                data: $('#confirm_form').serialize(),
+                dataType: "json",
+                success: function(data) {
+                    if (data.status == 1) {
+                        $('#result_confirm').html(data.msg).show();
+                        $("#list-data-confirm").load("{{ confirmation_list_url }}");
+                        $("#besar").val('');
+                    } else if (data.status == 2) {
+                        $('#result_confirm').html(data.msg).show();
+                    }
+                }
+            });
+            return false;
+        }
+    });
+
+    $("#list-data-confirm").load("{{ confirmation_list_url }}");
+
+    $(".order-checked").live('click', function() {
+        order_id = $(this).val();
+        besar = $("#total-" + order_id).data("id");
+        $("#besar").val(besar);
+    });
+
+    $('input[name=via_id]').live('click', function() {
+        if ($(this).val() == 1) {
+            $('#bank_cont').hide();
+        } else {
+            $('#bank_cont').show();
+        }
+    });
+});
+</script>
+<h3>{{ 'Konfirmasi Pembayaran'|lang }}</h3>
+{% if confirm.data_exist > 0 %}
+<form class="form-vertical" id="confirm_form" name="confirm_form" method="post" action="{{ confirmation_action_url }}">
+
+	<!-- error msg -->
+    <div id="list-data-confirm"></div>
+    <div id="result_confirm">
+        <div class="alert alert-danger errorMsg " style="display:none;"></div>
+    </div>
+
+    <!-- form input  -->
+    <!-- name -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Nama'|lang }}</label>
+        <div class="col-md-9">
+            {{ fullname }}
+            <input type="hidden" name="fullname" value="{{ fullname }}" />
+        </div>
+    </div>
+    <!-- via -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Pembayaran Via'|lang }}</label>
+        <div class="col-md-9">
+            {{ confirm.addon }} &nbsp; &nbsp;
+        </div>
+    </div>
+    <!-- bank destination -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Bank Tujuan Transfer'|lang }}
+        </label>
+        <div class="col-md-9">
+            <input class="form-control" type="text" name="bank_tujuan" id="bank_tujuan" size="40" />
+        </div>
+    </div>
+    <!-- total cost -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Besar Pembayaran'|lang }}
+        </label>
+        <div class="col-md-9">
+            <input class="form-control" type="text" name="besar" id="besar" value="{{ confirm.payment_amount }}" size="40" />
+        </div>
+    </div>
+    <!-- date payment -->
+    <div class="form-group">
+        <label class="col-md-3">{{ 'Tanggal Pembayaran'|lang }}</label>
+        <div class="col-md-9">
+            <link rel="stylesheet" type="text/css" href="{{ 'jscalender.css'|asset_url }}" />
+            <script type="text/javascript" src="{{ 'jscalender.js'|asset_url }}"></script>
+            <script type="text/javascript" src="{{ 'jscalender_en.js'|asset_url }}"></script>
+            <input class="text" type="text" size="10" name="tgl_pembayaran" id="tgl_pembayaran" value="{{ confirm.date }}" readonly="readonly" />
+            <img id="tgl_pembayaran_trigger" src="{{ 'date.png'|asset_url }}" alt="" />
+            <script type="text/javascript">
+            Calendar.setup({
+                inputField: "tgl_pembayaran",
+                trigger: "tgl_pembayaran_trigger",
+                onSelect: function() {
+                    this.hide()
+                },
+                showTime: 24,
+                dateFormat: "%d-%m-%Y"
+            });
+            </script>
+        </div>
+    </div>
+    <!-- submit -->
+    <div class="form-group">
+        <div class="col-md-9 col-md-offset-3">
+            <input class="formBtn btn btn-primary pull-right" type="submit" name="add_confirm" value="{{ 'Kirim'|lang }}" />
+        </div>
+    </div>
+
+</form>
+{% else %}
+<p>{{ 'Tidak ada order yang belum terbayar'|lang }}</p>
+{% endif %}

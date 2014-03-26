@@ -1,0 +1,33 @@
+<table width="100%" cellpadding="0" cellspacing="0" class="std-table rounded">
+	<thead>
+		<tr>
+			<th><strong>{{ 'Nama'|lang }}</strong>
+			</th>
+			<th><strong>{{ 'Alamat'|lang }}</strong>
+			</th>
+			<th align="center"><strong>{{ 'Aksi'|lang }}</strong>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for item in address_list %}
+		<tr>
+			<td valign="top" align="left">{{ item.name }}</td>
+			<td valign="top" align="left">{{ item.full_address }}</td>
+			<td valign="top" align="center">
+				<a class="edit_address" href="javascript:void(0);" data-id="{{ item.id }}" title="Edit Alamat">
+					<img src="{{ 'edit.png'|asset_url }}" border="0">
+				</a>
+				<a class="delete_address" href="{{ addressdelete_action_url }}" data-id="{{ item.id }}" title="Hapus Alamat">
+					<img src="{{ 'delete.png'|asset_url }}" border="0">
+				</a>
+			</td>
+		</tr>
+		<tr style="display:none" class="edit_address_container" id="edit_address_container-{{ item.id }}">
+			<td colspan="3">
+				{% set addressedit = item.addressedit %} {% set dropdown_edit = item.dropdown_edit %} {% include "templates/member-address-edit.html" %}
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>

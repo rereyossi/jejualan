@@ -1,0 +1,66 @@
+
+<div class="dropdown cart-toggle" >
+	<a href="#" class="sum-price dropdown-toggle" data-toggle="dropdown">
+	<img src="{{ 'cart-icon.png'|asset_url }}" alt="" />
+	<span class="cart-price">Rp. {{ cart.total_price|money_without_currency }}</span> 
+	<span class="sum-item pull-right">{{ cart.items_count }}</span></a>
+	<ul class="dropdown-menu cart-content" >
+		<li class="padd">
+			<div>
+				{% if cart.items %}
+				<small>
+					<table id="shoppingCartList" class="table" style="margin-bottom:0px">
+						<thead>
+							<tr>
+								<td colspan="2">Detail Produk</td>
+								<td>Jml</td>
+								<td class="text-right">Total</td>
+							</tr>
+						</thead>
+						<tbody>
+							{% for item in cart.items %}
+							<tr style="border-top:1px solid #ddd;border-bottom:1px solid #ddd;">
+								<td class="td_thumb">
+									{% if item.images.0.small %}
+									<a href="{{ item.url }}">
+									<img src="{{ item.images.0.small }}">
+									</a>
+									{% else %}
+									<span class="imgEmpty"></span>
+									{% endif %}
+								</td>
+								<td class="td_prod" style="padding:10px;min-width:160;">
+									<a href="{{ item.url }}">{{ item.name }}</a>
+								</td>
+								<td class="td_qty">
+									{{ item.qty }} pcs 
+								</td>
+								<td class="td_price text-right" >
+									{{ (item.retail_price * item.qty)|money_without_currency }}
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+						<tfoot>
+							<tr >
+								<td colspan="3"><strong>{{ 'Total'|lang }}</strong></td>
+								<td id="shoppingCartTotal"><strong>
+									{{ cart.total_price|money_without_currency }}
+									</strong>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</small>
+				<div class="btn-cart">
+					<a href="{{ cart.url }}" id="checkoutBtn" class="btn btn-primary btn-block">{{ 'Selesai Belanja'|lang }}</a>
+				</div>
+				{% else %}
+				<div class="empty">
+					{{ 'Keranjang belanja kosong'|lang }}
+				</div>
+				{% endif %}
+			</div>
+		</li>
+	</ul>
+</div>

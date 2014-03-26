@@ -1,0 +1,75 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600,700|Source+Sans+Pro:400,600,700);
+html {
+  font-size: 62.5%;
+  color: #333;
+}
+* {
+  font-size: 1.4rem;
+  line-height: 2.4rem;
+  font-family: 'Open Sans', sans-serif;
+}
+h1 {
+  font-size: 3.8rem;
+}
+h2 {
+  font-size: 3.1rem;
+}
+h3 {
+  font-size: 2.4rem;
+}
+h4 {
+  font-size: 1.7rem;
+}
+h5 {
+  font-size: 1.4rem;
+}
+h6 {
+  font-size: 1.4rem;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 3.7rem;
+  font-family: 'Source Sans Pro', sans-serif;
+  text-transform: capitalize;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+small {
+  font-size: 80%;
+  color: #6f6f6f;
+  line-height: 0;
+}
+p {
+  margin-top: 0;
+  font-family: inherit;
+  font-weight: normal;
+  text-rendering: optimizeLegibility;
+  margin-bottom: 10px;
+}
+a {
+  color: #008cba;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.text-capital {
+  text-transform: capitalize;
+}
+.text-upper {
+  text-transform: uppercase;
+}
+.text-lower {
+  text-transform: lowercase;
+}
+.text-title {
+  margin-bottom: 10px;
+  text-transform: capitalize;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

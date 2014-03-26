@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ content.title }}</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- rereyossi lab -->
+    <link rel="stylesheet" href="{{ 'new/css/main.css'|asset_url }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ 'new/css/reset.css'|asset_url }}" type="text/css" media="all" />
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <!-- validate js -->
+    <script type="text/javascript" src="{{ 'jquery.validate.min.js'|asset_url }}"></script>
+    <!-- colorbox -->
+    <script type="text/javascript" src="{{ 'jquery.colorbox-min.js'|asset_url }}"></script>
+    <link rel="stylesheet" href="{{ 'colorbox.css'|asset_url }}" type="text/css" media="all" />{{ content.header }}
+</head>
+
+<body>
+    <!-- bar member -->
+    {% if loggedin %}
+    <div class="main-bar">
+        <div class="logo-bar">
+            <a href="http://jejualan.com/">
+                <img src="http://cdn.jejualan.com/assets/images/jejualan.png" alt="" />
+            </a>
+        </div>
+        <div class="admin-bar">
+            <a href="{{ admin_url }}">Ke Admin Panel</a>
+        </div>
+        <div class="log-bar">
+            Login sebagai
+            <span>
+                <a href="{{ merchant_url }}">{{ merchant_name }}</a>
+            </span>|
+            <a href="{{ admin_logout_url }}">Logout</a>
+            <img src="http://cdn.jejualan.com/assets/images/close.png" id="remove-bar" onclick="javascript:removeCookie()" />
+        </div>
+    </div>
+    {% endif %}
+
+
+
+
+
+    <!-- start block-list -->
+    <div class="container">
+        <div class="row">
+            <div id="{{ sidebar }}" class="main">
+                <div class="page">
+                    {% set mainclass='' %} {% if template in ['index', 'product-list', 'search'] %} {% set mainclass='product-list' %} {% endif %}
+                    <div id="homepage" class="content {{ mainclass }}">
+                        {% if template in ['index', 'product-list', 'member-register', 'member-login', 'member-resetpass', 'member-forgetpass', 'contact', 'news-list', 'news-detail', 'product-list', 'product-detail', 'cart', 'cart-login-register', 'cart-shipping', 'cart-finish', 'search', 'testimonial', ] %} {{ content.layout }} {% else %}
+                        <div class="entry-content">{{ content.layout }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <!--end page-->
+                <!--end wrapper-inner-->
+            </div>
+        </div>
+    </div>
+    <!-- end block-list -->
+
+
+    <div class="menu-subscribe">
+        <div class="container">
+            <div class="col-md-6">
+                {% include "blocks/newsletter.html" %}
+            </div>
+            <div class="col-md-6">
+                {{settings.contact_title}} {{ contact }}
+            </div>
+        </div>
+    </div>
+
+
+    <!-- start block-menu bottom -->
+    <div class="">
+        <div class="container">
+            {% include "blocks/menu-bottom.html" %}
+        </div>
+    </div>
+
+
+    <div class="footer ">
+        <div class="container">
+            <span class="pull-left">
+                <div class="arrow-up"></div>
+                <a id="gotop" onclick="gotoTop()">Back to top</a>
+            </span>
+            {{ config.footer_text }}
+            </span>
+            <span class="pull-right">
+                <img src="http://cdn.jejualan.com/assets/images/jejualan.png" alt="" />
+            </span>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+.tabs-main {
+  display: block;
+}
+.tabs-main .tabs a {
+  float: left;
+  display: block;
+  padding: 10px;
+  color: #fff;
+  width: 25%;
+  text-decoration: none;
+  text-align: center;
+  border-right: 1px solid #555;
+  border-left: 1px solid #888;
+  font-size: 15px;
+  text-shadow: 1px 1px 0 #000;
+}

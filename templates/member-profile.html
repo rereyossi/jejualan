@@ -1,0 +1,94 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#profile_form").validate({
+		rules: {
+			fullname: {
+				required: true,
+				minlength: 3
+			},
+			nohp: {
+				required: true
+			}
+		},
+		messages: {
+			fullname: {
+				required: "{{ 'Nama Lengkap harus diisi'|lang }}",
+				minlength: "{{ 'Nama Lengkap minimal 3 karakter'|lang }}"
+			},
+			nohp: {
+				required: "{{ 'No. Handphone harus diisi'|lang }}"
+			}
+		},
+		errorLabelContainer: '.errorMsg',
+		errorElement: 'div',
+		submitHandler: function() {
+			$.ajax({
+				type: 'POST',
+				url: $('#profile_form').attr('action'),
+				data: $('#profile_form').serialize(),
+				dataType:"json",
+				success: function (data) {
+					if (data.status == 1) {
+               			$('#result_profile').html(data.msg).show();
+						normalText();
+					}
+					else if (data.status == 2) {
+						$('#result_profile').html(data.msg).show();
+					}
+				}
+			});
+			return false;
+		}
+	});
+	
+	$("#change-profile").live("click", updateText);
+	
+	function updateText() {
+		sName = $(".change-profile").find(".edit-fullname").text();
+		sMobile = $(".change-profile").find(".edit-nohp").text();
+		$(".change-profile").find(".edit-fullname").html('<input class="text" type="text" name="fullname" id="fullname"  value="' + sName + '" />');
+		$(".change-profile").find(".edit-nohp").html('<input class="text" type="text" name="nohp" id="nohp"  value="' + sMobile + '" />');
+		$(".change-profile").find(".edit-submit").html('<input class="btn btn-jej" type="submit" name="edit_profile" value="{{ 'Simpan'|lang }}" />');
+	}
+	
+	function normalText() {
+		sName = $(".change-profile").find("#fullname").val();
+		sMobile = $(".change-profile").find("#nohp").val();
+		$(".change-profile").find(".edit-fullname").html(sName);
+		$(".change-profile").find(".edit-nohp").html(sMobile);
+		$(".change-profile").find(".edit-submit").html('<input id="change-profile" class="btn btn-jej" style="width:130px !important;" type="button" value="{{ 'Ubah data diri'|lang }}" />');
+	}
+});
+</script>
+
+<h3>{{ 'Data Diri'|lang }}</h3>
+
+
+<div id="result_profile"><div class="errorMsg" style="display:none;"></div></div>
+
+<form id="profile_form" name="profile_form" method="post" action="{{ profile_action_url }}">
+
+<table width="100%" cellpadding="0" cellspacing="0" class="table table-striped change-profile inputan">
+	<tr>
+		<td width="25%">{{ 'Email'|lang }}</td>
+		<td width="75%">{{ email }}</td>
+	</tr>
+	<tr>
+		<td>{{ 'Username'|lang }}</td>
+		<td>{{ username }}</td>
+	</tr>
+	<tr>
+		<td>{{ 'Nama Lengkap'|lang }}</td>
+		<td class="edit-fullname">{{ fullname }}</td>
+	</tr>
+	<tr>
+		<td>{{ 'No. Handphone'|lang }}</td>
+		<td class="edit-nohp">{{ hp }}</td>
+	</tr>
+	
+	<tr>
+		<td>&nbsp;</td>
+		<td class="edit-submit"><input id="change-profile" class="btn btn-jej" style="width:130px !important;" type="button" value="{{ 'Ubah data diri'|lang }}" /></td>
+	</tr>
+</table>
+</form>

@@ -1,0 +1,104 @@
+<div class="row">
+	<div class="col-md-12">
+		<center>{% include "blocks/breadcrumb.html" %}</center>
+	</div>
+</div>
+<div class="row" style="border-bottom:1px solid #ddd;">
+	<div class="col-md-6 col-sm-6 padd-top-btm">
+			<!--<strong>{{ 'Urutkan : ' }}</strong>-->
+			<div class="btn-group ">
+				{% if sort_link.newest != '' %}
+				<a class="btn btn-sm " href="{{ sort_link.newest}}">{{ 'Terbaru'|lang }}</a>
+				{% else %}
+				<a class="btn btn-sm btn-jej ">{{ 'Terbaru'|lang }}</a>
+				{% endif %}
+				{% if sort_link.cheapest != '' %}
+				<a class="btn btn-sm " href="{{ sort_link.cheapest}}">{{ 'Termurah'|lang }}</a>
+				{% else %}
+				<a class="btn btn-sm btn-jej ">{{ 'Termurah'|lang }}</a>
+				{% endif %}
+				{% if sort_link.expensive != '' %}
+				<a class="btn btn-sm " href="{{ sort_link.expensive}}">{{ 'Termahal'|lang }}</a>
+				{% else %}
+				<a class="btn btn-sm btn-jej ">{{ 'Termahal'|lang }}</a>
+				{% endif %} 
+			</div>
+	</div>
+	<div class="col-md-3 col-sm-6 padd-top-btm">
+		<div class="">
+				{% if max_link.show == '200' %}
+				<a href="{{ max_link.url }}" class="btn btn-jej">{{ 'Tampilkan 200 per halaman' }}</a>
+				{% else %}
+				<a href="{{ max_link.url }}" class="btn btn-jej">{{ 'Tampilkan 20 per halaman' }}</a>
+				{% endif %}
+			</div>
+	</div>
+	<div class="col-md-3 col-sm-12">
+		{% if category_image != '' %}
+		<img class="img-responsive" src="{{ category_image }}" alt="{{ category_title }}" title="{{ category_title }}" />
+		{% endif %}
+	</div>
+</div>
+<div class="bg-white">
+	{% if products %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-9 shadow">
+				<br/>
+				<div class="row">
+					<div class="item-box">
+						<ul class="unstyled">
+							{% for productlist in products %} {% include 'snippets/product-item.html' %} {% endfor %}
+						</ul>
+					</div>
+					<script>
+						//Masonry
+						var mcontainer = $('.item-box');
+						mcontainer.each(function() {
+						var mc = $(this);
+						mc.imagesLoaded(function() {
+						mc.masonry({
+						itemSelector: '.item-inner'
+						});
+						})
+						});
+					</script>
+					{% if paginate|length > 0 %} {% include 'snippets/pagination.html' %} {% endif %}
+				</div>
+			</div>
+			<div class="col-md-3">
+				{% include 'blocks/product-filter.html' %}
+			</div>
+		</div>
+	</div>
+	<div class="row present">
+		<ul class="nav nav-tabs" id="myTab">
+			<li>
+				<a href="#new" data-toggle="tab">
+					<center>{{ settings.block_title_productnew|lang }}</center>
+				</a>
+			</li>
+			<li class="active">
+				<a href="#last" data-toggle="tab">
+					<center>{{ settings.block_title_lastvisited|lang }}</center>
+				</a>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane" id="new">{% include 'blocks/product-new.html' %}</div>
+			<div class="tab-pane active" id="last">{% include 'blocks/product-lastvisited.html' %}</div>
+		</div>
+		<script>
+			$(function () {
+				$('#myTab a:last').tab('show')
+			})
+		</script>
+	</div>
+	{% else %}
+	<div class="row bg-white ">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="errorMsg padd">{{ 'Produk tidak ditemukan'|lang }}</div>
+		</div>
+	</div>
+	{% endif %}
+</div>

@@ -1,0 +1,221 @@
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#login_form").validate({
+        rules: {
+            email: {
+                required: true,
+                email: true
+            },
+            password: {
+                required: true
+            }
+        },
+        messages: {
+            email: {
+                required: "{{ '<i class="
+                fa fa - exclamation - triangle "></i> Email harus diisi'|lang }}",
+                email: "{{ '<i class="
+                fa fa - exclamation - triangle "></i> Email tidak valid (contoh: nama@domain.com)'|lang }}"
+            },
+            password: {
+                required: "{{ '<i class="
+                fa fa - exclamation - triangle "></i> Password harus diisi'|lang }}"
+            }
+        },
+        errorLabelContainer: '.errorMsg',
+        errorElement: 'div',
+        submitHandler: function() {
+            $.ajax({
+                type: 'POST',
+                url: $('#login_form').attr('action'),
+                data: $('#login_form').serialize(),
+                dataType: "json",
+                success: function(data) {
+                    if (data.status == 1) {
+                        window.location.href = '{{ shipping_url }}';
+                    } else if (data.status == 2) {
+                        $('#result').html(data.msg).show();
+                    }
+                }
+            });
+            return false;
+        }
+    });
+
+    $("#register_form").validate({
+        rules: {
+            email: {
+                required: true,
+                email: true
+            },
+            password: {
+                required: true,
+                minlength: 3
+            },
+            password2: {
+                required: true,
+                equalTo: "#password"
+            },
+            fullname: {
+                required: true,
+                minlength: 3
+            },
+            nohp: {
+                required: true
+            }
+        },
+        messages: {
+            email: {
+                required: "{{ 'Email harus diisi'|lang }}",
+                email: "{{ 'Email tidak valid (contoh: nama@domain.com)'|lang }}"
+            },
+            password: {
+                required: "{{ 'Password harus diisi'|lang }}",
+                minlength: "{{ 'Password minimal 3 karakter'|lang }}"
+            },
+            password2: {
+                required: "{{ 'Ulangi Password harus diisi'|lang }}",
+                equalTo: "{{ 'Password & Ulangi Password tidak sama'|lang }}"
+            },
+            fullname: {
+                required: "{{ 'Nama Lengkap harus diisi'|lang }}",
+                minlength: "{{ 'Nama Lengkap minimal 3 karakter'|lang }}"
+            },
+            nohp: {
+                required: "{{ 'No. Handphone harus diisi'|lang }}"
+            }
+        },
+        errorLabelContainer: '#result2 .errorMsg',
+        errorElement: 'div',
+        submitHandler: function() {
+            $.ajax({
+                type: 'POST',
+                url: $('#register_form').attr('action'),
+                data: $('#register_form').serialize(),
+                dataType: "json",
+                success: function(data) {
+                    if (data.status == 1) {
+                        window.location.href = '{{ shipping_url }}';
+                    } else if (data.status == 2) {
+                        $('#result2').html(data.msg).show();
+                    }
+                }
+            });
+            return false;
+        }
+    });
+});
+</script>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- step step buy -->
+        <div id="step-cart">
+            <ul class="list-inline">
+                <li class="active">{{ 'Langkah Order'|lang }}</li>
+                <li class="active">{{ 'Keranjang Belanja'|lang }}</li>
+                <li class="active">{{ 'Login / Daftar'|lang }}</li>
+                <li class="">{{ 'Pengiriman'|lang }}</li>
+                <li class="">{{ 'Selesai'|lang }}</li>
+            </ul>
+        </div>
+
+
+
+
+        <div class="col-md-6">
+            <div class="login">
+                <h3 class="text-title">{{ 'Login Member'|lang }}</h3>
+                {{ 'Silahkan login jika Anda pernah berbelanja di sini.'|lang }}
+
+                <!-- error msg -->
+                <div id="result">
+                    <div class="alert alert-danger errorMsg" style="display:none;"></div>
+                </div>
+
+                <!-- form login -->
+                <form class="form-vertical" role="form" id="login_form" name="login_form" method="post" action="{{ login_url }}">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ 'Email'|lang }}</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" name="email" id="lemail">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ 'Password'|lang }}</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="password" name="password" id="lpassword">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9">
+                            <input type="submit" class="btn btn-primary pull-right" name="add_login" value="{{ 'Login'|lang }}" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="register">
+                <h3 class="text-title">{{ 'Pendaftaran Member'|lang }}</h3>
+                {{ 'Silahkan mendaftar jika Anda belum pernah berbelanja di sini.'|lang }}
+
+                <!-- error msg -->
+                <div id="result2">
+                    <div class="errorMsg" style="display:none;"></div>
+                </div>
+
+                <!-- form register -->
+                <form class="form-vertical" id="register_form" name="register_form" method="post" action="{{ register_url }}">
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{ 'Email'|lang }}</label>
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control" name="email" id="email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{ 'Password'|lang }}</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="password" name="password" id="password">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{ 'Ulangi Password'|lang }}</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="password" name="password2" id="password2">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{ 'Nama Lengkap'|lang }}</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="fullname" id="fullname">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{ 'No. Handphone'|lang }}</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="nohp" id="nohp">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <input type="submit" class="btn btn-primary pull-right" name="add_register" value="{{ 'Daftar'|lang }}" />
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

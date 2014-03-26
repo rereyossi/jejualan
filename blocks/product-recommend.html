@@ -1,0 +1,9 @@
+<div class="product-recomment-block">
+	<div class="row">
+    {% if product_recommend|length > 0 %}
+            {% for productlist in product_recommend %}
+                {% include 'snippets/product-item.html' %}
+            {% endfor %}       
+    {% endif %}
+    </div>
+</div>

@@ -1,0 +1,14 @@
+{% for link in category %}
+    <li>
+        <a href="{{ link.url }}"><strong style="font-weight:600">{{ link.name }}</strong></a>
+        {% if link.child %}
+            <ul>
+                {% include "snippets/category-sub.html" with {'category': link.child} %}
+            </ul>
+        {% endif %}
+    </li>
+{% endfor %}
+
+
+
+

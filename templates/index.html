@@ -1,0 +1,59 @@
+<div class="col-md-9">
+	<div class="row">
+		<div class="item-box left-side">
+			{% for productlist in product_recommend %}
+			{% if setnewproduct < 9 %}
+			<div class="col-md-4 col-sm-4 col-xs-6 item-inner">
+				<div class="thumbnail flip">
+					<a href="{{ productlist.url }}" role="button">
+						<center>
+							<div class="prod-img"><img class=" img-responsive" src="{{ productlist.images.0.compact }}" alt="{{ productlist.name }}" title="{{ productlist.name }}" />
+							</div>
+						</center>
+						<div class="caption">
+							<center>
+								<div class="p-prod">
+									{{ productlist.name }}
+								</div>
+								{% if config.show_price == 1 %}
+								<div class="product-price">
+									{# harga jual = price #}
+									{# harga diskon = retail_price #}
+									{% if  productlist.retail_price > 0 and productlist.price > productlist.retail_price %}
+									<img class="discount-label" src="{{ 'discount-icon.png'|asset_url }}" alt="" />
+									<h5 class=" retail">{{ productlist.retail_price|money }} </h5>
+									<h4><s>{{ productlist.price|money }}</s> </h4>
+									{% else %}
+									<h4>{{ productlist.price|money }}</h4>
+									{% endif %}
+								</div>
+								{% endif %}
+							</center>
+						</div>
+					</a>
+				</div>
+			</div>
+			{% endif %}
+			{% set setnewproduct = setnewproduct + 1 %}
+			{% endfor %}
+		</div>
+	</div>
+	<script>
+		//Masonry
+		var mcontainer = $('.item-box');
+		mcontainer.each(function() {
+		var mc = $(this);
+		mc.imagesLoaded(function() {
+		mc.masonry({
+		itemSelector: '.item-inner'
+		});
+		})
+		});
+	</script>
+</div>
+<div class="col-md-3">
+	{% include "blocks/soundcloud.html" %}
+	{% include "blocks/customersupport.html" %}
+	{% include "blocks/sosmed.html" %}
+	{% include "blocks/testimonial.html" %}
+</div>

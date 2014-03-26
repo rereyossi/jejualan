@@ -1,0 +1,26 @@
+
+	<table width="100%" class="table table-striped">
+		<tr>
+			<th class="hidden-xs"><strong>{{ 'Pilih Order'|lang }}</strong>
+			<th class="visible-xs"><strong>{{ ''|lang }}</strong>
+			</th>
+			<th align="" class="hidden-xs"><strong>{{ 'Order ID'|lang }}</strong>
+			<th align="" class="visible-xs"><strong>{{ 'ID'|lang }}</strong>
+			</th>
+			<th style="text-align:right;"><strong>{{ 'Total'|lang }}</strong>
+			</th>
+			<th style="text-align:center;"><strong>{{ 'Tgl. Order'|lang }}</strong>
+			</th>
+		</tr>
+		{% for item in confirm_list %}
+		<tr>
+			<td valign="top">
+				<input class="order-checked" type="radio" name="order_id" value="{{ item.id }}" {{ item.checked ? ' checked="checked"' : "" }} />
+			</td>
+			<td valign="top">{{ item.id }}</td>
+			<td valign="top" align="right" id="total-{{ item.id }}" data-id="{{ item.total_price }}">{{ item.total_price|money }}</td>
+			<td valign="top" align="center">{{ item.date|date("d M Y") }}</td>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>

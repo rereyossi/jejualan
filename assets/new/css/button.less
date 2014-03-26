@@ -1,0 +1,61 @@
+@btn-primary:  @color-primary;
+@btn-hover-primary: darken(@btn-primary, 15%);
+@btn-second: @color-second;
+@btn-hover-second: darken(@btn-second, 15%);
+@btn-third: @color-third;
+@btn-hover-third: darken(@btn-third, 15%);
+@btn-color:#fff;
+@btn-radius: @radius;
+
+.btn-border(){
+	border-style: solid;
+	border-width: 1px;
+	border-color: @btn-primary;
+}
+
+.btn{
+	text-transform: capitalize;
+	text-decoration: none;
+	font: inherit;
+	display: inline-block;
+	font-weight: 400;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	background-image: none;
+	border: 1px solid rgba(0, 0, 0, 0);
+	white-space: nowrap;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	border-radius: @btn-radius;
+	transition: @transite-time;
+	
+	&:hover{
+		text-decoration: none;
+		color: @btn-color;
+	}
+}
+
+.btn-primary{
+	background-color: @btn-primary;
+	color: @btn-color;
+	&:hover, &:focus, &:active{
+		background-color: @btn-hover-primary;
+	}
+}
+
+.btn-second{
+	background-color: @btn-second;
+	color: @btn-color;
+	&:hover, &:focus, &:active{
+		background-color: @btn-hover-second;
+	}
+}
+.btn-third{
+	background-color: @btn-third;
+	color: @btn-color;
+	&:hover, &:focus, &:active{
+		background-color: @btn-hover-third;
+	}
+}

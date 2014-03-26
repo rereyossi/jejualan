@@ -1,0 +1,23 @@
+<a class="product-list col-md-3 col-sm-6" href="{{ productlist.url }}">
+    <figure>
+        <div class="img">
+            <img src="{{ productlist.images.0.detail }}" alt="{{ productlist.name }}" title="{{ productlist.name }}" />{# harga jual = price #} {# harga diskon = retail_price #} {% if productlist.retail_price > 0 and productlist.price > productlist.retail_price %} {% else %}
+            <span class="deal">Rp. 120000</span>
+            {% endif %}
+        </div>
+        <figcaption>
+            <h2 class="text-title">{{ productlist.name }}</h2>
+            {% if config.show_price == 1 %}
+            <div class="buy clearfix center-inline">
+                {# harga jual = price #} {# harga diskon = retail_price #} {% if productlist.retail_price > 0 and productlist.price > productlist.retail_price %}
+                <span class="price pull-left">Rp. 200000</span>
+                {% else %}
+                <span class="old-price inline">Rp. 200000</span>
+                {% endif %}
+                <span class="cart pull-left"><i class="fa fa-shopping-cart"></i>
+                </span>
+            </div>
+            {% endif %}
+        </figcaption>
+    </figure>
+</a>

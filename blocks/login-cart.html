@@ -1,0 +1,72 @@
+<div class="main-nav-account">
+	<ul>
+	
+		<li class="acc">
+			{% if member.loggedin %}
+				<span class="my-acc"><a class="login_btn" href="#">{{ 'Member Area'|lang }}</a></span>
+			{% else %}
+				<span class="my-acc"><a class="login_btn" href="#">{{ 'Customer Login'|lang }}</a></span>
+			{% endif %}
+
+			<div id="login_box" style="display:none">
+				{% include "blocks/login.html" %}
+			</div>
+		</li>
+		
+		
+		<li class="cart">
+										
+			{% if cart.showcart %}
+
+				<a href="#"id="shopping-cart-btn">
+					{{ 'Keranjang Belanja'|lang }}
+					{{ cart.items_count }}
+					{{ 'item(s)'|lang }}
+				</a>
+				
+				<ul id="shopping-cart-list">
+					{% for item in cart.items %}
+					<li>
+						{% if item.images.0.small %}
+						<a href="{{ item.url }}">
+							<img src="{{ item.images.0.small }}" alt="{{ item.images.0.small }}" />
+						</a>
+						{% endif %}
+						
+						<a href="{{ item.url }}">{{ item.name }}</a>
+						{{ item.qty }} pcs {{ (item.retail_price * item.qty)|money_without_currency }}
+						<div class="clear"></div>
+					</li>
+					{% endfor %}
+					
+					<li>
+						<div id="shopping-cart-total">
+							<span class="left">
+								{{ 'Total'|lang }}: 
+							</span>
+							<span class="right">
+								{{ cart.total_price|money_without_currency }}
+							</span>
+						</div>
+						<a href="{{ cart.url }}" id="selesai-belanja">
+							{{ 'Selesai Belanja'|lang }}
+						</a>
+					</li>
+				</ul>
+
+				<script>
+			
+				$(function() {
+					$('#shopping-cart-list').hide();
+					$('#shopping-cart-btn').click(function(e) {
+						e.preventDefault();
+						$('#shopping-cart-list').toggle();
+					});
+				});
+				</script>
+			{% endif %}
+				
+		</li>
+	
+	</ul>
+</div>

@@ -1,0 +1,290 @@
+<script>
+var harga_semifinal = {};
+var harga_grosir = {};
+
+{ %
+    for stock_id, item in cart.items %
+}
+harga_semifinal[{
+    {
+        stock_id
+    }
+}] = {
+    {
+        item.min_price
+    }
+};
+harga_grosir[{
+    {
+        stock_id
+    }
+}] = {}; { %
+    for k, v in item.wholesale_price %
+}
+harga_grosir[{
+    {
+        stock_id
+    }
+}][{
+    {
+        k
+    }
+}] = {
+    {
+        v
+    }
+}; { % endfor %
+} { % endfor %
+}
+
+$(function() {
+    $('.qty').keyup(function() {
+        var subtotal = formatcurrency(hitungtotal());
+        $('#subtotal').html(subtotal);
+    });
+
+    $('#shoppingcart input[type="text"]').keypress(function(e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    $('#updatekupon').click(function() {
+        var kk = $('input[name="kode_kupon"]').val();
+        if ($.trim(kk) == '') {
+            return false;
+        }
+        $('#shoppingcart')
+            .attr('action', '{{ coupon_url }}')
+            .submit();
+    });
+
+    $('#belanjalagibtn').click(function() {
+        $('#shoppingcart')
+            .attr('action', '{{ back_url }}')
+            .submit();
+    });
+
+    $('#checkoutbutton').click(function() {
+        $('#shoppingcart')
+            .attr('action', '{{ login_register_url }}')
+            .submit();
+    });
+
+    $('input.del').click(function(e) {
+        e.preventDefault();
+        var stock_id = $(this).closest('tr').data('stock_id');
+        $('#delete_stock_id').val(stock_id);
+        $('#delete_form').submit();
+    });
+
+});
+
+function hitungtotal() {
+    var subtotal = 0;
+    $('.qty').each(function() {
+        var qty = parseInt($(this).val());
+        if (!(qty > 0)) {
+            qty = 0;
+        }
+        var qty_td = $(this).parent();
+        var stock_id = $(this).closest('tr').data('stock_id');
+        var harga_diskon = harga_semifinal[stock_id];
+
+        if (!$.isEmptyObject(harga_grosir[stock_id])) {
+            $.each(harga_grosir[stock_id], function(k, v) {
+                //console.log(k, v);
+                if (qty >= k) {
+                    harga_diskon = v;
+                }
+            });
+        }
+
+        var harga_awal = qty_td.prev().prev().prev().html();
+        harga_awal = harga_asli(harga_awal);
+
+        var diskon_persen = (harga_awal - harga_diskon) / harga_awal * 100;
+        diskon_persen = Math.round(diskon_persen);
+        //diskon_persen = diskon_persen.toFixed(2);
+        qty_td.prev().prev().html(diskon_persen);
+        qty_td.prev().html(formatcurrency(harga_diskon));
+
+        item_total = qty * harga_diskon;
+        qty_td.next('.total').html(formatcurrency(item_total));
+        subtotal += item_total;
+    });
+    var potongan_kupon = $('#potongan_kupon');
+    if (potongan_kupon.length) {
+        potongan_kupon = potongan_kupon.html();
+        potongan_kupon = harga_asli(potongan_kupon);
+        potongan_kupon = parseInt(potongan_kupon);
+        if (!(potongan_kupon > 0)) {
+            potongan_kupon = 0;
+        }
+    } else {
+        potongan_kupon = 0;
+    }
+    return subtotal - potongan_kupon;
+}
+
+function harga_asli(harga) {
+    var harga_asli1 = harga.replace('.', '');
+    var harga_asli2 = harga_asli1.replace('.', '');
+    var harga_asli3 = harga_asli2.replace('.', '');
+    return parseInt(harga_asli3);
+}
+
+function formatcurrency(st) {
+    st += '';
+    var theValue = st;
+    var finalString = '';
+
+    var modulus = theValue.length % 3;
+    var param = 3;
+    var count = 0;
+    for (i = 0; i <= theValue.length; i++) {
+        if (count == modulus && modulus != 0) {
+            finalString += '.';
+        }
+        if (count == (param + modulus) && count < (theValue.length - 1)) {
+            finalString += '.';
+            param = 3 + param;
+        }
+        finalString += theValue.charAt(i);
+        count++;
+
+    }
+    return finalString;
+}
+</script>
+<div class="row">
+    <div class="cart-main col-md-12">
+
+        <!-- step cart box -->
+        <div class="step-cart">
+            <ul class="list-inline">
+                <li class="active">{{ 'Langkah Order'|lang }}</li>
+                <li class="active">{{ 'Keranjang Belanja'|lang }}</li>
+                <li class="">{{ 'Login / Daftar'|lang }}</li>
+                <li class="">{{ 'Pengiriman'|lang }}</li>
+                <li class="">{{ 'Selesai'|lang }}</li>
+            </ul>
+        </div>
+
+        <!-- cat table -->
+        <div class="cart-table">
+            {% if error_msg %}
+            <div class="alert alert-danger errorMsg">
+                {{ error_msg }}
+            </div>
+            {% endif %}
+            <form id="shoppingcart" action="{{ cart_url }}" method="POST">
+
+                <table class=" table table-striped table-bordered bg-white" cellspacing="0" cellpadding="0" border="0">
+                    <tr>
+                        <th colspan="2">{{ 'Nama Produk'|lang }}</th>
+                        <th class="hidden-xs">{{ 'Harga (Rp)'|lang }}</th>
+                        <th class="hidden-xs">{{ 'Diskon (%)'|lang }}</th>
+                        <th class="hidden-xs">{{ 'Harga Diskon (Rp)'|lang }}</th>
+                        <th class="hidden-xs">{{ 'Jumlah'|lang }}</th>
+                        <th>{{ 'Total (Rp)'|lang }}</th>
+                        <th>{{ 'Hapus'|lang }}</th>
+                    </tr>
+                    {% if is_cart_empty %}
+                    <tr>
+                        <td colspan="8">{{ 'Keranjang belanja kosong'|lang }}</td>
+                    </tr>
+                    {% else %} {% for stock_id, item in cart.items %}
+                    <tr data-stock_id="{{ stock_id }}">
+                        <td>
+                            {% if item.images.0.small %}
+                            <img src="{{ item.images.0.small }}" alt="{{ item.name }}">{% endif %}
+                        </td>
+                        <td class="hidden-xs">
+                            <a href="{{ item.url }}">{{ item.name }}</a>
+                        </td>
+                        <td class="hidden-xs" align="right">{{ item.price|money_without_currency }}</td>
+                        <td class="hidden-xs" align="right">{{ item.discount }}</td>
+                        <td class="hidden-xs" align="right" class="harga_diskon">{{ item.retail_price|money_without_currency }}</td>
+                        <td align="center">
+                            <input type="text" style="width:50px;height:30px;text-align:center;" class="qty" name="qty[{{ stock_id }}]" value="{{ item.qty }}">
+                        </td>
+                        <td align="right" class="total">{{ (item.retail_price * item.qty)|money_without_currency }}</td>
+                        <td align="center">
+                            <input type="image" src="{{ 'delete.png'|asset_url }}" class="del">
+                        </td>
+                    </tr>
+                    {% endfor %} {% if cart.coupon_code %} {% if coupon.diskon_type == 1 %}
+                    <tr>
+                        <td colspan="6" align="right" bgcolor="#FFFFFF">
+                            <strong>{{ coupon.title }}</strong>
+                        </td>
+                        <td align="right" bgcolor="#FFFFFF">-
+                            <span id="potongan_kupon">{{ cart.coupon_amount}}</span>
+                        </td>
+                        <td align="center"></td>
+                    </tr>
+                    {% endif %} {% endif %}
+                    <tr>
+                        <td class="hidden-xs" colspan="6" align="right" bgcolor="#FFFFFF">
+                            <strong>{{ 'Jumlah sub total belanja'|lang }}</strong>
+                        </td>
+                        <td class="visible-xs" colspan="2" align="right" bgcolor="#FFFFFF">
+                            <strong>{{ 'Jumlah sub total belanja'|lang }}</strong>
+                        </td>
+                        <td align="right" id="subtotal" bgcolor="#FFFFFF">{{ cart.total_price|money_without_currency }}</td>
+                        <td bgcolor="#FFFFFF"></td>
+                    </tr>
+                    {% endif %}
+                </table>
+                <div class="padd4">
+                    {% if is_cart_empty %} {% else %} {% if show_coupon %}
+                    <div class="kupon pull-left ">
+                        {% if cart.coupon_code is empty %}
+                        <strong>{{ 'Kode Kupon'|lang }}:</strong>
+                        <br/>
+                        <table>
+                            <tr>
+                                <td>
+                                    <input type="text" class="form-control" style="border-radius:20px 0px 0px 20px !important;" name="kode_kupon">
+                                </td>
+                                <td>
+                                    <input id="updatekupon" class="btn btn-jej" style="border-radius:0px 20px 20px 0px !important;" type="button" value="Update Kupon">
+                                </td>
+                            </tr>
+                        </table>
+                        {% else %}
+                        <div class=" padd">
+                            <strong>Kode Kupon Anda:</strong>
+                            <br/>
+                            <div class="alert successMsg">
+                                <strong>{{ coupon.code }}</strong>({{ coupon.title }})
+                                <a style="margin-left:50px;" class="btn" href="{{ delete_coupon_url }}" title="Hapus Kupon">
+                                    <img src="{{ 'delete.png'|asset_url }}">
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    <div class="pull-right">
+                        <div style="height:17px;background-color:white;"></div>
+                        <input type="button" id="belanjalagibtn" class="btn btn-jej" value="{{ '&laquo; Belanja Lagi'|lang }}">
+                        <input type="button" id="checkoutbutton" class="btn btn-jej" value="{{ 'Checkout &raquo;'|lang }}">
+                        <div class=" visible-xs" style="height:17px;background-color:white;"></div>
+                        <div class=" visible-sm" style="height:17px;background-color:white;"></div>
+                    </div>
+                    {% endif %}
+            </form>
+            <form id="delete_form" method="post" action="{{ delete_item_url }}">
+                <input type="hidden" id="delete_stock_id" name="stock_id" value="">
+            </form>
+            </div>
+        </div>
+
+
+
+    </div>
+    <!-- cart main end -->
+</div>

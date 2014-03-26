@@ -1,0 +1,30 @@
+<div class="row">
+	<div class="col-md-12 nopadding">
+		<div class="breadcrumb">
+			<center>
+				<strong>{{ 'Berita'|lang }}</strong>
+			</center>
+		</div>
+	</div>
+</div>
+<div class="row mar-bot">
+	<div class="padding10">
+		{% for item in news %}
+		<div class="col-md-12 news-list">
+			<h4><a href="{{ item.url }}">{{ item.title }}</a><span class="pull-right"><small>{{ item.date|date("d M Y") }}</small></span></h4>
+			<p>
+				{% if item.image %}
+				<a href="{{ item.url }}">
+					<div class="img-blog">
+						<img class="img-thumbnail img-responsive" src="{{ item.image }}" alt="">
+					</div>
+				</a>
+				<br/>{% endif %}
+				<div class="news-body">{{ item.content|striptags|slice(0, 250) }} ...</div>
+				<br/>
+				<a class=" btn-xs btn btn-jej" href="{{ item.url }}">{{ 'Selengkapnya'|lang }}</a>
+			</p>
+		</div>
+		{% endfor %} {% include 'snippets/pagination.html' %}
+	</div>
+</div>
