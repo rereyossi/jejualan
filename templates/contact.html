@@ -15,9 +15,6 @@ $(document).ready(function() {
                 required: true,
                 email: true
             },
-            mobile: {
-                required: true
-            },
             address: {
                 required: true
             },
@@ -30,32 +27,26 @@ $(document).ready(function() {
         },
         messages: {
             name: {
-                required: "Nama harus diisi",
+                required: '<i class="fa fa-exclamation-triangle"></i> ' + "{{ 'Nama harus diisi'|lang }}",
                 minlength: "Nama minimal 3 karakter"
             },
             email: {
-                required: "Email harus diisi",
-                email: "Email tidak valid (contoh: nama@domain.com)"
-            },
-            phone: {
-                required: "No. Telp harus diisi"
-            },
-            mobile: {
-                required: "No. Handphone harus diisi"
+                required: '<i class="fa fa-exclamation-triangle"></i> ' +"Email harus diisi",
+                email: '<i class="fa fa-exclamation-triangle"></i> ' +"Email tidak valid (contoh: nama@domain.com)"
             },
             address: {
-                required: "Alamat harus diisi"
+                required: '<i class="fa fa-exclamation-triangle"></i> ' +"Alamat harus diisi"
             },
             content: {
-                required: "Pesan harus diisi"
+                required: '<i class="fa fa-exclamation-triangle"></i> ' +"Pesan harus diisi"
             },
             content: {
-                required: "Kode capthca harus diisi"
+                required: '<i class="fa fa-exclamation-triangle"></i> ' +"Kode capthca harus diisi"
             }
         },
         errorLabelContainer: '.errorMsg',
         errorElement: 'div',
-        errorClass: "ferror",
+        errorClass: "errorMsg",
         submitHandler: function() {
             $.ajax({
                 type: 'POST',
@@ -81,56 +72,43 @@ $(document).ready(function() {
             error.prependTo(field);
         },
     });
-    $("#contact_map").gMap({
-        { %
-            if latitude != ''
-            and longitude != '' %
-        }
-        markers: [{
+
+// gmap
+        $("#contact_map").gMap({
+            {% if latitude != '' and longitude != '' %}
+            markers: [ { latitude: '{{ latitude }}', longitude: '{{ longitude }}' } ],
             latitude: '{{ latitude }}',
-            longitude: '{{ longitude }}'
-        }],
-        latitude: '{{ latitude }}',
-        longitude: '{{ longitude }}',
-        { %
-            else %
-        }
-        markers: [{
-            address: '{{ address }}'
-        }],
-        address: '{{ address }}',
-        { % endif %
-        }
-        zoom: 14,
-        mapTypeControl: false,
-        zoomControl: false,
-        scrollwheel: false
-    });
+            longitude: '{{ longitude }}',
+            {% else %}
+            markers: [ { address: '{{ address }}' } ],
+            address: '{{ address }}',
+            {% endif %}
+            zoom: 14,
+            mapTypeControl: false,
+            zoomControl: false,
+            scrollwheel: false
+        });
 });
 </script>
 
-<!-- error msg-->
-<div class="row">
-    <div class="col-md-12">
-        <div id="result">
-            <div class="errorMsg" style="display:none;"></div>
-        </div>
-    </div>
-</div>
 
 <!-- contact page-->
 <div class="row">
-    <div id="contact-main " class="col-md-12">
+    <div id="contact-main">
         <!-- form contact -->
         <div class="contact-form col-md-6">
             <!-- contact title -->
             <div class="breadcrumb">
-                <h3 class="text-title">{{ 'Kirim Pesan'|lang }}</h3>
+                <h2 class="text-title">{{ 'Kirim Pesan'|lang }}</h2>
             </div>
 
+
             <!-- contact content -->
-            <div id="contact-content">
                 <form id="contact_form" class="form-vertical" name="contact_form" method="post" action="{{ contact_save_url }}">
+                    <!-- error msg -->
+                    <div id="result" class="col-md-8 col-md-offset-4">
+                        <div class="errorMsg alert alert-danger" style="display:none;"></div>
+                    </div>
                     {% if show_name == 1 %}
                     <div class="form-group">
                         <label for="input_name" class="col-sm-4 control-label">{{ 'Nama'|lang }}
@@ -152,7 +130,6 @@ $(document).ready(function() {
                     {% endif %} {% if show_phone == 1 %}
                     <div class="form-group">
                         <label for="input_phone" class="col-sm-4 control-label">{{ 'No. Telp'|lang }}
-                            <span>*</span>
                         </label>
                         <div class="col-sm-8">
                             <input type="text" id="input_phone" name="notelp" value="" class="form-control">
@@ -203,7 +180,6 @@ $(document).ready(function() {
                         </div>
                     </div>
                 </form>
-            </div>
 
         </div>
 
@@ -211,7 +187,7 @@ $(document).ready(function() {
         <div class="widget-box col-md-6">
             <!-- title map -->
             <div class="breadcrumb">
-                <h3 class="text-title">{{ 'Info Kontak'|lang }}</h3>
+                <h2 class="text-title">{{ 'Info Kontak'|lang }}</h2>
             </div>
 
             <!-- content widget box -->

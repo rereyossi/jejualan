@@ -1,4 +1,3 @@
-
 <script>
     $(function() {
         $('.add2cart').submit(function() {
@@ -32,8 +31,7 @@
                             $('#imageloading').hide();
                             if (data.success == 1) {
                                 $('#add2cartmessage').html(sukses + back + cart);
-                            }
-                            else {
+                            } else {
                                 $('#add2cartmessage').html('<div class="add2cartmsg">' + data.msg + '</div>' + ok);
                             }
                         }
@@ -76,8 +74,7 @@
 <div class="product-desc">
     <h2 class="text-title">{{ product.name }}</h2>
     <div class="price-box">
-        {{ 'Harga'|lang }}
-        {% if product.discount %}
+        {{ 'Harga'|lang }} {% if product.discount %}
         <strong class="price-discount">{{ product.price|money }}</strong>
         <strong class="price-grosir">{{ product.retail_price|money }}</strong>
         {% else %}
@@ -94,8 +91,7 @@
         <a class="col-md-4 addthis_button_facebook_like" fb:like:layout="button_count"></a>
         <a class="col-md-4 addthis_button_tweet"></a>
     </div>
-    <script type="text/javascript" 
-    src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4fff9b8d24c2d509"></script>
+    <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4fff9b8d24c2d509"></script>
     <!-- AddThis Button END -->
 </div>
 
@@ -106,10 +102,10 @@
         <input type="hidden" value="add" name="act">{% if product.attribute_stock.data|length > 1 %}
         <div class="form-group">
             <select class="form-control" name="stock_id">
-            {% for id,stockdata in product.attribute_stock.data %}
-            <option value="{{ id }}">{{ stockdata.option_name }}</option>
-            {% endfor %}
-        </select>
+                {% for id,stockdata in product.attribute_stock.data %}
+                <option value="{{ id }}">{{ stockdata.option_name }}</option>
+                {% endfor %}
+            </select>
         </div>
         {% else %}
         <input type="hidden" name="stock_id" value="{{ product.stock_id }}">{% endif %}
@@ -131,16 +127,14 @@
 
 <!-- product content -->
 <div class="product-content">
-        {{ product.desc }}
+    {{ product.desc }}
 </div>
 
 <!--product status-->
 <div class="product status">
     {% if product.stock %}
-    <img class="tick" src="{{ 'tick.png'|asset_url }}">{{ 'Tersedia'|lang }}
-    {% else %}
-    <img class="tick" src="{{ 'error.png'|asset_url }}">{{ 'Tidak Tersedia'|lang }}
-    {% endif %}
+    <img class="tick" src="{{ 'tick.png'|asset_url }}">{{ 'Tersedia'|lang }} {% else %}
+    <img class="tick" src="{{ 'error.png'|asset_url }}">{{ 'Tidak Tersedia'|lang }} {% endif %}
 </div>
 
 <!--product atrribute-->
@@ -215,18 +209,18 @@
     <div class="list">
         {% for wholesale in product.wholesale %}
         <div>
-            <span>{{ wholesale.qty }} Pcs:</span>  
-            <strong>{{ wholesale.price|money }} </strong>
+            <span>{{ wholesale.qty }} Pcs:</span>
+            <strong>{{ wholesale.price|money }}</strong>
         </div>
         {% endfor %}
     </div>
 </div>
-{% endif %}
-{% endif %}
+{% endif %} {% endif %}
 
 
-
-<script type="text/javascript">
+<!--product review-->
+<div class="product-review">
+    <script type="text/javascript">
     $(document).ready(function() {
         $('#review_add').live("click", function() {
             $('#review_add_container').slideToggle("slow");
@@ -286,7 +280,7 @@
             $(this).show();
         }
 
-//alert(previousID);
+        //alert(previousID);
         $('.pagination a.next').show();
         $("#review_list_container").load("{{ review.data_url }}/" + previousID);
         $(this).siblings().removeClass('current');
@@ -332,21 +326,21 @@
     },
             messages: {
             name: {
-            required: "{{ 'Nama harus diisi'|lang }}",
+            required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Nama harus diisi'|lang }}",
                     minlength: "{{ 'Nama minimal 3 karakter'|lang }}"
             },
                     email: {
-                    required: "{{ 'Email harus diisi'|lang }}",
+                    required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Email harus diisi'|lang }}",
                             email: "{{ 'Email tidak valid (contoh: nama@domain.com)'|lang }}"
                     },
                     content: {
-                    required: "{{ 'Review harus diisi'|lang }}"
+                    required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Review harus diisi'|lang }}"
                     },
                     rating: {
-                    required: "{{ 'Rating harus diisi'|lang }}"
+                    required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Rating harus diisi'|lang }}"
                     },
                     code: {
-                    required: "{{ 'Kode keamanan harus diisi'|lang }}"
+                    required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Kode keamanan harus diisi'|lang }}"
                     }
             },
             errorLabelContainer: '.errorMsg',
@@ -359,15 +353,15 @@
                     dataType: "json",
                     success: function(data) {
                         if (data.status == 1) {
-                            $('#result_review_add')
-                                    .html('<div class="alert alert-success col-md-9 col-md-offset-3">' + data.msg + '</div>')
+                            $('#result')
+                                    .html('<div class="alert alert-success">' + data.msg + '</div>')
                                     .show();
                             setTimeout(function() {
                                 $("#review_list_container").load("{{ review.data_url }}");
                             }, 1000);
                         }
                         else if (data.status == 2) {
-                            $('#result_review_add')
+                            $('#result')
                                     .html('<div class="alert">' + data.msg + '</div>')
                                     .show();
                         }
@@ -377,30 +371,25 @@
             }
     });
     });</script>
+    <div class="product-review-main">
+        <a id="review_add" class="btn btn-primary" href="javascript:void(0);">{{ '(+) Tambah review'|lang }}</a>
 
-<!--product review-->
-<div class="product-review-main">
-    <!--add comment-->
-    <a id="review_add" class="btn btn-primary" href="javascript:void(0);">{{ '(+) Tambah review'|lang }}</a>
+        <div id="review_add_container" style="margin-bottom:20px; display:none">
 
-    <!--form add comment-->
-    <!--form view while review add on click-->
-    <div id="review_add_container" style="margin-bottom:20px; display:none">
-        <!--error msg-->
-        <div id="result_review_add" class="col-md-8">
-            <div class="col-md-9 col-md-offset-3">
-                <div class="alert alert-danger errorMsg" style=" display:none"></div>
-            </div>
-        </div>
-
-        <!--form input comment-->
-        <div class="col-md-8">
-            <form class="form-vertical" id="review_add_form" name="review_add_form" method="post" action="{{ review.action_url }}">
+            <form class="form-vertical col-md-8" id="review_add_form" name="review_add_form" method="post" action="{{ review.action_url }}">
                 <input type="hidden" name="product_id" value="{{ product.id }}" />
+
+                <!-- error message -->
+                <div id="result" class="col-md-8 col-md-offset-4">
+                    <div class="alert alert-danger errorMsg" style=" display:none"></div>
+                </div>
+
                 <!-- name -->
                 <div class="form-group">
-                    <label class="col-md-3">{{ 'Nama'|lang }} <span>*</span></label>
-                    <div class="col-md-9">
+                    <label class="col-md-4">{{ 'Nama'|lang }}
+                        <span>*</span>
+                    </label>
+                    <div class="col-md-8">
                         <input class="form-control" type="text" name="name" id="name" />
                     </div>
                 </div>
@@ -408,8 +397,10 @@
 
                 <!-- email -->
                 <div class="form-group">
-                    <label class="col-md-3">{{ 'Email'|lang }} <span>*</span></label>
-                    <div class="col-md-9">
+                    <label class="col-md-4">{{ 'Email'|lang }}
+                        <span>*</span>
+                    </label>
+                    <div class="col-md-8">
                         <input class="form-control" type="text" name="email" id="email" />
                     </div>
                 </div>
@@ -417,8 +408,10 @@
 
                 <!-- review -->
                 <div class="form-group">
-                    <label class="col-md-3">{{ 'Review'|lang }}<span>*</span></label>
-                    <div class="col-md-9">
+                    <label class="col-md-4">{{ 'Review'|lang }}
+                        <span>*</span>
+                    </label>
+                    <div class="col-md-8">
                         <textarea class="form-control" name="content" id="content" rows="5"></textarea>
                     </div>
                 </div>
@@ -426,8 +419,10 @@
 
                 <!-- rating -->
                 <div class="form-group">
-                    <label class="col-md-3">{{ 'Rating'|lang }}<span>*</span></label>
-                    <div class="col-md-9">
+                    <label class="col-md-4">{{ 'Rating'|lang }}
+                        <span>*</span>
+                    </label>
+                    <div class="col-md-8">
                         <div class="radio-inline">
                             <div class="radio">
                                 <label for="rate-good" class="rate-good">
@@ -450,29 +445,30 @@
 
                 <!-- kode keamanan -->
                 <div class="form-group">
-                    <label class="col-md-3">{{ 'Kode keamanan'|lang }}<span>*</span></label>
-                    <div class="col-md-9">
-                        <img src="{{ captcha_url }}" id="captcha"><br>
-                        <input type="form-control" name="code" style="margin-top:10px;" id="code" class="text">
+                    <label class="col-md-4">{{ 'Kode keamanan'|lang }}
+                        <span>*</span>
+                    </label>
+                    <div class="col-md-8">
+                        <img src="{{ captcha_url }}" id="captcha">
+                        <br>
+                        <input type="text" name="code"  id="code" class="form-control">
                     </div>
                 </div>
 
                 <!-- submit -->
                 <div class="form-group">
-                    <div class="col-md-9 col-md-offset-3">
-                        <input class="formBtn btn btn-primary " type="submit" name="add_review" value="{{ 'Submit'|lang }}" />
+                    <div class="col-md-8 col-md-offset-4">
+                        <input class="formBtn btn btn-primary pull-right" type="submit" name="add_review" value="{{ 'Submit'|lang }}" />
                     </div>
                 </div>
             </form>
         </div>
-
+        <div id="review_list_container"></div>
+        <div id="nav-pages" style="padding-top: 10px;">
+            {% include 'snippets/pagination.html' %}
+        </div>
     </div>
-
-
-    <div id="review_list_container"></div>
-    <div id="nav-pages" style="padding-top: 10px;">
-        {% include 'snippets/pagination.html' %}
-    </div>
+    <!-- End .product-review -->
 </div>
 <!-- End .product-review -->
 
@@ -490,6 +486,3 @@
     </div>
     {% endif %}
 </div>
-
-
-

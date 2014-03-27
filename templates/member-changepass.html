@@ -49,26 +49,19 @@ $(document).ready(function() {
 });
 </script>
 
-
+<!-- title -->
 <h3 class="text-title">{{ 'Ganti Password'|lang }}</h3>
-
-<!-- error msg -->
-<div class="row">
-    <div class="col-md-7">
-        <div id="result_change col-md-8 col-md-offset-4">
-            <div class="alert alert-danger errorMsg" style="display:none;">
-
-            </div>
-        </div>
-
-    </div>
-</div>
-
 
 <!-- change form -->
 <div class="row">
-    <div class="form-change-pass col-md-7">
-        <form class="form-vertical" id="change_form" name="change_form" method="post" action="{{ changepass_action_url }}">
+    <div id="form-change-pass">
+        <form class="form-vertical col-md-8" id="change_form" name="change_form" method="post" action="{{ changepass_action_url }}">
+            <!-- error msg -->
+            <div id="result_change" class="col-md-8 col-md-offset-4">
+                <div class="alert alert-danger errorMsg" style="display:none;">
+
+                </div>
+            </div>
             <!-- email -->
             <div class="form-group">
                 <label class="col-md-4">{{ 'Email'|lang }}</label>

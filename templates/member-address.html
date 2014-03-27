@@ -1,127 +1,59 @@
 <script type="text/javascript">
-$(document).ready(function(){	
-	$("#address_add_form").validate({
-		rules: {
-			firstname: {
-				required: true,
-				minlength: 3
-			},
-			lastname: {
-				required: true
-			},
-			address: {
-				required: true
-			},
-			postcode: {
-				required: true
-			},
-			state_id: {
-				required: true
-			},
-			city_id: {
-				required: true
-			},
-			phone: {
-				required: true
-			},
-			phone_mobile: {
-				required: true
-			}
-		},
-		messages: {
-			firstname: {
-				required: "{{ 'Nama Depan harus diisi'|lang }}",
-				minlength: "{{ 'Nama Depan minimal 3 karakter'|lang }}"
-			},
-			lastname: {
-				required: "{{ 'Nama Belakang harus diisi'|lang }}"
-			},
-			address: {
-				required: "{{ 'Alamat harus diisi'|lang }}"
-			},
-			postcode: {
-				required: "{{ 'Kode Pos harus diisi'|lang }}"
-			},
-			state_id: {
-				required: "{{ 'Kota harus diisi'|lang }}"
-			},
-			city_id: {
-				required: "{{ 'Propinsi harus diisi'|lang }}"
-			},
-			phone: {
-				required: "{{ 'No. Telp harus diisi'|lang }}"
-			},
-			phone_mobile: {
-				required: "{{ 'No. Handphone harus diisi'|lang }}"
-			}
-		},
-		errorLabelContainer: '.errorMsg',
-		errorElement: 'div',
-		submitHandler: function() {
-			$.ajax({
-				type: 'POST',
-				url: $('#address_add_form').attr('action'),
-				data: $('#address_add_form').serialize(),
-				dataType:"json",
-				success: function (data) {
-					if (data.status == 1) {
-               			$('#result_address_add').html(data.msg).show();
-						$('#address_add_container').hide();
-						$('#address_add_container').find('.text').val('');
-						$('#address_add_container').find('#country_id').val(112);
-						$("#address_list_container").load('{{ address_list_url }}');
-					}
-					else if (data.status == 2) {
-						$('#result_address_add').html(data.msg).show();
-					}
-				}
-			});
-			return false;
-		}
-	});		
-	
-	$(".delete_address").live("click", function () {		
-		if ( confirm('Apakah yakin akan dihapus?') )
-		{
-			var id = $(this).attr('data-id');
-			var liShortcut = $(this).closest('tr');
-			
-			$.ajax({
-				type: 'POST',
-				url: $(this).attr('href'),
-				data: { 'id' : id },
-				dataType: "json",
-				success: function (data) {
-					if ( data.status == 1 ) {
-						liShortcut.fadeOut('remove');
-					}
-				}
-			})
-		}
-		return false;
+$(document).ready(function() {
+   
+    // delete address
+    $(".delete_address").live("click", function() {
+        if (confirm('Apakah yakin akan dihapus?')) {
+            var id = $(this).attr('data-id');
+            var liShortcut = $(this).closest('tr');
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('href'),
+                data: {
+                    'id': id
+                },
+                dataType: "json",
+                success: function(data) {
+                    if (data.status == 1) {
+                        liShortcut.fadeOut('remove');
+                    }
+                }
+            })
+        }
+        return false;
     });
-	
-	$('#address_add_container').hide();
-	$('#address_add').live("click", function () {
-		$('#address_add_container').slideToggle("slow");
+
+    $('#address_add_container').hide();
+
+    // add address
+    $('#address_add').toggle(function() {
+        $(this).empty().html("(x) {{ 'Tutup'|lang }}");
+        $('#address_add_container').slideToggle("slow");
+    }, function() {
+        $(this).empty().html("(+) {{ 'Tambah testimonial'|lang }}");
+        $('#address_add_container').slideToggle("slow");
     });
-	$('.edit_address_container').hide();
-	$('.edit_address').live("click", function () {
-		var id = $(this).attr('data-id');
-		$('#edit_address_container-' + id).slideToggle("slow");
+
+    // hide address
+    $('.edit_address_container').hide();
+    $('.edit_address').live("click", function() {
+        var id = $(this).attr('data-id');
+        $('#edit_address_container-' + id).slideToggle("slow");
     });
-	
-	$("#address_list_container").load('{{ address_list_url }}');
+
+    $("#address_list_container").load('{{ address_list_url }}');
 });
 </script>
 
-<h3 class="text-title">{{ 'Daftar Alamat'|lang }}</h3>
+<div class="title clearfix">
+    <h3 class="text-title pull-left">{{ 'Daftar Alamat'|lang }}</h3>
 
-<p><a id="address_add" class="btn btn-primary pull-right" href="javascript:void(0);">(+) {{ 'Tambah Alamat Baru'|lang }}</a></p>
+    <a id="address_add" class="btn btn-primary pull-right" href="javascript:void(0);">(+) {{ 'Tambah Alamat Baru'|lang }}</a>
+</div>
 
 <div id="address_add_container" style="margin-bottom:20px;">
-	{% include "templates/member-address-add.html" %}
+    {% include "templates/member-address-add.html" %}
 </div>
 
 <div id="address_list_container"></div>
-<br/>

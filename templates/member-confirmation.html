@@ -69,79 +69,87 @@ $(document).ready(function() {
     });
 });
 </script>
-<h3>{{ 'Konfirmasi Pembayaran'|lang }}</h3>
-{% if confirm.data_exist > 0 %}
-<form class="form-vertical" id="confirm_form" name="confirm_form" method="post" action="{{ confirmation_action_url }}">
+<div class="">
+    <div id="member-confirmation">
+        <h3 class="text-title">{{ 'Konfirmasi Pembayaran'|lang }}</h3>
+        {% if confirm.data_exist > 0 %}
+        <form class="form-vertical col-md-8" id="confirm_form" name="confirm_form" method="post" action="{{ confirmation_action_url }}">
 
-	<!-- error msg -->
-    <div id="list-data-confirm"></div>
-    <div id="result_confirm">
-        <div class="alert alert-danger errorMsg " style="display:none;"></div>
-    </div>
+            <!-- error msg -->
+            <div id="list-data-confirm"></div>
+            <div id="result_confirm">
+                <div class="alert alert-danger errorMsg " style="display:none;"></div>
+            </div>
 
-    <!-- form input  -->
-    <!-- name -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Nama'|lang }}</label>
-        <div class="col-md-9">
-            {{ fullname }}
-            <input type="hidden" name="fullname" value="{{ fullname }}" />
-        </div>
-    </div>
-    <!-- via -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Pembayaran Via'|lang }}</label>
-        <div class="col-md-9">
-            {{ confirm.addon }} &nbsp; &nbsp;
-        </div>
-    </div>
-    <!-- bank destination -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Bank Tujuan Transfer'|lang }} <span>*</span>
-        </label>
-        <div class="col-md-9">
-            <input class="form-control" type="text" name="bank_tujuan" id="bank_tujuan" size="40" />
-        </div>
-    </div>
-    <!-- total cost -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Besar Pembayaran'|lang }}
-        <span>*</span>
-        </label>
-        <div class="col-md-9">
-            <input class="form-control" type="text" name="besar" id="besar" value="{{ confirm.payment_amount }}" size="40" />
-        </div>
-    </div>
-    <!-- date payment -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Tanggal Pembayaran'|lang }}<span>*</span></label>
-        <div class="col-md-9">
-            <link rel="stylesheet" type="text/css" href="{{ 'jscalender.css'|asset_url }}" />
-            <script type="text/javascript" src="{{ 'jscalender.js'|asset_url }}"></script>
-            <script type="text/javascript" src="{{ 'jscalender_en.js'|asset_url }}"></script>
-            <input class="text" type="text" size="10" name="tgl_pembayaran" id="tgl_pembayaran" value="{{ confirm.date }}" readonly="readonly" />
-            <img id="tgl_pembayaran_trigger" src="{{ 'date.png'|asset_url }}" alt="" />
-            <script type="text/javascript">
-            Calendar.setup({
-                inputField: "tgl_pembayaran",
-                trigger: "tgl_pembayaran_trigger",
-                onSelect: function() {
-                    this.hide()
-                },
-                showTime: 24,
-                dateFormat: "%d-%m-%Y"
-            });
-            </script>
-        </div>
-    </div>
-    <!-- submit -->
-    <div class="form-group">
-        <div class="col-md-9 col-md-offset-3">
-            <input class="formBtn btn btn-primary pull-right" type="submit" name="add_confirm" value="{{ 'Kirim'|lang }}" />
-        </div>
-    </div>
+            <!-- form input  -->
+            <!-- name -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Nama'|lang }}</label>
+                <div class="col-md-8">
+                    {{ fullname }}
+                    <input type="hidden" name="fullname" value="{{ fullname }}" />
+                </div>
+            </div>
+            <!-- via -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Pembayaran Via'|lang }}</label>
+                <div class="col-md-8">
+                    {{ confirm.addon }} &nbsp; &nbsp;
+                </div>
+            </div>
+            <!-- bank destination -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Bank Tujuan Transfer'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <input class="form-control" type="text" name="bank_tujuan" id="bank_tujuan" size="40" />
+                </div>
+            </div>
+            <!-- total cost -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Besar Pembayaran'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <input class="form-control" type="text" name="besar" id="besar" value="{{ confirm.payment_amount }}" size="40" />
+                </div>
+            </div>
+            <!-- date payment -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Tanggal Pembayaran'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <link rel="stylesheet" type="text/css" href="{{ 'jscalender.css'|asset_url }}" />
+                    <script type="text/javascript" src="{{ 'jscalender.js'|asset_url }}"></script>
+                    <script type="text/javascript" src="{{ 'jscalender_en.js'|asset_url }}"></script>
+                    <input class="text" type="text" size="10" name="tgl_pembayaran" id="tgl_pembayaran" value="{{ confirm.date }}" readonly="readonly" />
+                    <img id="tgl_pembayaran_trigger" src="{{ 'date.png'|asset_url }}" alt="" />
+                    <script type="text/javascript">
+                    Calendar.setup({
+                        inputField: "tgl_pembayaran",
+                        trigger: "tgl_pembayaran_trigger",
+                        onSelect: function() {
+                            this.hide()
+                        },
+                        showTime: 24,
+                        dateFormat: "%d-%m-%Y"
+                    });
+                    </script>
+                </div>
+            </div>
+            <!-- submit -->
+            <div class="form-group">
+                <div class="col-md-8 col-md-offset-4">
+                    <input class="formBtn btn btn-primary pull-right" type="submit" name="add_confirm" value="{{ 'Kirim'|lang }}" />
+                </div>
+            </div>
 
-</form>
-{% else %}
-<p>{{ 'Tidak ada order yang belum terbayar'|lang }}</p>
-{% endif %}
+        </form>
+        {% else %}
+        <p>{{ 'Tidak ada order yang belum terbayar'|lang }}</p>
+        {% endif %}
+
+    </div>
+</div>

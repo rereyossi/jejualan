@@ -11,16 +11,10 @@ $("#address_edit_form-{{ item.id }}").validate({
         address: {
             required: true
         },
-        postcode: {
-            required: true
-        },
         state_id: {
             required: true
         },
         city_id: {
-            required: true
-        },
-        phone: {
             required: true
         },
         phone_mobile: {
@@ -29,29 +23,23 @@ $("#address_edit_form-{{ item.id }}").validate({
     },
     messages: {
         firstname: {
-            required: "{{ '<i class="fa fa-exclamation-triangle"></i> Nama Depan harus diisi'|lang }}",
-            minlength: "{{ '<i class="fa fa-exclamation-triangle"></i> Nama Depan minimal 3 karakter'|lang }}"
+            required: "{{'Nama Depan harus diisi'|lang }}",
+            minlength: "{{'Nama Depan minimal 3 karakter'|lang }}"
         },
         lastname: {
-            required: "{{ '<i class="fa fa-exclamation-triangle"></i> Nama Belakang harus diisi'|lang }}"
+            required: "{{'Nama Belakang harus diisi'|lang }}"
         },
         address: {
-            required: "{{ '<i class="fa fa-exclamation-triangle"></i> Alamat harus diisi'|lang }}"
-        },
-        postcode: {
-            required: "{{ '<i class="fa fa-exclamation-triangle"></i> Kode Pos harus diisi'|lang }}"
+            required: "{{'Alamat harus diisi'|lang }}"
         },
         state_id: {
-            required: "{{ '<i class="fa fa-exclamation-triangle"></i> Kota harus diisi'|lang }}"
+            required: "{{'<Kota harus diisi'|lang }}"
         },
         city_id: {
-            required: "{{ '<i class="fa fa-exclamation-triangle"></i> Propinsi harus diisi'|lang }}"
-        },
-        phone: {
-            required: "{{ '<i class="fa fa-exclamation-triangle"></i> No. Telp harus diisi'|lang }}"
+            required: "{{'Propinsi harus diisi'|lang }}"
         },
         phone_mobile: {
-            required: "{{ '<i class="fa fa-exclamation-triangle"></i> No. Handphone harus diisi'|lang }}"
+            required: "{{'No. Handphone harus diisi'|lang }}"
         }
     },
     errorLabelContainer: '.errorMsg',
@@ -96,31 +84,33 @@ $('#state_id-{{ item.id }}').change(function() {
 });
 </script>
 
-<!-- error msg -->
-<div id="result_address_edit-{{ item.id }}">
-    <div class="alert alert-danger errorMsg" style="display:none;"></div>
-</div>
+
 
 <!-- form address -->
-<form id="address_edit_form-{{ item.id }}" name="address_edit_form-{{ item.id }}" method="post" action="{{ addressedit_action_url }}">
+<form id="address_edit_form-{{ item.id }}" class="form-vertical col-md-8" name="address_edit_form-{{ item.id }}" method="post" action="{{ addressedit_action_url }}">
     <input type="hidden" name="address_id" value="{{ item.id }}" />
 
+    <!-- error msg -->
+    <div id="result_address_edit-{{ item.id }}" class="col-md-8 col-md-offset-4">
+        <div class="alert alert-danger errorMsg" style="display:none;"></div>
+    </div>
+    
     <!-- first name -->
     <div class="form-group">
-        <label class="col-md-3">{{ 'Nama Depan'|lang }}
+        <label class="col-md-4">{{ 'Nama Depan'|lang }}
             <span>*</span>
         </label>
-        <div class="col-md-9">
+        <div class="col-md-8">
             <input class="form-control" type="text" name="firstname" id="firstname" value="{{ item.firstname }}" />
         </div>
     </div>
 
     <!-- last name -->
     <div class="form-group">
-        <label class="col-md-3">{{ 'Nama Belakang'|lang }}
+        <label class="col-md-4">{{ 'Nama Belakang'|lang }}
             <span>*</span>
         </label>
-        <div class="col-md-9">
+        <div class="col-md-8">
             <input class="form-control" type="text" name="company" id="company" value="{{ item.company }}" />
         </div>
     </div>
@@ -128,8 +118,8 @@ $('#state_id-{{ item.id }}').change(function() {
 
     <!-- company -->
     <div class="form-group">
-        <label class="col-md-3">{{ 'Perusahaan'|lang }}</label>
-        <div class="col-md-9">
+        <label class="col-md-4">{{ 'Perusahaan'|lang }}</label>
+        <div class="col-md-8">
             <input class="form-control" type="text" name="company" id="company" value="{{ item.company }}" />
         </div>
     </div>
@@ -137,10 +127,10 @@ $('#state_id-{{ item.id }}').change(function() {
 
     <!-- address -->
     <div class="form-group">
-        <label class="col-md-3">{{ 'Alamat'|lang }}
+        <label class="col-md-4">{{ 'Alamat'|lang }}
             <span>*</span>
         </label>
-        <div class="col-md-9">
+        <div class="col-md-8">
             <textarea class="form-control" type="text" name="address" id="address">{{ item.address }}</textarea>
         </div>
     </div>
@@ -148,10 +138,10 @@ $('#state_id-{{ item.id }}').change(function() {
 
     <!-- country -->
     <div class="form-group">
-        <label class="col-md-3">{{ 'Negara'|lang }}
+        <label class="col-md-4">{{ 'Negara'|lang }}
             <span>*</span>
         </label>
-        <div class="col-md-9">
+        <div class="col-md-8">
             <select class="form-control" name="country_id" id="country_id-{{ item.id }}" style="max-width:164px;">
                 <option value="">{{ '-pilih negara-'|lang }}</option>
                 {% include 'snippets/country-options.html' with { 'selected': item.country_id } %}
@@ -161,10 +151,10 @@ $('#state_id-{{ item.id }}').change(function() {
 
     <!-- provinsi -->
     <div class="form-group">
-        <label class="col-md-3">{{ 'Propinsi'|lang }}
+        <label class="col-md-4">{{ 'Propinsi'|lang }}
             <span>*</span>
         </label>
-        <div class="col-md-9">
+        <div class="col-md-8">
             <select class="form-control" name="state_id" id="state_id-{{ item.id }}">
                 <option value="">{{ '-pilih propinsi-'|lang }}</option>
                 {% include 'snippets/state-options.html' with { 'selected': item.state_id } %}
@@ -174,10 +164,10 @@ $('#state_id-{{ item.id }}').change(function() {
 
     <!-- city -->
     <div class="form-group">
-        <label class="col-md-3">{{ 'Kota/Kabupaten'|lang }}
+        <label class="col-md-4">{{ 'Kota/Kabupaten'|lang }}
             <span>*</span>
         </label>
-        <div class="col-md-9">
+        <div class="col-md-8">
             <select class="form-control" name="city_id" id="city_id-{{ item.id }}">
                 <option value="">{{ '-pilih kota-'|lang }}</option>
                 {% include 'snippets/city-options.html' with { 'selected': item.city_id } %}
@@ -187,18 +177,18 @@ $('#state_id-{{ item.id }}').change(function() {
 
     <!-- code pos -->
     <div class="form-group">
-        <label class="col-md-3">{{ 'Kode Pos'|lang }}
+        <label class="col-md-4">{{ 'Kode Pos'|lang }}
             <span>*</span>
         </label>
-        <div class="col-md-9">
+        <div class="col-md-8">
             <inputclass="form-control" type="text" name="postcode" id="postcode" value="{{ item.postcode }}" />
         </div>
     </div>
 
     <!-- no telp -->
     <div class="form-group">
-        <label class="col-md-3">{{ 'No. Telp'|lang }}</label>
-        <div class="col-md-9">
+        <label class="col-md-4">{{ 'No. Telp'|lang }}</label>
+        <div class="col-md-8">
             <input class="form-control" type="text" name="phone" id="phone" value="{{ item.phone }}" />
         </div>
     </div>
@@ -206,17 +196,17 @@ $('#state_id-{{ item.id }}').change(function() {
 
     <!-- no hp -->
     <div class="form-group">
-        <label class="col-md-3">{{ 'No. HP'|lang }}
+        <label class="col-md-4">{{ 'No. HP'|lang }}
             <span>*</span>
         </label>
-        <div class="col-md-9">
+        <div class="col-md-8">
             <input class="form-control" type="text" name="phone_mobile" id="phone_mobile" value="{{ item.hp }}" />
         </div>
     </div>
 
     <!-- submit -->
     <div class="form-group">
-        <div class="col-md-9 col-md-offset-3">
+        <div class="col-md-8 col-md-offset-4">
             <input class="btn btn-primary pull-right" type="submit" name="edit_address" value="{{ 'Submit'|lang }}" />
         </div>
     </div>

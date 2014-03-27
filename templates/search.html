@@ -1,45 +1,43 @@
 <div class="row">
     <div class="col-md-12 nopadding">
         <div class="breadcrumb">
-            <center>
                 <span>{{ 'Pencarian produk'|lang }}</span>
-            </center>
         </div>
     </div>
 </div>
 
 <!-- wrapper -->
-<div class="col-md-8">
-    <form class="form-vertical" method="post" action="">
+<div class="row">
+    <form class="form-vertical col-md-8" method="post" action="">
         <input type="hidden" name="src" value="1" />
         <input type="hidden" name="in_search" value="1" />
         <!-- kata kunci -->
         <div class="form-group">
-            <label class="col-md-3">{{ 'Kata kunci'|lang }}</label>
-            <div class="col-md-9">
+            <label class="col-md-4">{{ 'Kata kunci'|lang }}</label>
+            <div class="col-md-8">
                 <input type="text" name="keyword" class="form-control" value="{{ keyword_value }}" />
             </div>
         </div>
 
         <!-- harga  -->
         <div class="form-group">
-            <label class="col-md-3">{{ 'Harga'|lang }}</label>
-            <div class="col-md-9">
+            <label class="col-md-4">{{ 'Harga'|lang }}</label>
+            <div class="col-md-8">
                 <input type="text" class="form-control" name="from" value="{{ price_from_value }}" placeholder="Dari" />
             </div>
         </div>
 
         <!-- harga sampai -->
         <div class="form-group">
-            <label class="col-md-3"></label>
-            <div class="col-md-9">
+            <label class="col-md-4"></label>
+            <div class="col-md-8">
                 <input type="text" class="form-control" name="to" value="{{ price_to_value }}" placeholder="{{ 's/d'|lang }}" />
             </div>
         </div>
 
         <!-- submit -->
         <div class="form-group">
-            <div class="col-md-9 col-md-offset-3">
+            <div class="col-md-8 col-md-offset-4">
                 <input type="submit" name="search" value="{{ 'Cari'|lang }}" class="btn btn-primary pull-right" />
             </div>
         </div>
@@ -59,7 +57,7 @@
         {% else %}
         <div class="row">
             <div class="col-sm-6">
-                <!--<strong>{{ 'Urutkan : ' }}</strong>-->
+
                 <div class="btn-group ">
                     {% if sort_link.newest != '' %}
                     <a class="btn btn-sm " href="{{ sort_link.newest}}">{{ 'Terbaru'|lang }}</a>
@@ -76,6 +74,7 @@
                     {% endif %}
                 </div>
             </div>
+
             <div class=" col-sm-6">
                 <div class="pull-right">
                     {% if max_link.show == '200' %}
@@ -85,9 +84,12 @@
                     {% endif %}
                 </div>
             </div>
+            
         </div>
     </div>
-    <div class="col-md-12search-result">
+
+<!-- result item -->
+    <div class="col-md-12 search-result">
         <div class="item-box">
             <ul>
                 {% for productlist in products %} {% include 'snippets/product-item-medium.html' %} {% endfor %}
@@ -105,11 +107,15 @@
             })
         });
         </script>
+
+        <!-- pagging -->
         <div class="row">
             <div class="col-md-12">
                 {% if paginate|length > 0 %} {% include 'snippets/pagination.html' %} {% endif %}
             </div>
         </div>
+
+
     </div>
 </div>
 {% endif %} {% endif %}

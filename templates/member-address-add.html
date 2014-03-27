@@ -18,119 +18,207 @@ $(document).ready(function() {
             $('#city_id').empty().html(data);
         });
     });
+
+    // ajax post 
+     $("#address_add_form").validate({
+        rules: {
+            firstname: {
+                required: true,
+                minlength: 3
+            },
+            lastname: {
+                required: true
+            },
+            address: {
+                required: true
+            },
+            postcode: {
+                required: true
+            },
+            state_id: {
+                required: true
+            },
+            city_id: {
+                required: true
+            },
+            phone_mobile: {
+                required: true
+            }
+        },
+        messages: {
+            firstname: {
+                required: "{{ 'Nama Depan harus diisi'|lang }}",
+                minlength: "{{ 'Nama Depan minimal 3 karakter'|lang }}"
+            },
+            lastname: {
+                required: "{{ 'Nama Belakang harus diisi'|lang }}"
+            },
+            address: {
+                required: "{{ 'Alamat harus diisi'|lang }}"
+            },
+            postcode: {
+                required: "{{ 'Kode Pos harus diisi'|lang }}"
+            },
+            state_id: {
+                required: "{{ 'Kota harus diisi'|lang }}"
+            },
+            city_id: {
+                required: "{{ 'Propinsi harus diisi'|lang }}"
+            },
+            phone_mobile: {
+                required: "{{ 'No. Handphone harus diisi'|lang }}"
+            }
+        },
+        errorLabelContainer: '.errorMsg',
+        errorElement: 'div',
+
+        submitHandler: function() {
+            $.ajax({
+                type: 'POST',
+                url: $('#address_add_form').attr('action'),
+                data: $('#address_add_form').serialize(),
+                dataType: "json",
+                success: function(data) {
+                    if (data.status == 1) {
+                        window.location.href = data.redirect;
+                    } else if (data.status == 2) {
+                        $('#result').html(data.msg).show();
+                    }
+                }
+            });
+            return false;
+        }
+    });
+
 });
 </script>
 
-<div class="row">
-    
-<!-- member address add -->
-<form id="address_add_form" class="form-vertical col-md-6" name="address_add_form" method="post" action="{{ addressadd_action_url }}">
+<div class="">
+    <div id="member-address-add">
+        <h3 class="text-title">{{ 'Alamat Tagihan'|lang }}</h3><hr>
 
-    <h3 class="text-title">{{ 'Alamat Tagihan'|lang }}</h3>
-    <!-- error msg -->
-    <div id="result_address_add col-md-9 col-md-offset-3">
-        <div class="alert alert-danger errorMsg" style="display:none;"></div>
+        <!-- member address add -->
+        <form id="address_add_form" class="form-vertical col-md-8" name="address_add_form" method="post" action="{{ addressadd_action_url }}">
+
+            <!-- error msg -->
+            <div id="result" class="col-md-8 col-md-offset-4">
+                <div class="alert alert-danger errorMsg" style="display:none;"></div>
+            </div>
+
+            <!-- first name -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Nama Depan'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <input class="form-control" type="text" name="firstname" id="firstname" />
+                </div>
+            </div>
+
+            <!-- last name -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Nama Belakang'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <input class="form-control" type="text" name="lastname" id="lastname" />
+                </div>
+            </div>
+
+
+            <!-- company -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Perusahaan'|lang }}</label>
+                <div class="col-md-8">
+                    <input class="form-control" type="text" name="company" id="company" />
+                </div>
+            </div>
+
+
+            <!-- address -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Alamat'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <textarea class="form-control" name="address" id="address" /></textarea>
+                </div>
+            </div>
+
+
+            <!-- country -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Negara'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <select class="form-control" name="country_id" id="country_id">
+                        <option value="">{{ '-pilih negara-'|lang }}</option>
+                        {% include 'snippets/country-options.html' with { 'selected': default_country_id } %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- provinsi -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Propinsi'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <select class="form-control" name="state_id" id="state_id">
+                        <option value="">{{ '-pilih propinsi-'|lang }}</option>
+                        {% include 'snippets/state-options.html' %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- city -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Kota/Kabupaten'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <select class="form-control" name="city_id" id="city_id">
+                        <option value="">{{ '-pilih kota-'|lang }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- code pos -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'Kode Pos'|lang }}</label>
+                <div class="col-md-8">
+                    <input class="form-control" type="text" name="postcode" id="postcode" />
+                </div>
+            </div>
+
+            <!-- no telp -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'No. Telp'|lang }}</label>
+                <div class="col-md-8">
+                    <input class="form-control" type="text" name="phone" id="phone" />
+                </div>
+            </div>
+
+
+            <!-- no hp -->
+            <div class="form-group">
+                <label class="col-md-4">{{ 'No. HP'|lang }}
+                    <span>*</span>
+                </label>
+                <div class="col-md-8">
+                    <input class="form-control" type="text" name="phone_mobile" id="phone_mobile" />
+                </div>
+            </div>
+
+            <!-- submit -->
+            <div class="form-group">
+                <div class="col-md-8 col-md-offset-4">
+                    <input class="btn btn-primary pull-right" type="submit" name="add_address" value="{{ 'Submit'|lang }}" />
+                </div>
+            </div>
+        </form>
+
+
     </div>
-
-    <!-- first name -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Nama Depan'|lang }}</label>
-        <div class="col-md-9">
-            <input class="form-control" type="text" name="firstname" id="firstname" />
-        </div>
-    </div>
-
-    <!-- last name -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Nama Belakang'|lang }}</label>
-        <div class="col-md-9">
-            <input class="form-control" type="text" name="lastname" id="lastname" />
-        </div>
-    </div>
-
-
-    <!-- company -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Perusahaan'|lang }}</label>
-        <div class="col-md-9">
-            <input class="form-control" type="text" name="company" id="company" />
-        </div>
-    </div>
-
-
-    <!-- address -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Alamat'|lang }}</label>
-        <div class="col-md-9">
-            <textarea class="form-control" name="address" id="address" /></textarea>
-        </div>
-    </div>
-
-
-    <!-- country -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Negara'|lang }}</label>
-        <div class="col-md-9">
-            <select class="form-control" name="country_id" id="country_id">
-                <option value="">{{ '-pilih negara-'|lang }}</option>
-                {% include 'snippets/country-options.html' with { 'selected': default_country_id } %}
-            </select>
-        </div>
-    </div>
-
-    <!-- provinsi -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Propinsi'|lang }}</label>
-        <div class="col-md-9">
-            <select class="form-control" name="state_id" id="state_id">
-                <option value="">{{ '-pilih propinsi-'|lang }}</option>
-                {% include 'snippets/state-options.html' %}
-            </select>
-        </div>
-    </div>
-
-    <!-- city -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Kota/Kabupaten'|lang }}</label>
-        <div class="col-md-9">
-            <select class="form-control" name="city_id" id="city_id">
-                <option value="">{{ '-pilih kota-'|lang }}</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- code pos -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'Kode Pos'|lang }}</label>
-        <div class="col-md-9">
-            <input class="form-control" type="text" name="postcode" id="postcode" />
-        </div>
-    </div>
-
-    <!-- no telp -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'No. Telp'|lang }}</label>
-        <div class="col-md-9">
-            <input class="form-control" type="text" name="phone" id="phone" />
-        </div>
-    </div>
-
-
-    <!-- no hp -->
-    <div class="form-group">
-        <label class="col-md-3">{{ 'No. HP'|lang }}</label>
-        <div class="col-md-9">
-            <input class="form-control" type="text" name="phone_mobile" id="phone_mobile" />
-        </div>
-    </div>
-
-    <!-- submit -->
-    <div class="form-group">
-        <div class="col-md-9 col-md-offset-3">
-            <input class="btn btn-primary pull-right" type="submit" name="add_address" value="{{ 'Submit'|lang }}" />
-        </div>
-    </div>
-
-</form>
-
 </div>

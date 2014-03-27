@@ -1,95 +1,100 @@
-<div class="row top"> 
-	<div class="col-md-12">		
-		<div class="breadcrumb">		
-		<strong>Member Area</strong>
-		</div>
-	</div>
-	<div class="col-md-12" > 
-		 <div id="member-container">
-                        <div class="tab-menu">
-                            <ul class="nav nav-tabs">
-                                <li class="mem"><a href="#fragment-1" data-toggle="tab">
-                                    <span>{{ 'Dashboard'|lang }}</span>
-                                </a></li>
-                                <li class="mem"><a href="#fragment-2" data-toggle="tab">
-                                     <span>{{ 'Status Order'|lang }}</span>
-                                </a></li>
-                                <li class="mem"><a href="#fragment-3" data-toggle="tab">
-                                     <span>{{ 'Konfirmasi'|lang }}</span>
-                                </a></li>
-                                <li class="mem"><a href="#fragment-4" data-toggle="tab">
-                                     <span>{{ 'Data Diri'|lang }}</span>
-                                </a></li>
-                                <li class="mem"><a href="#fragment-5" data-toggle="tab">
-                                     <span>{{ 'Alamat'|lang }}</span>
-                                </a></li>
-                                <li class="mem"><a href="#fragment-6" data-toggle="tab">
-                                     <span>{{ 'Ganti Password'|lang }}</span>
-                                </a></li>
-                                <li class="pull-right" >
-                                    <div class="btn-wrap">
-                                        <a class="btn btn-jej" href="#" id="account-logout">
-                                             <span>{{ 'Logout'|lang }}</span>
-                                        </a>
-                                    </div>
-									<br class="visible-xs"/>
-                                </li>
-                            </ul>
+<div class="row">
+    <div class="col-md-12">
+        <div class="breadcrumb">
+            <h1 class="text-title">member area</h1>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div id="member-container">
+
+            <div class="tabs-main">
+                <ul class="tabs">
+                    <li class="active">
+                        <a class="tabs-anchor" href="#tab1">
+                            <span>{{ 'Dashboard'|lang }}</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="tabs-anchor" href="#tab2">
+                            <span>{{ 'Status Order'|lang }}</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="tabs-anchor" href="#tab3">
+                            <span>{{ 'Konfirmasi'|lang }}</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="tabs-anchor" href="#tab4">
+                            <span>{{ 'Data Diri'|lang }}</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="tabs-anchor" href="#tab5">
+                            <span>{{ 'Alamat'|lang }}</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="tabs-anchor" href="#tab6">
+                            <span>{{ 'Ganti Password'|lang }}</span>
+                        </a>
+                    </li>
+                    <li class="pull-right">
+                        <div class="btn-wrap">
+                            <a class="btn btn-jej" href="#" id="account-logout">
+                                <span>{{ 'Logout'|lang }}</span>
+                            </a>
                         </div>
-                        <div class="tab-content mar-bot">
-                            <div id="fragment-1" class="tab-pane fade bor"><div class="arrow-down a1 visible-md visible-lg"></div>
-                                {% include "templates/member-home.html" %}
-                            </div>
-                            <div id="fragment-2" class="tab-pane fade bor"><div class="arrow-down a2 visible-md visible-lg"></div>
-                                {% if order_id %}
-                                    {% include "templates/member-order-list.html" %}
-                                {% else %}
-                                    <p class="empty">{{ 'Anda belum pernah berbelanja disini'|lang }}</p>
-                                {% endif %}
-                            </div>
-                            <div id="fragment-3" class="tab-pane fade bor"><div class="arrow-down a3 visible-md visible-lg"></div>
-                               {% include "templates/member-confirmation.html" %}
-                            </div>
-                            <div id="fragment-4" class="tab-pane fade bor"><div class="arrow-down a4 visible-md visible-lg"></div>
-                                {% include "templates/member-profile.html" %}
-                            </div>
-                            <div id="fragment-5" class="tab-pane fade bor"><div class="arrow-down a5 visible-md visible-lg"></div>
-                                {% include "templates/member-address.html" %}
-                            </div>
-                            <div id="fragment-6" class="tab-pane fade bor"><div class="arrow-down a6 visible-md visible-lg"></div>
-                                {% include "templates/member-changepass.html" %}
-                            </div>
-                            
-                        </div>
+                    </li>
+                </ul>
+
+                <div class="content">
+                    <div id="tab1" class="tab-content active-content">
+                        {% include "templates/member-home.html" %}
                     </div>
-	</div>
+                    <div id="tab2" class="tab-content">
+                        {% if order_id %} {% include "templates/member-order-list.html" %} {% else %}
+                        <p class="empty">{{ 'Anda belum pernah berbelanja disini'|lang }}</p>
+                        {% endif %}
+                    </div>
+                    <div id="tab3" class="tab-content">
+                        {% include "templates/member-confirmation.html" %}
+                    </div>
+                    <div id="tab4" class="tab-content">
+                        {% include "templates/member-profile.html" %}
+                    </div>
+                    <div id="tab5" class="tab-content">
+                        {% include "templates/member-address.html" %}
+                    </div>
+                    <div id="tab6" class="tab-content">
+                        {% include "templates/member-changepass.html" %}
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
 </div>
 
 <script>
-	$(document).ready(function(){
-	
-		//Init tab
-		var hash = window.location.hash;
-		if ( hash ) {
-			var links = $( '.tab-menu a[href="'+hash+'"]' );
-			if ( links.length > 0 ) {
-				$( '.tab-menu a[href="'+hash+'"]' ).tab( 'show' );
-			} else {
-				$( '.tab-menu li:first-child a' ).tab( 'show' );
-			}
-		} else {
-			$( '.tab-menu li:first-child a' ).tab( 'show' );
-		}
-		$('.tab-menu a').click(function (e) 
-		{
-			var hash = $(this).attr( 'href' );
-			window.location.hash = hash;
-			e.preventDefault()
-			$(this).tab('show')
-		});
-		
-		$("#account-logout").click(function () {
-			window.location.href = '{{ logout_url }}';
-		});
-	});
+jQuery(document).ready(function($) {
+    $('.tabs-anchor').click(function(event) {
+        // remove nav tab active 
+        $('.tabs-main .tabs .active-tab').removeClass('active-tab');
+        // remove content active 
+        $('.tabs-main .content .active-content').removeClass('active-content');
+        // get id content from nav link
+        var activeTab = $(this).attr('href');
+        // active nav 
+        $(this).addClass('active-tab')
+        // active content
+        $(activeTab).addClass('active-content');
+
+    });
+
+ 
+});
 </script>
