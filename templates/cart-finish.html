@@ -12,19 +12,21 @@
             </ul>
         </div>
 
-
-        <div class="cart-informasi">
+        
+        <!-- cart informasi -->
+        <div id="cart-finish">
             <!-- message -->
-            <div class="padd">
+            <div class="send-main">
                 {% if sendmail is empty %} {% else %}
-                <div class="successMsg padd alert-success">
+                <div class="successMsg alert-success alert-success">
                     {{ 'Terimakasih atas Order Anda. Email invoice telah kami kirimkan ke alamat email Anda.'|lang }}
                 </div>
-                <br/>{% endif %} {{ payment }}
+                {% endif %} 
+                {{ payment }}
             </div>
 
             <!-- table informasi -->
-            <table class="table table-striped">
+            <table class="table table-bordered table-striped">
                 <tr>
                     <td>
                         <strong>{{ 'Nama Produk'|lang }}</strong>
@@ -73,5 +75,6 @@
                 </tr>
             </table>
         </div>
+        
     </div>
 </div>

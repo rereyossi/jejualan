@@ -40,8 +40,8 @@ $(document).ready(function() {
             content: {
                 required: '<i class="fa fa-exclamation-triangle"></i> ' +"Pesan harus diisi"
             },
-            content: {
-                required: '<i class="fa fa-exclamation-triangle"></i> ' +"Kode capthca harus diisi"
+            captcha: {
+                required: '<i class="fa fa-exclamation-triangle"></i> ' +"Kode captcha harus diisi"
             }
         },
         errorLabelContainer: '.errorMsg',
@@ -55,10 +55,10 @@ $(document).ready(function() {
                 dataType: "json",
                 success: function(data) {
                     if (data.status == 1) {
-                        $('#result').html(data.msg).show();
+                        $('#result').html("<div class='alert alert-success'>"+data.msg+"</div>").show();
                         $('#contact-form').hide();
                     } else if (data.status == 2) {
-                        $('#result').html(data.msg).show();
+                        $('#result').html("<div class='alert alert-danger'>"+data.msg+"</div>").show();
                         $('#img_captcha').attr('src', '{{ captcha_url }}?r=' + Math.random());
                     }
                 }
@@ -95,6 +95,14 @@ $(document).ready(function() {
 <!-- contact page-->
 <div class="row">
     <div id="contact-main">
+    <!-- gmap -->
+    <div class="gmap col-md-12">
+                        {% if address or latitude and longitude %}
+                <div class="map">
+                    <div id="contact_map" style="width:100%; height:340px;"></div>
+                </div>
+                {% endif %}
+    </div>
         <!-- form contact -->
         <div class="contact-form col-md-6">
             <!-- contact title -->
@@ -192,11 +200,6 @@ $(document).ready(function() {
 
             <!-- content widget box -->
             <div class="widget-content">
-                {% if address or latitude and longitude %}
-                <div class="map">
-                    <div id="contact_map" style="width:100%; height:340px;"></div>
-                </div>
-                {% endif %}
                 <div class="contact-text">
                     {{text}}
                 </div>

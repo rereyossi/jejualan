@@ -16,18 +16,18 @@ $(document).ready(function() {
         },
         messages: {
             password_old: {
-                required: "{{ 'Password Lama harus diisi'|lang }}"
+                required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Password Lama harus diisi'|lang }}"
             },
             password_new: {
-                required: "{{ 'Password Baru harus diisi'|lang }}",
-                minlength: "{{ 'Password Baru minimal 3 karakter'|lang }}"
+                required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Password Baru harus diisi'|lang }}",
+                minlength: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Password Baru minimal 3 karakter'|lang }}"
             },
             password_new2: {
-                required: "{{ 'Ulangi Password Baru harus diisi'|lang }}",
-                equalTo: "{{ 'Password Baru & Ulangi Password Baru tidak sama'|lang }}"
+                required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Ulangi Password Baru harus diisi'|lang }}",
+                equalTo: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Password Baru & Ulangi Password Baru tidak sama'|lang }}"
             }
         },
-        errorLabelContainer: '.errorMsg',
+        errorLabelContainer: '#result_change .errorMsg',
         errorElement: 'div',
         submitHandler: function() {
             $.ajax({
@@ -37,9 +37,9 @@ $(document).ready(function() {
                 dataType: "json",
                 success: function(data) {
                     if (data.status == 1) {
-                        $('#result_change').html(data.msg).show();
+                        $('#result_change').html("<div class='alert alert-success'>"+data.msg+"</div>").show();
                     } else if (data.status == 2) {
-                        $('#result_change').html(data.msg).show();
+                        $('#result_change').html("<div class='alert alert-danger'>"+data.msg+"</div>").show();
                     }
                 }
             });

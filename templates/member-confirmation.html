@@ -18,16 +18,16 @@ $(document).ready(function() {
         },
         messages: {
             order_id: {
-                required: "{{ 'Order yang dikonfirmasi harus diisi'|lang }}"
+                required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Order yang dikonfirmasi harus diisi'|lang }}"
             },
             via_id: {
-                required: "{{ 'Metode pembayaran harus diisi'|lang }}"
+                required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Metode pembayaran harus diisi'|lang }}"
             },
             bank_tujuan: {
-                required: "{{ 'Bank Tujuan Transfer harus diisi'|lang }}"
+                required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Bank Tujuan Transfer harus diisi'|lang }}"
             },
             besar: {
-                required: "{{ 'Besar Pembayaran harus diisi'|lang }}"
+                required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Besar Pembayaran harus diisi'|lang }}"
             }
         },
         errorLabelContainer: '.errorMsg',
@@ -40,26 +40,23 @@ $(document).ready(function() {
                 dataType: "json",
                 success: function(data) {
                     if (data.status == 1) {
-                        $('#result_confirm').html(data.msg).show();
+                        $('#result_confirm').html("<div class='alert alert-success'>"+data.msg+"</div>").show();
                         $("#list-data-confirm").load("{{ confirmation_list_url }}");
                         $("#besar").val('');
                     } else if (data.status == 2) {
-                        $('#result_confirm').html(data.msg).show();
+                        $('#result_confirm').html("<div class='alert alert-danger'>"+data.msg+"</div>").show();
                     }
                 }
             });
             return false;
         }
     });
-
     $("#list-data-confirm").load("{{ confirmation_list_url }}");
-
     $(".order-checked").live('click', function() {
         order_id = $(this).val();
         besar = $("#total-" + order_id).data("id");
         $("#besar").val(besar);
     });
-
     $('input[name=via_id]').live('click', function() {
         if ($(this).val() == 1) {
             $('#bank_cont').hide();
@@ -69,18 +66,18 @@ $(document).ready(function() {
     });
 });
 </script>
-<div class="">
-    <div id="member-confirmation">
-        <h3 class="text-title">{{ 'Konfirmasi Pembayaran'|lang }}</h3>
-        {% if confirm.data_exist > 0 %}
-        <form class="form-vertical col-md-8" id="confirm_form" name="confirm_form" method="post" action="{{ confirmation_action_url }}">
+<div id="member-confirmation">
+    <h3 class="text-title">{{ 'Konfirmasi Pembayaran'|lang }}</h3>
+    {% if confirm.data_exist > 0 %}
+    <form class="form-vertical" id="confirm_form" name="confirm_form" method="post" action="{{ confirmation_action_url }}">
+        <!-- error msg -->
+        <div id="result_confirm">
+            <div class="alert alert-danger errorMsg " style="display:none;"></div>
+        </div>
+        <!-- list table product -->
+        <div id="list-data-confirm" class="table-responsive table-second"></div>
 
-            <!-- error msg -->
-            <div id="list-data-confirm"></div>
-            <div id="result_confirm">
-                <div class="alert alert-danger errorMsg " style="display:none;"></div>
-            </div>
-
+        <div class="col-md-8 member-form-comfirmation">
             <!-- form input  -->
             <!-- name -->
             <div class="form-group">
@@ -120,22 +117,22 @@ $(document).ready(function() {
                 <label class="col-md-4">{{ 'Tanggal Pembayaran'|lang }}
                     <span>*</span>
                 </label>
-                <div class="col-md-8">
+                <div class="col-md-3">
                     <link rel="stylesheet" type="text/css" href="{{ 'jscalender.css'|asset_url }}" />
                     <script type="text/javascript" src="{{ 'jscalender.js'|asset_url }}"></script>
                     <script type="text/javascript" src="{{ 'jscalender_en.js'|asset_url }}"></script>
-                    <input class="text" type="text" size="10" name="tgl_pembayaran" id="tgl_pembayaran" value="{{ confirm.date }}" readonly="readonly" />
+                    <input class="form-control" type="text"  name="tgl_pembayaran" id="tgl_pembayaran" value="{{ confirm.date }}" readonly="readonly" />
                     <img id="tgl_pembayaran_trigger" src="{{ 'date.png'|asset_url }}" alt="" />
                     <script type="text/javascript">
-                    Calendar.setup({
-                        inputField: "tgl_pembayaran",
-                        trigger: "tgl_pembayaran_trigger",
-                        onSelect: function() {
-                            this.hide()
-                        },
-                        showTime: 24,
-                        dateFormat: "%d-%m-%Y"
-                    });
+                                        Calendar.setup({
+                                            inputField: "tgl_pembayaran",
+                                            trigger: "tgl_pembayaran_trigger",
+                                            onSelect: function() {
+                                                this.hide()
+                                            },
+                                            showTime: 24,
+                                            dateFormat: "%d-%m-%Y"
+                                        });
                     </script>
                 </div>
             </div>
@@ -145,11 +142,9 @@ $(document).ready(function() {
                     <input class="formBtn btn btn-primary pull-right" type="submit" name="add_confirm" value="{{ 'Kirim'|lang }}" />
                 </div>
             </div>
-
-        </form>
-        {% else %}
-        <p>{{ 'Tidak ada order yang belum terbayar'|lang }}</p>
-        {% endif %}
-
-    </div>
+        </div>
+    </form>
+    {% else %}
+    <p>{{ 'Tidak ada order yang belum terbayar'|lang }}</p>
+    {% endif %}
 </div>

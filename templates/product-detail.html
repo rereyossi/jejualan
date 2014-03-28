@@ -133,8 +133,10 @@
 <!--product status-->
 <div class="product status">
     {% if product.stock %}
-    <img class="tick" src="{{ 'tick.png'|asset_url }}">{{ 'Tersedia'|lang }} {% else %}
-    <img class="tick" src="{{ 'error.png'|asset_url }}">{{ 'Tidak Tersedia'|lang }} {% endif %}
+   <i class="fa fa-check-circle fa-2x"></i> {{ 'Tersedia'|lang }} 
+   {% else %}
+   <i class="fa fa-exclamation-triangle fa-2x"></i>{{ 'Tidak Tersedia'|lang }}
+     {% endif %}
 </div>
 
 <!--product atrribute-->
@@ -142,27 +144,27 @@
     <h4>{{ 'Info Detail'|lang }}</h4>
     <!-- Porduct Id -->
     <div class="col-sm-4 thumb">
-        <h5 class="title">{{ 'Nomor Produk'|lang }}</h5>
+        <h5 class="text-title">{{ 'Nomor Produk'|lang }}</h5>
         <div class="value">{{ product.id }}</div>
     </div>
     <!-- Weight -->
     {% if product.weight > 0 %}
     <div class="col-sm-4 thumb">
-        <h5 class="title">{{ 'Shipping weight'|lang }}</h5>
+        <h5 class="text-title">{{ 'Shipping weight'|lang }}</h5>
         <div class="value">{{ product.weight }} gr</div>
     </div>
     {% endif %}
     <!-- Tag -->
     {% if product.tags != '' %}
     <div class="col-sm-4 thumb">
-        <h5 class="title">{{ 'Tags'|lang }}</h5>
+        <h5 class="text-title">{{ 'Tags'|lang }}</h5>
         <div class="value">{{ product.tags }}</div>
     </div>
     {% endif %}
     <!-- Attribute -->
     {% if product.other_atributes is not empty %} {% for otherattributes in product.other_atributes %}
     <div class="col-sm-4 thumb">
-        <h5 class="title">{{ otherattributes.name }}</h5>
+        <h5 class="text-title">{{ otherattributes.name }}</h5>
         <div class="value">{{ otherattributes.value }}</div>
     </div>
     {% endfor %} {% endif %}
@@ -174,7 +176,7 @@
 <div class="product-stock">
     {% if config.record_stock %} {% if product.attribute_stock.data > 0 %}
     <div class="stock">
-        <h4>{{ 'Info Stok'|lang }}</h4>
+        <h4 class="text-title">{{ 'Info Stok'|lang }}</h4>
         <table class="table  table-bordered">
             <thead>
                 <tr class="table-primer">
@@ -234,9 +236,9 @@
                 var count_page = {{  paginate.pages_count  ? paginate.pages_count : 0 }};
             //var currentPage = null;
             $(".pagination a.previous").hide();
-    $('a.item[data-id=1]').addClass('current');
-    $("#review_list_container").load("{{ review.data_url }}/1");
-    $(".pagination a.item").click(function() {
+            $('a.item[data-id=1]').addClass('current');
+            $("#review_list_container").load("{{ review.data_url }}/1");
+            $(".pagination a.item").click(function() {
 
         var thisId = $(this).data("id");
         if (thisId == $(".pagination .item").length)
@@ -280,7 +282,6 @@
             $(this).show();
         }
 
-        //alert(previousID);
         $('.pagination a.next').show();
         $("#review_list_container").load("{{ review.data_url }}/" + previousID);
         $(this).siblings().removeClass('current');
@@ -325,10 +326,10 @@
             }
     },
             messages: {
-            name: {
-            required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Nama harus diisi'|lang }}",
-                    minlength: "{{ 'Nama minimal 3 karakter'|lang }}"
-            },
+                    name: {
+                    required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Nama harus diisi'|lang }}",
+                            minlength: "{{ 'Nama minimal 3 karakter'|lang }}"
+                    },
                     email: {
                     required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Email harus diisi'|lang }}",
                             email: "{{ 'Email tidak valid (contoh: nama@domain.com)'|lang }}"
@@ -362,7 +363,7 @@
                         }
                         else if (data.status == 2) {
                             $('#result')
-                                    .html('<div class="alert">' + data.msg + '</div>')
+                                    .html('<div class="alert alert-danger">' + data.msg + '</div>')
                                     .show();
                         }
                     }
@@ -370,7 +371,8 @@
                 return false;
             }
     });
-    });</script>
+    });
+</script>
     <div class="product-review-main">
         <a id="review_add" class="btn btn-primary" href="javascript:void(0);">{{ '(+) Tambah review'|lang }}</a>
 
@@ -428,14 +430,14 @@
                                 <label for="rate-good" class="rate-good">
                                     <input type="radio" name="rating" id="rate-good" value="1" />
 
-                                    <img src="{{ 'thumbs-up.png'|asset_url }}" alt="" />
+                                    <i class="fa fa-thumbs-o-up fa-2x"></i> 
                                 </label>
                             </div>
                             <div class="radio">
                                 <label for="rate-bad" class="rate-bad">
                                     <input type="radio" name="rating" id="rate-bad" value="-1" />
 
-                                    <img src="{{ 'thumbs-down.png'|asset_url }}" alt="" />
+                                    <i class="fa fa-thumbs-o-down fa-2x"></i> 
                                 </label>
                             </div>
                         </div>
@@ -450,7 +452,6 @@
                     </label>
                     <div class="col-md-8">
                         <img src="{{ captcha_url }}" id="captcha">
-                        <br>
                         <input type="text" name="code"  id="code" class="form-control">
                     </div>
                 </div>

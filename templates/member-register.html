@@ -57,7 +57,7 @@ $(document).ready(function() {
                     if (data.status == 1) {
                         window.location.href = data.redirect;
                     } else if (data.status == 2) {
-                        $('#result').html(data.msg).show();
+                        $('#result').html("<div class='alert alert-danger'>"+data.msg+"</div>").show();
                     }
                 }
             });
@@ -76,7 +76,9 @@ $(document).ready(function() {
     </div>
 </div>
 
-
+{% if member.loggedin %}
+<p>Anda sedang login</p>
+    {% else %}
 <!-- form register -->
 <div class="row">
     <div id="member-register">
@@ -149,3 +151,4 @@ $(document).ready(function() {
         </form>
     </div>
 </div>
+    {% endif %}

@@ -10,8 +10,8 @@
 
             <div class="tabs-main">
                 <ul class="tabs">
-                    <li class="active">
-                        <a class="tabs-anchor" href="#tab1">
+                    <li class="">
+                        <a class="tabs-anchor active-tab" href="#tab1">
                             <span>{{ 'Dashboard'|lang }}</span>
                         </a>
                     </li>
@@ -42,7 +42,7 @@
                     </li>
                     <li class="pull-right">
                         <div class="btn-wrap">
-                            <a class="btn btn-jej" href="#" id="account-logout">
+                            <a class="btn btn-primary" href="#" id="account-logout">
                                 <span>{{ 'Logout'|lang }}</span>
                             </a>
                         </div>
@@ -81,20 +81,44 @@
 
 <script>
 jQuery(document).ready(function($) {
+    // tabs 
     $('.tabs-anchor').click(function(event) {
+        var hash = window.location.hash;
         // remove nav tab active 
         $('.tabs-main .tabs .active-tab').removeClass('active-tab');
+
+        $(this).addClass('active-tab');
+
         // remove content active 
         $('.tabs-main .content .active-content').removeClass('active-content');
-        // get id content from nav link
-        var activeTab = $(this).attr('href');
-        // active nav 
-        $(this).addClass('active-tab')
+
         // active content
-        $(activeTab).addClass('active-content');
+        $(hash).addClass('active-content');
+
+
 
     });
 
- 
+    // tab same url and page
+
+    var hash = window.location.hash;
+
+
+
+
+if (hash>0) {
+            // remove nav tab active 
+        $('.tabs-main .tabs .active-tab').removeClass('active-tab');
+        // tab active
+        $('.tabs-main li a[href="' + hash + '"]').addClass('active-tab');
+        // remove content active 
+        $('.tabs-main .content .active-content').removeClass('active-content');
+        // active content
+        $(hash).addClass('active-content');
+};
+
+
+
+
 });
 </script>

@@ -14,10 +14,10 @@
         $(document).ready(function() {
 
             $('#open_form_testimonial').toggle(function() {
-                $(this).empty().html("(x) {{ 'Tutup'|lang }}");
+                $(this).empty().html("<i class='fa fa-minus-circle'></i> {{ 'Tutup'|lang }}");
                 $('#testimonial_form').slideDown(400);
             }, function() {
-                $(this).empty().html("(+) {{ 'Tambah testimonial'|lang }}");
+                $(this).empty().html("<i class='fa fa-plus-circle'></i> {{ 'Tambah testimonial'|lang }}");
                 $('#testimonial_form').slideUp(400);
             });
 
@@ -34,45 +34,46 @@
                     content: {
                         required: true,
                     },
-                    code:{
+                    code: {
                         required: true,
                     }
                 },
                 messages: {
                     name: {
-                        required: "{{ 'Nama harus diisi'|lang }}",
+                        required: '<i class="fa fa-exclamation-triangle"></i> ' + "{{ 'Nama harus diisi'|lang }}",
                         minlength: "{{ 'Nama minimal 3 karakter'|lang }}"
                     },
                     email: {
-                        required: "{{ 'Email harus diisi'|lang }}",
-                        email: "{{ 'Email tidak valid (contoh: nama@domain.com)'|lang }}"
+                        required: '<i class="fa fa-exclamation-triangle"></i> ' + "{{ 'Email harus diisi'|lang }}",
+                        email: '<i class="fa fa-exclamation-triangle"></i> ' + "{{ 'Email tidak valid (contoh: nama@domain.com)'|lang }}"
                     },
 
                     content: {
-                        required: "{{ 'Content harus diisi'|lang }}"
+                        required: '<i class="fa fa-exclamation-triangle"></i> ' + "{{ 'Content harus diisi'|lang }}"
                     },
 
                     code: {
-                        required: "{{ 'Capcha harus diisi'|lang }}"
+                        required: '<i class="fa fa-exclamation-triangle"></i> ' + "{{ 'Capcha harus diisi'|lang }}"
                     },
                 },
                 errorLabelContainer: '.errorMsg',
                 errorElement: 'div',
-                errorClass: "errorMsg",
 
                 submitHandler: function() {
                     $.ajax({
                         type: 'POST',
-                        url: "{{ testimonial.action_url }}",
+                        url: $("#testimonial-valid").attr('action'),
                         data: $("#testimonial-valid").serialize(),
                         dataType: "json",
                         success: function(data) {
-                            if (data.status == 1) {
-                                $('#result').html(data.msg).show();
-                            } else if (data.status == 2) {
-                                $('#result').html(data.msg).show();
-                                $('#captcha').attr('src', '{{ captcha_url }}?r=' + Math.random());
-                            }
+                          if (data.status == 1) {
+                        $('#result').html("<div class='alert alert-success'>"+data.msg+"</div>").show();
+                         $('#img_captcha').attr('src', '{{ captcha_url }}?r=' + Math.random());
+                        $('#contact-form').hide();
+                    } else if (data.status == 2) {
+                        $('#result').html("<div class='alert alert-danger'>"+data.msg+"</div>").show();
+                        $('#img_captcha').attr('src', '{{ captcha_url }}?r=' + Math.random());
+                    }
                         }
                     });
                     return false;
@@ -82,8 +83,8 @@
         });
         </script>
 
-        <a href="#" class="btn btn-second" id="open_form_testimonial">
-            (+) {{ 'Tambah testimonial'|lang }}
+        <a href="#" class="add-testimonial btn btn-primary" id="open_form_testimonial">
+            <i class="fa fa-plus-circle"></i> {{ 'Tambah testimonial'|lang }}
         </a>
 
 
@@ -93,7 +94,7 @@
 
 
                 <!-- form input -->
-                <form id="testimonial-valid" class="form-vertical col-md-8" method="post" action="">
+                <form id="testimonial-valid" class="form-vertical col-md-8" method="post" action="{{ testimonial.action_url }}">
                     <!-- alert -->
                     <div id="result" class="col-md-8 col-md-offset-4">
                         <div class="alert alert-danger  errorMsg" style="display:none"></div>
@@ -138,14 +139,14 @@
                             <span>*</span>
                         </label>
                         <div class="col-md-8">
-                            <img src="{{ captcha_url }}" id="captcha">&nbsp;
+                            <img id="captcha" src="{{ captcha_url }}">&nbsp;
                             <input style="max-width:100px !important;" type="text" name="code" id="code" size="10" class="form-control">
                         </div>
                     </div>
                     <!-- submit -->
                     <div class="form-group">
                         <div class="col-md-8 col-md-offset-4">
-                            <input type="submit" name="save_testimonial" class=" btn btn-primary pull-right" value="{{ 'Simpan'|lang }}" id="save_testimonial">
+                            <input type="submit" name="save_testimonial" class="btn btn-primary pull-right" value="{{ 'Simpan'|lang }}" id="save_testimonial">
                         </div>
                     </div>
                 </form>
@@ -157,22 +158,15 @@
         <!-- view testimonial -->
         <div class="row">
             {% if testimonial != false %} {% for row in testimonial %} {% if row.content != '' %}
-            <div class="col-sm-6 posting-view">
-                <div class="testim">
-                    <p>
-                        <em>{{ row.date|date('d M Y') }}</em>
-                    </p>
-                    <p>{{ row.content }}</p>
+            <div class="testimonial-view col-sm-6">
+                <div class="content-box">
+                    <small class="date">{{ row.date|date('d M Y') }}</small>
+                    <p class="content">{{ row.content }}</p>
                 </div>
-                <div class="arrow pull-right"></div>
-                <a>
-                    <p class="contributor">
-                        <strong>{{ row.name }}
-                            <small class="pull-right">
-                                <img style="width:12px;" src="{{ 'testi-location.png'|asset_url }}" alt="" />{{ row.address }} &nbsp;&nbsp;&nbsp;</small>
-                        </strong>
-                    </p>
-                </a>
+                <div class="contributor">
+                <h4 class="name pull-left">{{ row.name }}</h4>
+                <small class="pull-right"><i class="fa fa-map-marker fa-2x"></i>  {{ row.address }}</small>  
+                </div>
             </div>
             {% endif %} {% endfor %} {% include 'snippets/pagination.html' %} {% endif %}
         </div>

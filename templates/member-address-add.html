@@ -32,9 +32,6 @@ $(document).ready(function() {
             address: {
                 required: true
             },
-            postcode: {
-                required: true
-            },
             state_id: {
                 required: true
             },
@@ -47,26 +44,23 @@ $(document).ready(function() {
         },
         messages: {
             firstname: {
-                required: "{{ 'Nama Depan harus diisi'|lang }}",
-                minlength: "{{ 'Nama Depan minimal 3 karakter'|lang }}"
+                required: "<i class="fa fa-exclamation-triangle"></i> "+"{{ 'Nama Depan harus diisi'|lang }}",
+                minlength: "<i class="fa fa-exclamation-triangle"></i> "+"{{ 'Nama Depan minimal 3 karakter'|lang }}"
             },
             lastname: {
-                required: "{{ 'Nama Belakang harus diisi'|lang }}"
+                required: "<i class="fa fa-exclamation-triangle"></i> "+"{{ 'Nama Belakang harus diisi'|lang }}"
             },
             address: {
-                required: "{{ 'Alamat harus diisi'|lang }}"
-            },
-            postcode: {
-                required: "{{ 'Kode Pos harus diisi'|lang }}"
+                required: "<i class="fa fa-exclamation-triangle"></i> "+"{{ 'Alamat harus diisi'|lang }}"
             },
             state_id: {
-                required: "{{ 'Kota harus diisi'|lang }}"
+                required: "<i class="fa fa-exclamation-triangle"></i> "+"<i class="fa fa-exclamation-triangle"></i> "+"{{ 'Kota harus diisi'|lang }}"
             },
             city_id: {
-                required: "{{ 'Propinsi harus diisi'|lang }}"
+                required: "<i class="fa fa-exclamation-triangle"></i> "+"{{ 'Propinsi harus diisi'|lang }}"
             },
             phone_mobile: {
-                required: "{{ 'No. Handphone harus diisi'|lang }}"
+                required: "<i class="fa fa-exclamation-triangle"></i> "+"{{ 'No. Handphone harus diisi'|lang }}"
             }
         },
         errorLabelContainer: '.errorMsg',
@@ -82,7 +76,7 @@ $(document).ready(function() {
                     if (data.status == 1) {
                         window.location.href = data.redirect;
                     } else if (data.status == 2) {
-                        $('#result').html(data.msg).show();
+                         $('#result').html("<div class='alert alert-danger'>"+data.msg+"</div>").show();
                     }
                 }
             });
