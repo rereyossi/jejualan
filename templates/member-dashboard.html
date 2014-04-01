@@ -50,10 +50,10 @@
                 </ul>
 
                 <div class="content">
-                    <div id="tab1" class="tab-content active-content">
+                    <div id="tab1" class="tab-content ">
                         {% include "templates/member-home.html" %}
                     </div>
-                    <div id="tab2" class="tab-content">
+                    <div id="tab2" class="tab-content active-tab-content">
                         {% if order_id %} {% include "templates/member-order-list.html" %} {% else %}
                         <p class="empty">{{ 'Anda belum pernah berbelanja disini'|lang }}</p>
                         {% endif %}
@@ -81,42 +81,29 @@
 
 <script>
 jQuery(document).ready(function($) {
-    // tabs 
-    $('.tabs-anchor').click(function(event) {
+    function tab() {
         var hash = window.location.hash;
-        // remove nav tab active 
+        // // remove nav tab active 
         $('.tabs-main .tabs .active-tab').removeClass('active-tab');
-
-        $(this).addClass('active-tab');
-
-        // remove content active 
-        $('.tabs-main .content .active-content').removeClass('active-content');
-
-        // active content
-        $(hash).addClass('active-content');
-
-
-
-    });
-
-    // tab same url and page
-
-    var hash = window.location.hash;
-
-
-
-
-if (hash>0) {
-            // remove nav tab active 
-        $('.tabs-main .tabs .active-tab').removeClass('active-tab');
-        // tab active
+        // // tab active
         $('.tabs-main li a[href="' + hash + '"]').addClass('active-tab');
-        // remove content active 
-        $('.tabs-main .content .active-content').removeClass('active-content');
-        // active content
-        $(hash).addClass('active-content');
-};
-
+        // // remove content active 
+        $('.tabs-main .content .active-tab-content').removeClass('active-tab-content');
+        // // active content
+        $(hash).addClass('active-tab-content');
+    }
+    tab();
+    $(window).on('hashchange', function() {
+        var hash = window.location.hash;
+        // // remove nav tab active 
+        $('.tabs-main .tabs .active-tab').removeClass('active-tab');
+        // // tab active
+        $('.tabs-main li a[href="' + hash + '"]').addClass('active-tab');
+        // // remove content active 
+        $('.tabs-main .content .active-tab-content').removeClass('active-tab-content');
+        // // active content
+        $(hash).addClass('active-tab-content');
+    });
 
 
 

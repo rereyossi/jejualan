@@ -3,16 +3,25 @@
 
     // tabs anchor
     .tabs{
-        overflow: hidden;
+        .clearfix;
         background-color: @color-primary;
         li{
             float: left;
+
         }
         a{
+
+
             display: block;
             padding: 10px 12px;
             text-align: center;
             color: #fff;
+            -webkit-transition: all 0.2s;
+            -moz-transition: all 0.2s;
+            -ms-transition: all 0.2s;
+            -o-transition: all 0.2s;
+            transition: all 0.2s;
+            
             &:hover{
                 color: color-text-second;
                 text-decoration: none;
@@ -50,7 +59,7 @@
     }
 
     // active content
-    .active-content{
+    .active-tab-content{
         display: block;
     }
 }

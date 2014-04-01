@@ -40,6 +40,45 @@
 	padding-left: 10px
 }
 
+// -----------------------------------------------------------------------------------
+//nav main for category
+// -----------------------------------------------------------------------------------
+#nav-main{
+	text-transform: capitalize;
+	li{
+		background-color: @color-primary;
+		border-right: 1px solid darken(@color-primary, 10%);
+		border-left: 1px solid lighten(@color-primary, 10%);
+		&:first-child{
+			border-left: none;
+		}
+		&:last-child{
+			border-right: none;
+		}
+		a, i{
+			color: @color-text-base;
+			&:hover, &:focus, &:visited{
+				background-color: darken(@color-primary, 20%);
+			}
+		}
+		ul{
+			box-shadow:  0 6px 12px rgba(0,0,0,.175);
+		}
+		li{
+			border-bottom: 1px solid darken(@color-primary, 10%);
+			border-top: 1px solid lighten(@color-primary, 10%);
+			border-left: none;
+			border-right: none;
+		}
+		.sub-collapser{
+			background-color:rgba(78, 169, 244, 0);
+		}
+		i{
+			font-size: 14px;
+		}
+	}
+}
+
 // header main ========================================================================
 // header main top 
 #header-main{
@@ -259,13 +298,33 @@
 	}
 }
 
+//----------------------------------------------------------------
+// move to up
+//----------------------------------------------------------------
+.move-top{
+line-height: 45px;
+width: 45px;
+height: 45px;
+right: 15px;
+bottom: 300px;
+text-align: center;
+transition: 1s;
+background: rgba(19,20,20,0.3);
+position: fixed;
+		color: #fff;
+	&:hover{
+		color: #fff;
+				background: rgba(19,20,20,0.20);
+	}
+
+}
 
 // footer =========================================================================
 // conect for solmed and newsletter
 .connect{
 	padding-top: 10px;
 	padding-bottom: 10px;
-	background-color: #2A2A2A;
+	background-color: @background-primary;
 	border-bottom: 1px solid #1E1E1E;
 	h3{
 		color: @color-text-second;
@@ -332,7 +391,7 @@
 
 // info 
 .info{
-	background-color: #3C3C3C;
+	background-color: @background-second;
 	border-top: 1px solid #4C4C4C;
 	border-bottom: 1px solid #1E1E1E;
 	#menu-bottom{
@@ -340,10 +399,11 @@
 		padding-bottom: 20px;
 		h3{
 			font-size: 1.8rem;
+			margin-bottom: 0;
 			color: @color-text-third;
 		}
 		a{
-			color: #fff;
+			color: @color-text-second;
 			&:hover{
 				color: @color-primary;	
 				text-decoration: none;	
@@ -363,4 +423,83 @@
 	background-color: @background-primary;
 	color: #fff;
 	text-align: center;
+}
+
+
+// nav sidebar =======================================================================================
+// nav sidebar for user login and member area menu
+#nav_sidebar{
+	z-index: 9999;
+	background: @color-primary;
+	position: fixed;
+	width: 260px;
+	left: -260px;
+	height: 100%;
+	-webkit-transition: all 0.8s;
+	-moz-transition: all 0.8s;
+	-ms-transition: all 0.8s;
+	-o-transition: all 0.8s;
+	transition: all 0.8s;	
+
+	-moz-box-shadow: 3px 1px 13px rgba(31, 31, 31, 0.27);
+	-webkit-box-shadow: 3px 1px 13px rgba(31, 31, 31, 0.27);
+	box-shadow: 3px 1px 13px rgba(31, 31, 31, 0.28);
+	
+	li{
+		// line list nav sidebar menu
+		border-top: 1px solid lighten(@color-primary, 10%);
+		border-bottom: 1px solid darken(@color-primary, 10%);
+		&:first-child{
+			border-top: none;
+		}
+		&:last-child{
+			border-bottom: none;
+		}
+
+		a{
+			text-transform: capitalize;
+			color: @color-text-base;
+			padding: 10px 12px;
+			display: block;
+			&:hover{
+				text-decoration: none;
+				background-color: @color-second;
+			}
+		}
+	}
+
+	// login sidebar
+	.login{
+		padding: 15px;
+		background-color: #fff;
+		input{
+			color: @color-text-base;
+		}
+	}
+	.help{
+		a{
+			display: block;
+		}
+	}
+}
+// main left move if user click
+#main{
+	-webkit-transition: all 0.8s;
+	-moz-transition: all 0.8s;
+	-ms-transition: all 0.8s;
+	-o-transition: all 0.8s;
+	transition: all 0.8s;	
+}
+.main-active{
+	position: relative;
+	-webkit-transform: translateX(260px);
+	-moz-transform: translateX(260px);
+	-ms-transform: translateX(260px);
+	-o-transform: translateX(260px);
+	transform: translateX(260px);
+}
+
+// sidebar move 
+.nav-sidebar-active{
+	left: 0 !important;
 }

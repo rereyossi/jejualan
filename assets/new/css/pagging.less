@@ -18,23 +18,28 @@
 
 // pagging active
 // pagging background active follow ative page
-@pagging-active-color: @color-base;
+@pagging-active-color: @color-second;
 @pagging-active-background: @color-primary;
-
+.pagging-box{
+    .center-inline;
+}
 .pagging-main {
-width: 275px;    
-display: block;
-.center-inline;
+// width: 277px;    
+// display: block;
+display: inline-block;
+margin-top: 10px;
+margin-bottom: 10px;
+.clearfix;
+// .center-inline;
     li {
         .clearfix;
         list-style: none;
-        display: inline-block;
         float: left;
         margin-left: 5px;
         a {
             transition: @transite-time;
             position: relative;
-            float: left;
+            display: block;
             padding: 6px 12px;
             line-height: 1.42857143;
             text-decoration: none;
@@ -59,7 +64,7 @@ display: block;
         border-bottom-right-radius: @pagging-out-radius;
     }
 
-    .active{
+    .pagging-active{
         background-color: @pagging-active-color;
         color: @pagging-active-background;
     }

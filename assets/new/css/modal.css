@@ -1,0 +1,29 @@
+.modal-wrapper {
+  background-color: #000;
+  opacity: 0.8;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: none;
+  -webkit-transition: all 0.8s;
+  -moz-transition: all 0.8s;
+  -ms-transition: all 0.8s;
+  -o-transition: all 0.8s;
+  transition: all 0.8s;
+}
+.active-modal {
+  display: block;
+}
+.deactive-modal {
+  display: none;
+}
+.modal-box {
+  padding: 15px;
+  width: 60%;
+  height: 60%;
+  position: absolute;
+  background: #333333;
+  color: white;
+}

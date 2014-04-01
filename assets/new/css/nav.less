@@ -129,16 +129,8 @@
 
 // inline list 
 .list-inline {
-    .clearfix;
     li {
-        float: left;
-        display: block;
-        position: relative;
-    }
-    a{
-        display: block;
-        padding-right: 10px;
-        padding-left: 10px;
+        display: inline-block;
     }
 }
 
@@ -149,5 +141,31 @@ ul{
     padding: 0;
     li{
         list-style: none;
+    }
+}
+
+
+// nav vertical 
+.nav-vertical{
+    border: 1px solid #eee;
+    text-transform: capitalize;
+    a{
+        padding: 5px 15px;
+        display: block;
+        -webkit-transition: 0.5s;
+        -moz-transition: 0.5s;
+        -ms-transition: 0.5s;
+        -o-transition: 0.5s;
+        transition: 0.5s;
+        
+        &:hover{
+            color: @color-text-second;
+            text-decoration: none;
+            background-color: @color-primary;
+        }
+    }
+
+    .nav-vertical-active{
+        background-color: @color-second;
     }
 }

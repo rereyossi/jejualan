@@ -10,21 +10,21 @@
                 <td width="25%">{{ 'Total Order'|lang }}</td>
                 <td width="75%">
                     <strong>{{ total_order|money }}</strong>
-                    ( <a href="{{ order_url }}">{{ 'Lihat Detail'|lang }}</a> )
-</td>
+                    (
+                    <a href="{{ order_url }}">{{ 'Lihat Detail'|lang }}</a>)
+                </td>
             </tr>
             <tr>
                 <td>{{ 'Alamat'|lang }}</td>
                 <td>
-                    {{ shipping_address }}
-                    {{ shipping_city }}, {{ shipping_state }}, {{ shipping_postcode }}
+                    {{ shipping_address }} {{ shipping_city }}, {{ shipping_state }}, {{ shipping_postcode }}
                 </td>
             </tr>
             <tr>
                 <td>{{ 'Status'|lang }}</td>
                 <td>
                     {{ order_statusname }} {% if order_statusid == 1 %} [ {{ '
-                    <a href="%s">klik disini</a> untuk konfirmasi pembayaran.'|lang|format(confirmation_url) }} ] {% elseif order_statusid == 4 %} [ {{ tracking_number }} ] {% endif %}
+                    <a href="%s">klik disini</a>untuk konfirmasi pembayaran.'|lang|format(confirmation_url) }} ] {% elseif order_statusid == 4 %} [ {{ tracking_number }} ] {% endif %}
                 </td>
             </tr>
         </table>
@@ -52,7 +52,7 @@
             </tr>
             <tr>
                 <td colspan="2">(
-                    <a href="{{ profile_url }}">{{ 'Lihat Detail'|lang }}</a> )</td>
+                    <a href="http://commerce.jcamp.biz/yosy/account#tab4">{{ 'Lihat Detail'|lang }}</a>)</td>
             </tr>
         </table>
     </div>
