@@ -45,7 +45,7 @@ jQuery(function() {
             .submit();
     });
 
-    jQuery('.del').click(function(e) {
+    jQuery('input.del').click(function(e) {
         e.preventDefault();
         var stock_id = jQuery(this).closest('tr').data('stock_id');
         jQuery('#delete_stock_id').val(stock_id);
@@ -131,127 +131,119 @@ function formatcurrency(st) {
     return finalString;
 }
 </script>
-<div class="">
-    <div id="cart-main">
+<div class="row bg-white">
+<div class="col-md-10 col-md-offset-1">
+<br/>
 
-
-        <!-- step cart -->
-        <div class="step-cart">
-            <ul class="list-inline">
-                <li class="active">{{ 'Langkah Order'|lang }}</li>
-                <li class="active">{{ 'Keranjang Belanja'|lang }}</li>
-                <li class="active">{{ 'Login / Daftar'|lang }}</li>
-                <li class="active">{{ 'Pengiriman'|lang }}</li>
-                <li class="active">{{ 'Selesai'|lang }}</li>
-            </ul>
+<div class="langkah row">
+            <div class="col-md-2">{{ 'Langkah Order'|lang }} :</div>
+            <div class="col-md-2 active-nav"> <strong>{{ 'Keranjang Belanja'|lang }}</strong> <span class="cart-arrow"></span></div>
+            <div class="col-md-2"> {{ 'Login / Daftar'|lang }}</div>
+            <div class="col-md-2"> {{ 'Pengiriman'|lang }}</div>
+            <div class="col-md-2"> {{ 'Selesai'|lang }}</div>
         </div>
+<br/>
 
+{% if error_msg %}
+<div class="errorMsg">
+    {{ error_msg }}
+</div>
+{% endif %}
 
-        {% if error_msg %}
-        <div class="alert alert-danger errorMsg">
-            {{ error_msg }}
-        </div>
+<form id="shoppingcart" action="{{ cart_url }}" method="POST">
+    <div class="table-responsive">
+    <table class=" table table-striped table-bordered bg-white" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <th colspan="2">{{ 'Nama Produk'|lang }}</th>
+            <th>{{ 'Harga (Rp)'|lang }}</th>
+            <th>{{ 'Diskon (%)'|lang }}</th>
+            <th>{{ 'Harga Diskon (Rp)'|lang }}</th>
+            <th>{{ 'Jumlah'|lang }}</th>
+            <th>{{ 'Total (Rp)'|lang }}</th>
+            <th>{{ 'Hapus'|lang }}</th>
+        </tr>
+        {% if is_cart_empty %}
+        <tr>
+            <td colspan="8">{{ 'Keranjang belanja kosong'|lang }}</td>
+        </tr>
+        {% else %}
+
+            {% for stock_id, item in cart.items %}
+            <tr data-stock_id="{{ stock_id }}">
+                <td>
+                    {% if item.images.0.small %}
+                        <img src="{{ item.images.0.small }}" alt="{{ item.name }}">
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ item.url }}">{{ item.name }}</a>
+                </td>
+                <td align="right">{{ item.price|money_without_currency }}</td>
+                <td align="right">{{ item.discount }}</td>
+                <td align="right" class="harga_diskon">{{ item.retail_price|money_without_currency }}</td>
+                <td align="center"><input type="text" style="width:70px;height:30px;text-align:center;" class="qty" name="qty[{{ stock_id }}]" value="{{ item.qty }}"></td>
+                <td align="right" class="total">{{ (item.retail_price * item.qty)|money_without_currency }}</td>
+                <td align="center"><input type="image" src="{{ 'delete.png'|asset_url }}" class="del"></td>
+            </tr>
+            {% endfor %}
+
+            {% if cart.coupon_code %}
+                {% if coupon.diskon_type == 1 %}
+                <tr>
+                    <td colspan="6" align="right" bgcolor="#FFFFFF"><strong>{{ coupon.title }}</strong></td>
+                    <td align="right" bgcolor="#FFFFFF">- <span id="potongan_kupon">{{ cart.coupon_amount}}</span></td>
+                    <td align="center"></td>
+                </tr>
+                {% endif %}
+            {% endif %}
+
+            <tr>
+                <td colspan="6" align="right" bgcolor="#FFFFFF"><strong>{{ 'Jumlah sub total belanja'|lang }}</strong></td>
+                <td align="right" id="subtotal" bgcolor="#FFFFFF">{{ cart.total_price|money_without_currency }}</td>
+                <td bgcolor="#FFFFFF"></td>
+            </tr>
+
         {% endif %}
+    </table>
+    <div>
+    {% if is_cart_empty %}
 
-        <form id="shoppingcart" action="{{ cart_url }}" method="POST">
-            <div class="table-responsive">
-                <table class=" table table-striped table-bordered" cellspacing="0" cellpadding="0" border="0">
-                    <tr>
-                        <th colspan="2">{{ 'Nama Produk'|lang }}</th>
-                        <th>{{ 'Harga (Rp)'|lang }}</th>
-                        <th>{{ 'Diskon (%)'|lang }}</th>
-                        <th>{{ 'Harga Diskon (Rp)'|lang }}</th>
-                        <th>{{ 'Jumlah'|lang }}</th>
-                        <th>{{ 'Total (Rp)'|lang }}</th>
-                        <th>{{ 'Hapus'|lang }}</th>
-                    </tr>
-                    {% if is_cart_empty %}
-                    <tr>
-                        <td colspan="8">{{ 'Keranjang belanja kosong'|lang }}</td>
-                    </tr>
-                    {% else %} {% for stock_id, item in cart.items %}
-                    <tr data-stock_id="{{ stock_id }}">
-                        <td>
-                            {% if item.images.0.small %}
-                            <div class="img">
-                                <img src="{{ item.images.0.small }}" alt="{{ item.name }}">
-                            </div>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="{{ item.url }}">{{ item.name }}</a>
-                        </td>
-                        <td align="right">{{ item.price|money_without_currency }}</td>
-                        <td align="right">{{ item.discount }}</td>
-                        <td align="right" class="harga_diskon">{{ item.retail_price|money_without_currency }}</td>
-                        <td align="center">
-                            <input type="text" style="width:70px;height:30px;text-align:center;" class="qty" name="qty[{{ stock_id }}]" value="{{ item.qty }}">
-                        </td>
-                        <td align="right" class="total">{{ (item.retail_price * item.qty)|money_without_currency }}</td>
-                        <td align="center">
-                            <a href="#" class="del"><i class="fa fa-trash-o fa-2x"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %} {% if cart.coupon_code %} {% if coupon.diskon_type == 1 %}
-                    <tr>
-                        <td colspan="6" align="right" bgcolor="#FFFFFF">
-                            <strong>{{ coupon.title }}</strong>
-                        </td>
-                        <td align="right" bgcolor="#FFFFFF">-
-                            <span id="potongan_kupon">{{ cart.coupon_amount}}</span>
-                        </td>
-                        <td align="center"></td>
-                    </tr>
-                    {% endif %} {% endif %}
-
-                    <tr>
-                        <td colspan="6" align="right" bgcolor="#FFFFFF">
-                            <strong>{{ 'Jumlah sub total belanja'|lang }}</strong>
-                        </td>
-                        <td align="right" id="subtotal" bgcolor="#FFFFFF">{{ cart.total_price|money_without_currency }}</td>
-                        <td bgcolor="#FFFFFF"></td>
-                    </tr>
-
-                    {% endif %}
+    {% else %}
+        {% if show_coupon %}
+            <div class="kupon pull-left padd">
+                {% if cart.coupon_code is empty %}
+                
+                {{ 'Kode Kupon'|lang }}:
+                <table>
+                <tr>
+                <td><input type="text" class="form-control" name="kode_kupon"></td>
+                <td><input id="updatekupon" class="btn btn-jej" type="button" value="Update Kupon"></td>
+                </tr>
                 </table>
+                {% else %}
+
                 <div>
-                    {% if is_cart_empty %} {% else %} {% if show_coupon %}
-                    <div class="kupon pull-left padd">
-                        {% if cart.coupon_code is empty %} {{ 'Kode Kupon'|lang }}:
-                        <table>
-                            <tr>
-                                <td>
-                                    <input type="text" class="form-control" name="kode_kupon">
-                                </td>
-                                <td>
-                                    <input id="updatekupon" class="btn btn-primary" type="button" value="Update Kupon">
-                                </td>
-                            </tr>
-                        </table>
-                        {% else %}
-
-                        <div>
-                            Kode Kupon Anda:
-                            <strong>{{ coupon.code }}</strong>
-                            <a class="btn btn-primary" href="{{ delete_coupon_url }}" title="Hapus Kupon">
-                               <i class="fa fa-trash-o fa-2x">
-                            </a>
-                        </div>
-                        ({{ coupon.title }}) {% endif %}
-                    </div>
-                    {% endif %}
-                    <div class="pull-right padd">
-                        &nbsp;
-                        <br/>&nbsp;
-                        <input type="button" id="belanjalagibtn" class="btn btn-primary" value="{{ '&laquo; Belanja Lagi'|lang }}">
-                        <input type="button" id="checkoutbutton" class="btn re-btn-primary" value="{{ 'Checkout &raquo;'|lang }}">
-                    </div>
-                    {% endif %}
-                    </form>
-
-                    <form id="delete_form" method="post" action="{{ delete_item_url }}">
-                        <input type="hidden" id="delete_stock_id" name="stock_id" value="">
-                    </form>
+                    Kode Kupon Anda: <strong>{{ coupon.code }}</strong>
+                    <a class="btn btn-jej" href="{{ delete_coupon_url }}" title="Hapus Kupon">
+                        <img src="{{ 'delete.png'|asset_url }}">
+                    </a>
                 </div>
+                ({{ coupon.title }})
+
+                {% endif %}
             </div>
+        {% endif %}
+        <div class="pull-right padd">
+        &nbsp;<br/>
+        &nbsp;
+        <input type="button" id="belanjalagibtn" class="btn btn-jej" value="{{ '&laquo; Belanja Lagi'|lang }}">
+        <input type="button" id="checkoutbutton" class="btn btn-jej" value="{{ 'Checkout &raquo;'|lang }}">
+        </div>
+    {% endif %}
+</form>
+
+<form id="delete_form" method="post" action="{{ delete_item_url }}">
+    <input type="hidden" id="delete_stock_id" name="stock_id" value="">
+</form>
+</div>
+</div>

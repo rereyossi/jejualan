@@ -1,41 +1,39 @@
 <script type="text/javascript">
-$(document).ready(function(){
-	$('#newsletter_submit').click(function(){
-		var email = $('#newsletter_email').val();
-		var emailReg = /^([\w-\.+]+@([\w-]+\.)+[\w-]{2,4})?$/;
+$(document).ready(function() {
+    $('#newsletter_submit').click(function() {
+        var email = $('#newsletter_email').val();
+        var emailReg = /^([\w-\.+]+@([\w-]+\.)+[\w-]{2,4})?$/;
 
-		if(  email == '' || !emailReg.test(email) ){
-			$.colorbox({html:'<div class="errorMsg">{{ 'Alamat email tidak valid'|lang }}</div>'});
-			$('#newsletter_email').focus();
-		}else{
-			var urlAction = '{{ newsletter.action_url }}';
-			var postData = 'email='+email;
-			$.post(urlAction,postData,function(response){
-				$.colorbox({html:response});
-				$('#newsletter_email').val('');
-			});
-		}
-		return false;
-	});
+        if (email == '' || !emailReg.test(email)) {
+            $.colorbox({
+                html: '<div class="errorMsg">{{ '
+                Alamat email tidak valid '|lang }}</div>'
+            });
+            $('#newsletter_email').focus();
+        } else {
+            var urlAction = '{{ newsletter.action_url }}';
+            var postData = 'email=' + email;
+            $.post(urlAction, postData, function(response) {
+                $.colorbox({
+                    html: response
+                });
+                $('#newsletter_email').val('');
+            });
+        }
+        return false;
+    });
 });
 </script>
 <div class="newsletter-block">
-			<h3 class="text-title">
-				<div style="margin-top:20px !important">{{ settings.newsletter_title }}</div>
-			</h3>
+    <form class="form-inline" method="post" action="">
+        <span id="response"></span>
+        <input type="hidden" name="in_search" value="1" />
 
-		<div class="content">
-			<p>{{ settings.newsletter_info }}</p>
-			<form class="form-inline" method="post" action="">
-				<span id="response"></span>
-					<input type="hidden" name="in_search" value="1" />
-
-					<div class="form-group">
-						<input type="text" class="form-control" id="newsletter_email" placeholder="Masukan email anda">
-					</div>
-					<div class="form-group">
-						<input class="btn btn-primary" id="newsletter_submit" value="{{ settings.newsletter_button }}" type="submit">
-					</div>
-			</form>
-		</div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="newsletter_email" placeholder="Masukan email anda">
+        </div>
+        <div class="form-group">
+            <input class="btn btn-primary" id="newsletter_submit" value="{{ settings.newsletter_button }}" type="submit">
+        </div>
+    </form>
 </div>

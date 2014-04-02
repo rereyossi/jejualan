@@ -25,24 +25,24 @@ $(document).ready(function() {
         },
         messages: {
             email: {
-                required: "{{ 'Email harus diisi'|lang }}",
+                required: "<i class='fa fa-warning'></i> "+ "{{ 'Email harus diisi'|lang }}",
                 email: "{{ 'Email tidak valid (contoh: nama@domain.com)'|lang }}"
             },
             password: {
-                required: "{{ 'Password harus diisi'|lang }}",
-                minlength: "{{ 'Password minimal 3 karakter'|lang }}"
+                required: "<i class='fa fa-warning'></i> "+ "{{ 'Password harus diisi'|lang }}",
+                minlength: "<i class='fa fa-warning'></i> "+ "{{ 'Password minimal 3 karakter'|lang }}"
             },
             password2: {
-                required: "{{ 'Ulangi Password harus diisi'|lang }}",
-                equalTo: "{{ 'Password & Ulangi Password tidak sama'|lang }}"
+                required: "<i class='fa fa-warning'></i> "+ "{{ 'Ulangi Password harus diisi'|lang }}",
+                equalTo: "<i class='fa fa-warning'></i> "+ "{{ 'Password & Ulangi Password tidak sama'|lang }}"
             },
             fullname: {
-                required: "{{ 'Nama Lengkap harus diisi'|lang }}",
-                minlength: "{{ 'Nama Lengkap minimal 3 karakter'|lang }}"
+                required: "<i class='fa fa-warning'></i> "+ "{{ 'Nama Lengkap harus diisi'|lang }}",
+                minlength: "<i class='fa fa-warning'></i> "+ "{{ 'Nama Lengkap minimal 3 karakter'|lang }}"
             },
             nohp: {
-                required: "{{ 'No. Handphone harus diisi'|lang }}",
-                number: "{{ 'No. Handphone harus angka'|lang }}"
+                required: "<i class='fa fa-warning'></i> "+ "{{ 'No. Handphone harus diisi'|lang }}",
+                number: "<i class='fa fa-warning'></i> "+ "{{ 'No. Handphone harus angka'|lang }}"
             }
         },
         errorLabelContainer: '.errorMsg',
@@ -57,7 +57,7 @@ $(document).ready(function() {
                     if (data.status == 1) {
                         window.location.href = data.redirect;
                     } else if (data.status == 2) {
-                        $('#result').html("<div class='alert alert-danger'>"+data.msg+"</div>").show();
+                        $('#result').html("<div class='alert alert-danger'>" + data.msg + "</div>").show();
                     }
                 }
             });
@@ -67,88 +67,71 @@ $(document).ready(function() {
 });
 </script>
 
-<!-- breadcrumb -->
-<div class="row">
-    <div class="col-md-12">
-        <div class="breadcrumb">
-            <h1 class="text-title">{{ 'Pendaftaran Member'|lang }}</h1>
-        </div>
-    </div>
-</div>
 
-{% if member.loggedin %}
-<p>Anda sedang login</p>
-    {% else %}
-<!-- form register -->
-<div class="row">
-    <div id="member-register">
-        <form class="form-vertical col-md-8" role="form" id="register_form" name="register_form" method="post" action="{{ register_action_url }}">
-        <!-- error msg -->
-            <div id="result" class="col-md-8 col-md-offset-4">
+<div id="member-register">
+    <!-- breadcrumb -->
+    <div class="breadcrumb">
+        <h1 class="text-title">{{ 'Pendaftaran Member'|lang }}</h1>
+    </div>
+
+    <div class="row">
+        <form class="form-vertical col-md-4" role="form" id="register_form" name="register_form" method="post" action="{{ register_action_url }}">
+            <!-- error msg -->
+            <div id="result">
                 <div class="alert alert-danger errorMsg" style="display:none;"></div>
             </div>
 
             <!-- email -->
             <div class="form-group">
-                <label class="col-md-4 control-label">{{ 'Email'|lang }}
+                <label>{{ 'Email'|lang }}
                     <span>*</span>
                 </label>
-                <div class="col-md-8">
-                    <input type="email" class="form-control" name="email" id="email">
-                </div>
+                <input type="email" class="form-control" name="email" id="email">
             </div>
 
             <!-- password -->
             <div class="form-group">
-                <label class="col-md-4 control-label">{{ 'Password'|lang }}
+                <label>{{ 'Password'|lang }}
                     <span>*</span>
                 </label>
-                <div class="col-md-8">
-                    <input type="password" class="form-control" name="password" id="password">
-                </div>
+                <input type="password" class="form-control" name="password" id="password">
             </div>
 
             <!-- repassword -->
             <div class="form-group">
-                <label class="col-sm-4 control-label">{{ 'Ulangi Password'|lang }}
+                <label>{{ 'Ulangi Password'|lang }}
                     <span>*</span>
                 </label>
-                <div class="col-md-8">
-                    <input type="password" class="form-control" name="password2" id="password2">
-                </div>
+                <input type="password" class="form-control" name="password2" id="password2">
             </div>
 
             <!-- full name -->
             <div class="form-group">
-                <label class="col-md-4 control-label">{{ 'Nama Lengkap'|lang }}
+                <label>{{ 'Nama Lengkap'|lang }}
                     <span>*</span>
                 </label>
-                <div class="col-md-8">
-                    <input type="text" class="form-control" name="fullname" id="fullname">
-                </div>
+                <input type="text" class="form-control" name="fullname" id="fullname">
             </div>
 
             <!-- handphone -->
             <div class="form-group">
-                <label class="col-md-4 control-label">{{ 'No. Handphone'|lang }}
+                <label>{{ 'No. Handphone'|lang }}
                     <span>*</span>
                 </label>
-                <div class="col-md-8">
-                    <input type="text" class="form-control" name="nohp" id="nohp">
-                </div>
+                <input type="text" class="form-control" name="nohp" id="nohp">
+            </div>
+
+            <!-- register infomartion -->
+            <div class="form-group">
+                <a href="{{ login.login_url }}">{{ 'Sudah punya akun?'|lang|format(login_url) }}</a> 
             </div>
 
             <!-- submit -->
             <div class="form-group">
-                <div class="col-md-8 col-md-offset-4">
-                    <input class="btn btn-primary pull-right" class="formBtn" type="submit" name="add_register" value="{{ 'Daftar'|lang }}" />
-                    <div style="margin:10px 0">
-                        {{ 'Sudah mempunyai akun? Klik
-                        <a href="%s">disini</a> untuk login.'|lang|format(login_url) }}
-                    </div>
-                </div>
+                <input class="btn btn-primary pull-right" class="formBtn" type="submit" name="add_register" value="{{ 'Daftar'|lang }}" />
             </div>
         </form>
+
+
     </div>
 </div>
-    {% endif %}

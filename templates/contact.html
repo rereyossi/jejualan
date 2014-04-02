@@ -31,17 +31,17 @@ $(document).ready(function() {
                 minlength: "Nama minimal 3 karakter"
             },
             email: {
-                required: '<i class="fa fa-exclamation-triangle"></i> ' +"Email harus diisi",
-                email: '<i class="fa fa-exclamation-triangle"></i> ' +"Email tidak valid (contoh: nama@domain.com)"
+                required: '<i class="fa fa-exclamation-triangle"></i> ' + "Email harus diisi",
+                email: '<i class="fa fa-exclamation-triangle"></i> ' + "Email tidak valid (contoh: nama@domain.com)"
             },
             address: {
-                required: '<i class="fa fa-exclamation-triangle"></i> ' +"Alamat harus diisi"
+                required: '<i class="fa fa-exclamation-triangle"></i> ' + "Alamat harus diisi"
             },
             content: {
-                required: '<i class="fa fa-exclamation-triangle"></i> ' +"Pesan harus diisi"
+                required: '<i class="fa fa-exclamation-triangle"></i> ' + "Pesan harus diisi"
             },
             captcha: {
-                required: '<i class="fa fa-exclamation-triangle"></i> ' +"Kode captcha harus diisi"
+                required: '<i class="fa fa-exclamation-triangle"></i> ' + "Kode captcha harus diisi"
             }
         },
         errorLabelContainer: '.errorMsg',
@@ -55,10 +55,10 @@ $(document).ready(function() {
                 dataType: "json",
                 success: function(data) {
                     if (data.status == 1) {
-                        $('#result').html("<div class='alert alert-success'>"+data.msg+"</div>").show();
+                        $('#result').html("<div class='alert alert-success'>" + data.msg + "</div>").show();
                         $('#contact-form').hide();
                     } else if (data.status == 2) {
-                        $('#result').html("<div class='alert alert-danger'>"+data.msg+"</div>").show();
+                        $('#result').html("<div class='alert alert-danger'>" + data.msg + "</div>").show();
                         $('#img_captcha').attr('src', '{{ captcha_url }}?r=' + Math.random());
                     }
                 }
@@ -73,38 +73,50 @@ $(document).ready(function() {
         },
     });
 
-// gmap
-        $("#contact_map").gMap({
-            {% if latitude != '' and longitude != '' %}
-            markers: [ { latitude: '{{ latitude }}', longitude: '{{ longitude }}' } ],
+    // gmap
+    $("#contact_map").gMap({
+        { %
+            if latitude != ''
+            and longitude != '' %
+        }
+        markers: [{
             latitude: '{{ latitude }}',
-            longitude: '{{ longitude }}',
-            {% else %}
-            markers: [ { address: '{{ address }}' } ],
-            address: '{{ address }}',
-            {% endif %}
-            zoom: 14,
-            mapTypeControl: false,
-            zoomControl: false,
-            scrollwheel: false
-        });
+            longitude: '{{ longitude }}'
+        }],
+        latitude: '{{ latitude }}',
+        longitude: '{{ longitude }}',
+        { %
+            else %
+        }
+        markers: [{
+            address: '{{ address }}'
+        }],
+        address: '{{ address }}',
+        { % endif %
+        }
+        zoom: 14,
+        mapTypeControl: false,
+        zoomControl: false,
+        scrollwheel: false
+    });
 });
 </script>
 
 
 <!-- contact page-->
-<div class="row">
-    <div id="contact-main">
-    <!-- gmap -->
-    <div class="gmap col-md-12">
-                        {% if address or latitude and longitude %}
-                <div class="map">
-                    <div id="contact_map" style="width:100%; height:340px;"></div>
-                </div>
-                {% endif %}
-    </div>
+<div id="contact-main">
+    <div class="row">
+
+        <!-- gmap -->
+        <div class="gmap col-md-12">
+            {% if address or latitude and longitude %}
+            <div class="map">
+                <div id="contact_map" style="width:100%; height:340px;"></div>
+            </div>
+            {% endif %}
+        </div>
         <!-- form contact -->
-        <div class="contact-form col-md-6">
+        <div class="contact-form col-md-4">
             <!-- contact title -->
             <div class="breadcrumb">
                 <h2 class="text-title">{{ 'Kirim Pesan'|lang }}</h2>
@@ -112,82 +124,69 @@ $(document).ready(function() {
 
 
             <!-- contact content -->
-                <form id="contact_form" class="form-vertical" name="contact_form" method="post" action="{{ contact_save_url }}">
-                    <!-- error msg -->
-                    <div id="result" class="col-md-8 col-md-offset-4">
-                        <div class="errorMsg alert alert-danger" style="display:none;"></div>
+            <form id="contact_form"name="contact_form" method="post" action="{{ contact_save_url }}">
+                <!-- error msg -->
+                <div id="result" >
+                    <div class="errorMsg alert alert-danger" style="display:none;"></div>
+                </div>
+                {% if show_name == 1 %}
+                <div class="form-group">
+                    <label for="input_name">{{ 'Nama'|lang }}
+                        <span>*</span>
+                    </label>
+                        <input type="text" id="input_name" name="name" value="" class="form-control">
+
+                </div>
+                {% endif %} {% if show_email == 1 %}
+                <div class="form-group">
+                    <label for="input_email">{{ 'Email'|lang }}
+                        <span>*</span>
+                    </label>
+                        <input type="email" id="input_email" name="email" value="" class="form-control">
+                </div>
+                {% endif %} {% if show_phone == 1 %}
+                <div class="form-group">
+                    <label for="input_phone">{{ 'No. Telp'|lang }}
+                    </label>
+                        <input type="text" id="input_phone" name="notelp" value="" class="form-control">
+                </div>
+                {% endif %} {% if show_hp == 1 %}
+                <div class="form-group">
+                    <label for="input_hp">{{ 'No. Handphone'|lang }}
+                        <span>*</span>
+                    </label>
+                        <input type="text" id="input_hp" name="nohp" value="" class="form-control">
+                </div>
+                {% endif %} {% if show_address == 1 %}
+                <div class="form-group">
+                    <label for="input_address">{{ 'Alamat'|lang }}
+                        <span>*</span>
+                    </label>
+                        <input type="text" id="input_address" name="address" value="" class="form-control">
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="input_content">{{ 'Pesan'|lang }}
+                        <span>*</span>
+                    </label>
+                        <textarea id="input_content" name="content" rows="4" cols="40" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="input_captcha">{{ 'Kode Captcha'|lang }}
+                        <span>*</span>
+                    </label>
+                    <div>
+                        <img id="img_captcha" src="{{ captcha_url }}" />
+                        <p>
+                            <strong>{{ 'Isikan kode diatas'|lang }}</strong>
+                        </p>
+                        <input class="form-control col-md-6" type="text" id="captcha" name="captcha" value="" class="form-control">
                     </div>
-                    {% if show_name == 1 %}
-                    <div class="form-group">
-                        <label for="input_name" class="col-sm-4 control-label">{{ 'Nama'|lang }}
-                            <span>*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input type="text" id="input_name" name="name" value="" class="form-control">
-                        </div>
-                    </div>
-                    {% endif %} {% if show_email == 1 %}
-                    <div class="form-group">
-                        <label for="input_email" class="col-sm-4 control-label">{{ 'Email'|lang }}
-                            <span>*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input type="email" id="input_email" name="email" value="" class="form-control">
-                        </div>
-                    </div>
-                    {% endif %} {% if show_phone == 1 %}
-                    <div class="form-group">
-                        <label for="input_phone" class="col-sm-4 control-label">{{ 'No. Telp'|lang }}
-                        </label>
-                        <div class="col-sm-8">
-                            <input type="text" id="input_phone" name="notelp" value="" class="form-control">
-                        </div>
-                    </div>
-                    {% endif %} {% if show_hp == 1 %}
-                    <div class="form-group">
-                        <label for="input_hp" class="col-sm-4 control-label">{{ 'No. Handphone'|lang }}
-                            <span>*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input type="text" id="input_hp" name="nohp" value="" class="form-control">
-                        </div>
-                    </div>
-                    {% endif %} {% if show_address == 1 %}
-                    <div class="form-group">
-                        <label for="input_address" class="col-sm-4 control-label">{{ 'Alamat'|lang }}
-                            <span>*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input type="text" id="input_address" name="address" value="" class="form-control">
-                        </div>
-                    </div>
-                    {% endif %}
-                    <div class="form-group">
-                        <label for="input_content" class="col-sm-4 control-label">{{ 'Pesan'|lang }}
-                            <span>*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <textarea id="input_content" name="content" rows="4" cols="40" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="input_captcha" class="col-sm-4 control-label">{{ 'Kode Captcha'|lang }}
-                            <span>*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <img id="img_captcha" src="{{ captcha_url }}" />
-                            <p>
-                                <strong>{{ 'Isikan kode diatas'|lang }}</strong>
-                            </p>
-                            <input class="form-control col-md-6" type="text" id="captcha" name="captcha" value="" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-4 col-sm-8">
-                            <input class="btn btn-primary pull-right" type="submit" id="submit_message" name="add_contact" value="{{ 'Kirim'|lang }}" />
-                        </div>
-                    </div>
-                </form>
+                </div>
+                <div class="form-group">
+                        <input class="btn btn-primary pull-right" type="submit" id="submit_message" name="add_contact" value="{{ 'Kirim'|lang }}" />
+                </div>
+            </form>
 
         </div>
 

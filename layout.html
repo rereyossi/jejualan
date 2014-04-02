@@ -1,85 +1,105 @@
 <!DOCTYPE html>
 <html>
-    <head>
 
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                <title>{{ content.title }}</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- rereyossi lab -->
-        <link rel="stylesheet" href="{{ 'new/css/main.css'|asset_url }}" type="text/css" media="all" />
-        <link rel="stylesheet" href="{{ 'new/css/reset.css'|asset_url }}" type="text/css" media="all" />
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-        <!-- validate js -->
-        <script type="text/javascript" src="{{ 'jquery.validate.min.js'|asset_url }}"></script>
-        <!-- colorbox -->
-        <script type="text/javascript" src="{{ 'jquery.colorbox-min.js'|asset_url }}"></script>
-        <link rel="stylesheet" href="{{ 'colorbox.css'|asset_url }}" type="text/css" media="all" />{{ content.header }}
-    </head>
-    <body>
-        <!-- bar member -->
-        {% if loggedin %}
-        <div class="main-bar">
-            <div class="logo-bar">
-                <a href="http://jejualan.com/">
-                <img src="http://cdn.jejualan.com/assets/images/jejualan.png" alt="" />
-                </a>
-            </div>
-            <div class="admin-bar">
-                <a href="{{ admin_url }}">Ke Admin Panel</a>
-            </div>
-            <div class="log-bar">
-                Login sebagai
-                <span>
-                <a href="{{ merchant_url }}">{{ merchant_name }}</a>
-                </span>|
-                <a href="{{ admin_logout_url }}">Logout</a>
-                <img src="http://cdn.jejualan.com/assets/images/close.png" id="remove-bar" onclick="javascript:removeCookie()" />
-            </div>
-        </div>
-        {% endif %}
-        <!-- start block-list -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ content.title }}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- jquery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2/jquery.min.js"></script>
+
+    <!-- valid js -->
+    <script src="{{ 'validate/jquery.validate.min.js'|plugins }}"></script>
+
+    <!-- clound zoom -->
+    <link rel="stylesheet" href="{{ 'cloud-zoom/cloud-zoom.css'|plugins }}" type="text/css" media="all" />
+    <script type="text/javascript" src="{{ 'cloud-zoom/cloud-zoom.1.0.2.min.js'|plugins }}"></script>
+
+    <!-- colorbox -->
+    <link rel="stylesheet" href="{{ 'colorbox/colorbox.css'|plugins }}" type="text/css" media="all" />
+    <script type="text/javascript" src="{{ 'colorbox/jquery.colorbox-min.js'|plugins }}"></script>
+
+
+    <!-- aniamation -->
+    <link rel="stylesheet" href="{{ 'animate-css3/animate.css'|plugins }}" type="text/css" media="all" />
+
+    <!-- font awasome -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+
+    <!-- rereyossi css -->
+    <link rel="stylesheet" href="{{ 'rereyossi-style.css'|asset_url }}">{{ content.header }}
+</head>
+
+<body>
+
+    <!-- start block-list -->
+    <div id="wrapper-main">
         <div class="container">
-            <div class="row">
-                <div id="{{ sidebar }}" class="main">
-                    <div class="page">
-                        {% set mainclass='' %} {% if template in ['index', 'product-list', 'search'] %} {% set mainclass='product-list' %} {% endif %}
-                        <div id="homepage" class="content {{ mainclass }}">
-                            {% if template in ['index', 'product-list', 'member-register', 'member-login', 'member-resetpass', 'member-forgetpass', 'contact', 'news-list', 'news-detail', 'product-list', 'product-detail', 'cart', 'cart-login-register', 'cart-shipping', 'cart-finish', 'search', 'testimonial', ] %} {{ content.layout }} {% else %}
-                            <div class="entry-content">{{ content.layout }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <!--end page-->
-                    <!--end wrapper-inner-->
-                </div>
+
+            {% set mainclass='' %} {% if template in ['index', 'product-list', 'search'] %} {% set mainclass='product-list' %} {% endif %}
+            <div id="homepage" class="content {{ mainclass }}">
+                {% if template in ['index', 'product-list', 'member-register', 'member-login', 'member-resetpass', 'member-forgetpass', 'contact', 'news-list', 'news-detail', 'product-list', 'product-detail', 'cart', 'cart-login-register', 'cart-shipping', 'cart-finish', 'search', 'testimonial', ] %} {{ content.layout }} {% else %}
+                <div class="entry-content">{{ content.layout }}</div>
+                {% endif %}
+
             </div>
         </div>
-        <!-- end block-list -->
-        <div class="menu-subscribe">
+    </div>
+
+
+    <!-- footer main -->
+    <footer>
+        <!-- connect -->
+        <div class="connect">
             <div class="container">
-                <div class="col-md-6">
-                    {% include "blocks/newsletter.html" %}
-                </div>
-                <div class="col-md-6">
-                    {{settings.contact_title}} {{ contact }}
+                <div class="row">
+                    <div class="solmed col-md-6 col-sm-6 col-xs-6">
+                        <ul class="list-inline">
+                            <li>
+                                <a class="tw" href="#"><i class="fa fa-twitter"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="fb" href="#"><i class="fa fa-facebook"></i> 
+                                </a>
+                            </li>
+                            <li>
+                                <a class="gp" href="#"><i class="fa fa-google-plus"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                         {% include "blocks/newsletter.html" %}
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- start block-menu bottom -->
-        <div class="">
+        <!-- info -->
+        <div class="info text-capital ">
             <div class="container">
                 {% include "blocks/menu-bottom.html" %}
             </div>
         </div>
-        <div class="footer ">
+
+        <!-- author -->
+        <div class="author">
             <div class="container">
                 {{ config.footer_text }}
                 <span class="pull-right">
-                <img src="http://cdn.jejualan.com/assets/images/jejualan.png" alt="" />
+                    <img src="http://cdn.jejualan.com/assets/images/jejualan.png" alt="" />
                 </span>
             </div>
         </div>
-    </body>
+
+    </footer>
+
+
+</body>
+
 </html>

@@ -1,33 +1,41 @@
 <div id="member-home">
     <h3 class="text-title">{{ 'Dashboard'|lang }}</h3>
+    <hr>
 
     <!-- pesanan -->
     <div class="pesanan">
         <h4 class="text-title">{{ 'Pembelian Terakhir'|lang }}</h4>
         {% if order_id > 0 %}
-        <table class="table table-bordered">
-            <tr>
-                <td width="25%">{{ 'Total Order'|lang }}</td>
-                <td width="75%">
-                    <strong>{{ total_order|money }}</strong>
-                    (
-                    <a href="{{ order_url }}">{{ 'Lihat Detail'|lang }}</a>)
-                </td>
-            </tr>
-            <tr>
-                <td>{{ 'Alamat'|lang }}</td>
-                <td>
-                    {{ shipping_address }} {{ shipping_city }}, {{ shipping_state }}, {{ shipping_postcode }}
-                </td>
-            </tr>
-            <tr>
-                <td>{{ 'Status'|lang }}</td>
-                <td>
-                    {{ order_statusname }} {% if order_statusid == 1 %} [ {{ '
-                    <a href="%s">klik disini</a>untuk konfirmasi pembayaran.'|lang|format(confirmation_url) }} ] {% elseif order_statusid == 4 %} [ {{ tracking_number }} ] {% endif %}
-                </td>
-            </tr>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tr>
+                    <td width="25%">{{ 'Total Order'|lang }}</td>
+                    <td width="75%">
+                        <strong>{{ total_order|money }}</strong>
+                        <a href="{{ order_url }}">{{ 'Lihat Detail'|lang }}</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'Alamat'|lang }}</td>
+                    <td>
+                        {{ shipping_address }} {{ shipping_city }}, {{ shipping_state }}, {{ shipping_postcode }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'Status'|lang }}</td>
+                    <td>
+                        {{ order_statusname }} {% if order_statusid == 1 %}
+                        <a href="%s">klik disini</a>
+                        <span>{{ 'untuk konfirmasi pembayaran.'|lang|format(confirmation_url) }}</span>
+                        {% elseif order_statusid == 4 %}
+                        <span>
+                            [ {{ tracking_number }} ]
+                        </span>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
         {% else %}
         <p>{{ 'Anda belum pernah berbelanja disini'|lang }}</p>
         {% endif %}
@@ -37,23 +45,26 @@
     <!-- identitas -->
     <div class="identitas">
         <h4 class="text-title">{{ 'Data Diri'|lang }}</h4>
-        <table class="table table-bordered">
-            <tr>
-                <td width="25%">{{ 'Nama'|lang }}</td>
-                <td width="75%">{{ fullname }}</td>
-            </tr>
-            <tr>
-                <td>{{ 'Email'|lang }}</td>
-                <td>{{ email }}</td>
-            </tr>
-            <tr>
-                <td>{{ 'No. HP'|lang }}</td>
-                <td>{{ hp }}</td>
-            </tr>
-            <tr>
-                <td colspan="2">(
-                    <a href="http://commerce.jcamp.biz/yosy/account#tab4">{{ 'Lihat Detail'|lang }}</a>)</td>
-            </tr>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tr>
+                    <td width="25%">{{ 'Nama'|lang }}</td>
+                    <td width="75%">{{ fullname }}</td>
+                </tr>
+                <tr>
+                    <td>{{ 'Email'|lang }}</td>
+                    <td>{{ email }}</td>
+                </tr>
+                <tr>
+                    <td>{{ 'No. HP'|lang }}</td>
+                    <td>{{ hp }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <a href="http://commerce.jcamp.biz/yosy/account#tab4">{{ 'Lihat Detail'|lang }}</a>
+                    </td>
+                </tr>
+        </div>
         </table>
     </div>
 

@@ -1,0 +1,107 @@
+.detail-caption{
+	.price-old{
+		text-decoration: underline;
+	}
+	.price-new{
+		font-size: 2.1rem;
+		font-weight: bold;
+	}
+	.info-title{
+		font-weight: bold;
+		display: block;
+	}
+	.tag{
+		.clearfix;
+		margin-bottom: 15px;
+	}
+	.detail-tag{
+		background-color: @color-primary;
+		color: @color-text-base;
+		border-radius: @radius;
+		padding: 6px 8px;
+		float: left;
+		margin-right: 5px;
+		-webkit-transition: 0.2s;
+		-moz-transition: 0.2s;
+		-ms-transition: 0.2s;
+		-o-transition: 0.2s;
+		transition: 0.2s;
+		
+		&:hover{
+			text-decoration: none;
+			background-color: darken(@color-primary, 10%);
+		}
+	}
+}
+
+// ------------------------------------------------------------------------------------------------------
+// cart main
+// ------------------------------------------------------------------------------------------------------
+.cart-step{
+	border-bottom: 2px solid @color-primary;
+	ul{
+		.text-capital;
+		.list-inline;
+	}
+	li{
+		border: 1px solid #dddddd;	
+		&:hover{
+			.cart-step-active;
+		}
+	}
+}
+
+.cart-step-active{
+	background-color: @color-primary;
+	border-color: @color-primary !important;
+	a{
+		color: @color-text-base;
+		text-decoration: none;
+	}
+}
+
+.cart-table{
+	.td-img{
+		width: 150px;
+	}
+	.td-qty{
+		width: 80px;
+	}
+	.cart-del{
+		color: @color-text-primary;
+		i{
+			font-size: 1.8rem;
+		}
+	}
+	.cart-total{
+		font-size: 2.1rem;
+		font-weight: bold;
+	}
+
+}
+.cart-extension{
+	.cart-next{
+		margin-top: 20px;
+	}
+}
+
+// ------------------------------------------------------------------------------------------------------
+// cart shiping
+// ------------------------------------------------------------------------------------------------------
+.shiping-information{
+	.shiping-total{
+		font-size: 2.1rem;
+	}
+}
+
+// ------------------------------------------------------------------------------------------------------
+// testimonial
+// ------------------------------------------------------------------------------------------------------
+
+#open_form_testimonial{
+	margin-bottom: 15px;
+}
+
+// ------------------------------------------------------------------------------------------------------
+// member home
+// ------------------------------------------------------------------------------------------------------

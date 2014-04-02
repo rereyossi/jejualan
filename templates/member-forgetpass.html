@@ -9,8 +9,8 @@ $(document).ready(function() {
         },
         messages: {
             email: {
-                required: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Email harus diisi'|lang }}",
-                email: '<i class="fa fa-exclamation-triangle"></i> '+"{{ 'Email tidak valid (contoh: nama@domain.com)'|lang }}"
+                required: '<i class="fa fa-exclamation-triangle"></i> ' + "{{ 'Email harus diisi'|lang }}",
+                email: '<i class="fa fa-exclamation-triangle"></i> ' + "{{ 'Email tidak valid (contoh: nama@domain.com)'|lang }}"
             }
         },
         errorLabelContainer: '.errorMsg',
@@ -23,10 +23,10 @@ $(document).ready(function() {
                 dataType: "json",
                 success: function(data) {
                     if (data.status == 1) {
-                        $('#result') .html("<div class='alert alert-success'>"+data.msg+"</div>").show();
+                        $('#result').html("<div class='alert alert-success'>" + data.msg + "</div>").show();
                         $('#password_form').hide();
                     } else if (data.status == 2) {
-                        $('#result') .html("<div class='alert alert-danger'>"+data.msg+"</div>").show();
+                        $('#result').html("<div class='alert alert-danger'>" + data.msg + "</div>").show();
                     }
                 }
             });
@@ -35,35 +35,30 @@ $(document).ready(function() {
     });
 });
 </script>
-<div class="row">
-    <div class="col-md-12">
+<div id="member-forget-password">
+    <div class="row">
         <div class="breadcrumb">
             <h1 class="text-title">{{ 'Lupa Password'|lang }}</h1>
         </div>
-    </div>
-</div>
-<!-- form -->
-
-    <div id="member-forget-password">
-    <div class="row">
-        <form class="form-vertical col-md-8" role="form" id="password_form" name="password_form" method="post" action="{{ forgetpass_action_url }}">
-            <!-- error msg -->
-            <div id="result" class="col-md-8 col-md-offset-4">
-                <div class="alert alert-danger errorMsg" style="display:none;"></div>
-            </div>
-            <!-- email -->
-            <div class="form-group">
-                <label class="col-md-4 control-label">{{ 'Email'|lang }}<span>*</span></label>
-                <div class="col-md-8">
-                    <input class="form-control" type="text" name="email" id="email">
+        <div class="row">
+            <form class="form-vertical col-md-4" role="form" id="password_form" name="password_form" method="post" action="{{ forgetpass_action_url }}">
+                <!-- error msg -->
+                <div id="result">
+                    <div class="alert alert-danger errorMsg" style="display:none;"></div>
                 </div>
-            </div>
-            <!-- submit -->
-            <div class="form-group">
-                <div class="col-md-offset-4 col-md-8">
+                <!-- email -->
+                <div class="form-group">
+                    <label>{{ 'Email'|lang }}
+                        <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="email" id="email">
+
+                </div>
+                <!-- submit -->
+                <div class="form-group">
                     <input class="btn btn-primary pull-right" type="submit" name="add_password" value="{{ 'Kirim'|lang }}" />
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>

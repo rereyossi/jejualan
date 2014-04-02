@@ -14,7 +14,7 @@
         $(document).ready(function() {
 
             $('#open_form_testimonial').toggle(function() {
-                $(this).empty().html("<i class='fa fa-minus-circle'></i> {{ 'Tutup'|lang }}");
+                $(this).empty().html("<i class='fa fa-times-circle'></i> {{ 'Tutup'|lang }}");
                 $('#testimonial_form').slideDown(400);
             }, function() {
                 $(this).empty().html("<i class='fa fa-plus-circle'></i> {{ 'Tambah testimonial'|lang }}");
@@ -94,60 +94,59 @@
 
 
                 <!-- form input -->
-                <form id="testimonial-valid" class="form-vertical col-md-8" method="post" action="{{ testimonial.action_url }}">
+                <form id="testimonial-valid" class="form-vertical col-md-4" method="post" action="{{ testimonial.action_url }}">
                     <!-- alert -->
-                    <div id="result" class="col-md-8 col-md-offset-4">
+                    <div id="result">
                         <div class="alert alert-danger  errorMsg" style="display:none"></div>
                     </div>
                     <!-- name -->
                     <div class="form-group">
-                        <label class="col-md-4">{{ 'Nama'|lang }}
+                        <label>{{ 'Nama'|lang }}
                             <span>*</span>
                         </label>
-                        <div class="col-md-8">
+
                             <input type="text" name="name" id="name" class="form-control">
-                        </div>
+                      
                     </div>
                     <!-- email -->
                     <div class="form-group">
-                        <label class="col-md-4">{{ 'Email'|lang }}
+                        <label>{{ 'Email'|lang }}
                             <span>*</span>
                         </label>
-                        <div class="col-md-8">
-                            <input type="text" name="email" id="email" class="form-control">
-                        </div>
+                        <input type="text" name="email" id="email" class="form-control">
+                        
                     </div>
                     <!-- address -->
                     <div class="form-group">
-                        <label class="col-md-4">{{ 'Alamat'|lang }}</label>
-                        <div class="col-md-8">
+                        <label >{{ 'Alamat'|lang }}</label>
+                       
                             <input type="text" name="address" id="address" class="form-control">
-                        </div>
+                       
                     </div>
                     <!-- content -->
                     <div class="form-group">
-                        <label class="col-md-4">{{ 'Isi testimonial'|lang }}
+                        <label >{{ 'Isi testimonial'|lang }}
                             <span>*</span>
                         </label>
-                        <div class="col-md-8">
+                      
                             <textarea name="content" class="form-control" id="content" rows="5"></textarea>
-                        </div>
+                     
                     </div>
                     <!-- kode keamanan -->
                     <div class="form-group">
-                        <label class="col-md-4">{{ 'Kode keamanan'|lang }}
+                        <label>{{ 'Kode keamanan'|lang }}
                             <span>*</span>
                         </label>
-                        <div class="col-md-8">
+                        <div>
                             <img id="captcha" src="{{ captcha_url }}">&nbsp;
                             <input style="max-width:100px !important;" type="text" name="code" id="code" size="10" class="form-control">
                         </div>
                     </div>
                     <!-- submit -->
                     <div class="form-group">
-                        <div class="col-md-8 col-md-offset-4">
+                
                             <input type="submit" name="save_testimonial" class="btn btn-primary pull-right" value="{{ 'Simpan'|lang }}" id="save_testimonial">
-                        </div>
+                 
                     </div>
                 </form>
             </div>
